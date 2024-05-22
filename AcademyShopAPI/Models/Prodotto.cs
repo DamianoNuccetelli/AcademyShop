@@ -16,7 +16,7 @@ public partial class Prodotto
     public int Id { get; set; }
 
     [Required]
-    [StringLength(10)]
+    [StringLength(50)]
     [Unicode(false)]
     public string Descrizione { get; set; }
 

@@ -16,7 +16,7 @@ public partial class StatoOrdine
     public int Id { get; set; }
 
     [Required]
-    [StringLength(50)]
+    [StringLength(10)]
     [Unicode(false)]
     public string Descrizione { get; set; }
 
