@@ -25,6 +25,26 @@ public partial class Utente
     [Unicode(false)]
     public string Nome { get; set; }
 
+    [Column("Data_Nascita")]
+    public DateOnly DataNascita { get; set; }
+
+    [Required]
+    [Column("Citta_Nascita")]
+    [StringLength(50)]
+    [Unicode(false)]
+    public string CittaNascita { get; set; }
+
+    [Required]
+    [Column("Provincia_Nascita")]
+    [StringLength(2)]
+    [Unicode(false)]
+    public string ProvinciaNascita { get; set; }
+
+    [Required]
+    [StringLength(1)]
+    [Unicode(false)]
+    public string Sesso { get; set; }
+
     [Required]
     [Column("Codice_Fiscale")]
     [StringLength(16)]
@@ -33,6 +53,11 @@ public partial class Utente
 
     [Column("Data_Registrazione", TypeName = "datetime")]
     public DateTime DataRegistrazione { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    [Unicode(false)]
+    public string Email { get; set; }
 
     [Required]
     [StringLength(16)]

@@ -18,9 +18,14 @@ public partial class Prodotto
     [Required]
     [StringLength(50)]
     [Unicode(false)]
+    public string Nome { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    [Unicode(false)]
     public string Descrizione { get; set; }
 
-    public int Quantita { get; set; }
+    public int Quantità { get; set; }
 
     [InverseProperty("FkIdProdottoNavigation")]
     public virtual ICollection<DettaglioOrdine> DettaglioOrdines { get; set; } = new List<DettaglioOrdine>();
