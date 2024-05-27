@@ -23,7 +23,8 @@ namespace AcademyShopAPI.Controllers
            oBL = _oBL;
         }
         //Florea Renato Chiamata al BusinessLayer 
-        [HttpGet("GetOrdiniByUserId/{userId}")]
+        
+        [HttpGet("GetAllOrdiniByUserId/{userId}")]
         public async Task<IActionResult> GetOrdiniByUserId(int userId)
         {
 
