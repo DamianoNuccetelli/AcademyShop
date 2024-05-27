@@ -224,10 +224,6 @@ namespace AcademyShopAPI.Controllers
             }
         }
 
-   
-
-
-
 
     }
 }

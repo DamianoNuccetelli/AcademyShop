@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Transactions;
+using Azure.Core;
 
 namespace DataLayer
 {
@@ -288,24 +289,38 @@ namespace DataLayer
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-#pragma warning disable CS8603
-            return await (from ordine in _context.Ordines
-                          join statoOrdine in _context.StatoOrdines on ordine.FkIdStato equals statoOrdine.Id
-                          join dettaglioOrdine in _context.DettaglioOrdines on ordine.Id equals dettaglioOrdine.FkIdOrdine
-                          join prodotto in _context.Prodottos on dettaglioOrdine.FkIdProdotto equals prodotto.Id
-                          where ordine.FkIdUtente == userId && dettaglioOrdine.Id == dettaglioOrdineId
-                          select new OrdineDettaglioDTOperGET
-                          {
-                              ProdottoNome = prodotto.Nome,
-                              ProdottoDescrizione = prodotto.Descrizione,
-                              StatoOrdineDescrizione = statoOrdine.Descrizione,
-                              Quantita = dettaglioOrdine.Quantita,
-                              ProdottoId = prodotto.Id,
-                              DataRegistrazione = ordine.DataRegistrazione,
-                              DataAggiornamento = ordine.DataAggiornamento
-                          }).FirstOrDefaultAsync();
-#pragma warning restore CS8603 
+
+            var ordineDettaglio = await (from ordine in _context.Ordines
+                                         join statoOrdine in _context.StatoOrdines on ordine.FkIdStato equals statoOrdine.Id
+                                         join dettaglioOrdine in _context.DettaglioOrdines on ordine.Id equals dettaglioOrdine.FkIdOrdine
+                                         join prodotto in _context.Prodottos on dettaglioOrdine.FkIdProdotto equals prodotto.Id
+                                         where ordine.FkIdUtente == userId && dettaglioOrdine.Id == dettaglioOrdineId
+                                         select new OrdineDettaglioDTOperGET
+                                         {
+                                             ProdottoNome = prodotto.Nome,
+                                             ProdottoDescrizione = prodotto.Descrizione,
+                                             StatoOrdineDescrizione = statoOrdine.Descrizione,
+                                             Quantita = dettaglioOrdine.Quantita,
+                                             ProdottoId = prodotto.Id,
+                                             DataRegistrazione = ordine.DataRegistrazione,
+                                             DataAggiornamento = ordine.DataAggiornamento
+                                         }).FirstOrDefaultAsync();
+
+            return ordineDettaglio;
         }
+        //Gabriele
+        public async Task<string?> GetUserPassword(int userId)
+        {
+            var user = await _context.Utentes.FirstOrDefaultAsync(u => u.Id == userId);
+            return user?.Password;
+        }
+        //Gabriele
+        public async Task<bool> VerificaUserAsync(int userId, string password)
+        {
+            return await _context.Utentes.AnyAsync(u => u.Id == userId && u.Password == password);
+        }
+
+
 
         //Daniel -> Aggiunta e rimozione dell'utente dal db
         public async Task<IEnumerable<Utente>> GetUtentes()

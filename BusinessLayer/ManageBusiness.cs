@@ -177,20 +177,36 @@ namespace BusinessLayer
             }
         }
 
+        //Gabriele
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-            var userExists = await oDL.GetUtente(userId) != null;
-
-            if (userId <= 0 || dettaglioOrdineId <= 0 || !userExists)
+            try
             {
-                throw new ApplicationException("I parametri Id utente e Id Dettaglio ordine sono errati");          
+                // Recupera la password dell'utente
+                string? password = await oDL.GetUserPassword(userId);
+
+                if (password == null)
+                {
+                    throw new ApplicationException("Utente non trovato");
+                }
+
+                // Verifica se l'utente esiste e la password è corretta
+                bool userIsValid = await oDL.VerificaUserAsync(userId, password);
+                if (!userIsValid)
+                {
+                    throw new ApplicationException("User ID or password is incorrect.");
+                }
+
+                // Recupera i dettagli dell'ordine
+                return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
             }
-
-          
-            return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero dell'ordine", ex);
+            }
         }
-
+       
         //Daniel -> Aggiunta e rimozione dell'utente dal db
         public async Task<IEnumerable<Utente>> GetUtentes()
         {
