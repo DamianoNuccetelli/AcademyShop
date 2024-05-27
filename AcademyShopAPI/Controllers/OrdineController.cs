@@ -207,7 +207,6 @@ namespace AcademyShopAPI.Controllers
         /* INSERIMENTO NUOVO ORDINE*/
         public async Task<ActionResult<int>> NuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
         {
-            // OrdineBusiness _business = new OrdineBusiness();
             int idOrdine;
 
             try

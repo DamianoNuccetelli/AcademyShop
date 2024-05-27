@@ -196,19 +196,19 @@ namespace BusinessLayer
                     };
                 }
 
-                // Controlli di business
-                if (string.IsNullOrWhiteSpace(utente.Cognome) || string.IsNullOrWhiteSpace(utente.Nome) ||
-                    string.IsNullOrWhiteSpace(utente.CodiceFiscale) || string.IsNullOrWhiteSpace(utente.Password) ||
-                    string.IsNullOrWhiteSpace(utente.CittaNascita) || string.IsNullOrWhiteSpace(utente.ProvinciaNascita) ||
-                    string.IsNullOrWhiteSpace(utente.Sesso) || string.IsNullOrWhiteSpace(utente.Email))
-                {
-                    return new ContentResult
-                    {
-                        Content = "Tutti i campi sono obbligatori.",
-                        ContentType = "text/plain",
-                        StatusCode = 400
-                    };
-                }
+                // Controlli di business (al posto di questi controlli utilizzo il campo required sul dto)
+                //if (string.IsNullOrWhiteSpace(utente.Cognome) || string.IsNullOrWhiteSpace(utente.Nome) ||
+                //    string.IsNullOrWhiteSpace(utente.CodiceFiscale) || string.IsNullOrWhiteSpace(utente.Password) ||
+                //    string.IsNullOrWhiteSpace(utente.CittaNascita) || string.IsNullOrWhiteSpace(utente.ProvinciaNascita) ||
+                //    string.IsNullOrWhiteSpace(utente.Sesso) || string.IsNullOrWhiteSpace(utente.Email))
+                //{
+                //    return new ContentResult
+                //    {
+                //        Content = "Tutti i campi sono obbligatori.",
+                //        ContentType = "text/plain",
+                //        StatusCode = 400
+                //    };
+                //}
 
                 if (utente.CodiceFiscale.Length != 16 || utente.Password.Length != 16 || utente.ProvinciaNascita.Length != 2 || (utente.Sesso != "M" && utente.Sesso != "F"))
                 {
