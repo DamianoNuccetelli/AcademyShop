@@ -28,7 +28,7 @@ namespace AcademyShopAPI.Controllers
             try
             {
                 var result = await _oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-                return Ok(result);
+                return Ok(result); 
             }
             catch (ApplicationException ex)
             {

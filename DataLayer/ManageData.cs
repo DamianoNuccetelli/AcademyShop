@@ -194,15 +194,10 @@ namespace DataLayer
                 }
             }
         }
-
-        public ManageData(AcademyShopDBContext context)
-        {
-            _context = context;
-        }
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-#pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
+#pragma warning disable CS8603
             return await (from ordine in _context.Ordines
                           join statoOrdine in _context.StatoOrdines on ordine.FkIdStato equals statoOrdine.Id
                           join dettaglioOrdine in _context.DettaglioOrdines on ordine.Id equals dettaglioOrdine.FkIdOrdine
@@ -218,7 +213,7 @@ namespace DataLayer
                               DataRegistrazione = ordine.DataRegistrazione,
                               DataAggiornamento = ordine.DataAggiornamento
                           }).FirstOrDefaultAsync();
-#pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
+#pragma warning restore CS8603 
         }
     }
 }

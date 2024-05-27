@@ -15,11 +15,11 @@ namespace AcademyShopAPI.Controllers
     public class OrdineController : ControllerBase
     {
         private readonly AcademyShopDBContext _context;
-        private ManageBusiness oBL = null;
+        private readonly ManageBusiness oBL;
 
-        public OrdineController(AcademyShopDBContext context)
+        public OrdineController(ManageBusiness _oBL)
         {
-            _context = context;
+           oBL = _oBL;
         }
 
         // GET: api/Ordine
@@ -48,7 +48,7 @@ namespace AcademyShopAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutOrdine(int idUtente, int idDettaglioOrdine, int quantita)
         {
-            oBL = new ManageBusiness(_context);
+            
             try
             {
                 // Verifica dell'utente loggato

@@ -7,22 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 
+
 namespace BusinessLayer
 {
     public class ManageBusiness
     {
-        private readonly AcademyShopDBContext _context;
 
-        private ManageData oDL = null;
+        private readonly ManageData oDL;
 
-        public ManageBusiness(AcademyShopDBContext context)
+        public ManageBusiness(ManageData _oDL)
         {
-            _context = context;
+            oDL = _oDL;
         }
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
-            oDL = new ManageData(_context);
             try
             {
                 // Chiama il metodo corrispondente del data layer per recuperare l'ID dell'ordine
@@ -38,7 +37,7 @@ namespace BusinessLayer
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
-            oDL = new ManageData(_context);
+           // oDL = new ManageData(_context);
             try
             {
                 // Chiama il metodo corrispondente del data layer per recuperare l'ID dell'ordine
@@ -53,7 +52,6 @@ namespace BusinessLayer
 
         public async Task<int?> RecuperaQuantitaProdottoAsync(int idOrdineEsistente)
         {
-            oDL = new ManageData(_context);
             try
             {
                 // Chiama il metodo corrispondente del data layer per recuperare l'ID dell'ordine
@@ -68,7 +66,6 @@ namespace BusinessLayer
 
         public async Task<int?> RecuperaIdProdottoAsync(int idOrdineEsistente)
         {
-            oDL = new ManageData(_context);
             try
             {
                 // Chiama il metodo corrispondente del data layer per recuperare l'ID dell'ordine
@@ -83,7 +80,6 @@ namespace BusinessLayer
 
         public async Task<bool> ModificaOrdineAsync(int idOrdineEsistente, int idProdotto, int quantita)
         {
-            oDL = new ManageData(_context);
             try
             {
                 return await oDL.ModificaOrdineAsync(idOrdineEsistente, idProdotto, quantita);
@@ -93,6 +89,12 @@ namespace BusinessLayer
                 // Gestisci l'errore, ad esempio registrandolo o rilanciandolo
                 throw new Exception("Errore durante la modifica dell'ordine nel business layer.", ex);
             }
+        }
+
+
+        public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
+        {
+            return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
         }
 
     }
