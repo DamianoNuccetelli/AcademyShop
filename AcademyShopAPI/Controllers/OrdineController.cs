@@ -171,11 +171,9 @@ namespace AcademyShopAPI.Controllers
         /* INSERIMENTO NUOVO ORDINE*/
         public async Task<ActionResult<int>> NuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
         {
-            int idOrdine;
-
             try
             {
-                idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
+                int idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
                 return StatusCode(201, idOrdine);
             }
             catch (ArgumentException)
