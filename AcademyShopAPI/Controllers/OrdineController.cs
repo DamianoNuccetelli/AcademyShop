@@ -52,9 +52,7 @@ namespace AcademyShopAPI.Controllers
             
             try
             {
-                // Verifica dell'utente loggato
-                //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
-
+               
                 // Chiamata al business layer per verificare l'esistenza dell'ordine
                 int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
 
