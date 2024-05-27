@@ -119,19 +119,60 @@ namespace AcademyShopAPI.Controllers
         }
 
         // DELETE: api/Ordine/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrdine(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrdine(int idUtente, int idDettaglioOrdine)
         {
-            var ordine = await _context.Ordines.FindAsync(id);
-            if (ordine == null)
+
+            try
             {
-                return NotFound();
+                // Verifica dell'utente loggato
+                //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
+
+                // Chiamata al business layer per verificare l'esistenza dell'ordine
+                int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
+
+                if (idOrdineEsistente == null)
+                {
+                    return BadRequest("L'ordine non esiste.");
+                }
+
+                // Altri controlli di business, se necessario...
+                //Chiamata al business layer per recuperare lo stato dell'ordine
+
+                int statoOrdine = (int)await oBL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
+                if (statoOrdine == 3)
+                {
+                    return BadRequest("L'ordine è chiuso"); // Stato dell'ordine chiuso
+                }
+
+                // Chiamata al business layer per recuperare la quantità del prodotto
+
+                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idOrdineEsistente);
+
+                int? idProdotto = await oBL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+                if (idProdotto == null)
+                {
+                    return BadRequest("Il prodotto non esiste"); // Prodotto non esistente
+                }
+
+                // Chiamata al business layer per modificare l'ordine (transazioni)
+                bool successo = await oBL.DeleteOrdineAsync((int)idOrdineEsistente);
+
+                if (successo)
+                {
+                    return NoContent(); // Operazione completata con successo
+                }
+                else
+                {
+                    return BadRequest(); // Errore nell'operazione di cancellazione dell'ordine
+                }
             }
-
-            _context.Ordines.Remove(ordine);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Gestione degli errori
+                return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
+            }
         }
 
         private bool OrdineExists(int id)

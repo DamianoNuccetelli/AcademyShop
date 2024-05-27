@@ -91,6 +91,18 @@ namespace BusinessLayer
             }
         }
 
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            try
+            {
+                return await oDL.DeleteOrdineAsync(idOrdineEsistente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante la cancellazione dell'ordine nel business layer.", ex);
+            }
+        }
+
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {

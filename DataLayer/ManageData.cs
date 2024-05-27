@@ -215,5 +215,55 @@ namespace DataLayer
                           }).FirstOrDefaultAsync();
 #pragma warning restore CS8603 
         }
+
+        //Francesco
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Recupera l'ordine esistente
+                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
+                    if (ordine == null)
+                    {
+                        throw new Exception("Ordine non trovato.");
+                    }
+
+                   
+
+                    // Recupera il dettaglio ordine esistente
+                    var dettaglioOrdine = await _context.DettaglioOrdines
+                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
+                        // Aggiorno le quantità dei prodotti
+                        foreach (var dettaglio in ordine.DettaglioOrdines)
+                        {
+                            var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
+                            if (prodotto != null)
+                            {
+                                prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
+                            }
+                        }
+
+                        // Elimino dettaglio ordine
+                        _context.DettaglioOrdines.RemoveRange(ordine.DettaglioOrdines);
+
+                        // Elimino l'ordine
+                        _context.Ordines.Remove(ordine);
+
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        return true; // Successo
+                    }
+                
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    // Gestione dell'errore
+                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                }
+            }
+        }
     }
 }
