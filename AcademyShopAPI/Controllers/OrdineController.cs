@@ -208,7 +208,7 @@ namespace AcademyShopAPI.Controllers
         {
             try
             {
-                var result = await _oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
 
                 if (result == null)
                 {
