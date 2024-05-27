@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
+using BusinessLayer;
 
 namespace AcademyShopAPI.Controllers
 {
@@ -14,6 +15,7 @@ namespace AcademyShopAPI.Controllers
     public class OrdineController : ControllerBase
     {
         private readonly AcademyShopDBContext _context;
+        private ManageBusiness oBL = null;
 
         public OrdineController(AcademyShopDBContext context)
         {
@@ -43,34 +45,67 @@ namespace AcademyShopAPI.Controllers
 
         // PUT: api/Ordine/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrdine(int id, Ordine ordine)
+        [HttpPut]
+        public async Task<IActionResult> PutOrdine(int idUtente, int idDettaglioOrdine, int quantita)
         {
-            if (id != ordine.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(ordine).State = EntityState.Modified;
-
+            oBL = new ManageBusiness(_context);
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrdineExists(id))
+                // Verifica dell'utente loggato
+                //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
+
+                // Chiamata al business layer per verificare l'esistenza dell'ordine
+                int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
+
+                if (idOrdineEsistente == null)
                 {
-                    return NotFound();
+                    return BadRequest("L'ordine non esiste.");
+                }
+
+                // Altri controlli di business, se necessario...
+                //Chiamata al business layer per recuperare lo stato dell'ordine
+
+                int statoOrdine = (int)await oBL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
+                if (statoOrdine == 3)
+                {
+                    return BadRequest("L'ordine è chiuso"); // Stato dell'ordine chiuso
+                }
+
+                // Chiamata al business layer per recuperare la quantità del prodotto
+
+                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idOrdineEsistente);
+
+                if (quantitaProdottoDisponibile <= quantita || quantitaProdottoDisponibile == 0)
+                {
+                    return BadRequest("La quantita disponibile non è sufficiente"); // Quantità disponibile non sufficiente
+                }
+
+                int? idProdotto = await oBL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+                if (idProdotto == null)
+                {
+                    return BadRequest("Il prodotto non esiste"); // Prodotto non esistente
+                }
+
+                // Chiamata al business layer per modificare l'ordine (transazioni)
+                bool successo = await oBL.ModificaOrdineAsync((int)idOrdineEsistente, (int)idProdotto, quantita);
+
+                if (successo)
+                {
+                    return NoContent(); // Operazione completata con successo
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(); // Errore nell'operazione di modifica dell'ordine
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Gestione degli errori
+                return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
+            }
         }
+
 
         // POST: api/Ordine
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
