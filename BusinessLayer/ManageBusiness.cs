@@ -92,7 +92,18 @@ namespace BusinessLayer
             }
         }
 
-        //Gabriele
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            try
+            {
+                return await oDL.DeleteOrdineAsync(idOrdineEsistente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante la cancellazione dell'ordine nel business layer.", ex);
+            }
+        }
+
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
@@ -210,6 +221,22 @@ namespace BusinessLayer
             return birthDate >= minDate && birthDate <= maxDate;
         }
 
+        public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
+        {
+            int idOrdine;
+            Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
 
+            if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
+            {
+                prodotto.Quantità -= quantità;
+
+                idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                return idOrdine;
+            }
+            else
+            {// codice errore 400
+                throw new ArgumentException();
+            }
+        }
     }
 }
