@@ -195,7 +195,7 @@ namespace BusinessLayer
                 bool userIsValid = await oDL.VerificaUserAsync(userId, password);
                 if (!userIsValid)
                 {
-                    throw new ApplicationException("User ID or password is incorrect.");
+                    throw new ApplicationException("User ID o password incorretti");
                 }
 
                 // Recupera i dettagli dell'ordine
