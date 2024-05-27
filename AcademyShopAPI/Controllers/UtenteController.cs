@@ -11,6 +11,8 @@ using DtoLayer.Dto;
 
 namespace ProgettoAcademyShop.Controller
 {
+    //Task Daniel Roberti -> Aggiunta ed eliminazione utente dal db
+
     [Route("api/[controller]")]
     [ApiController]
     public class UtenteController : ControllerBase
@@ -58,7 +60,7 @@ namespace ProgettoAcademyShop.Controller
 
         // ADD USER
         [HttpPost]
-        public async Task<ActionResult<Utente>> PostUtente(UtenteDTO utenteDTO)
+        public async Task<ActionResult<Utente>> PostUtente(UtenteDTOperPOST utenteDTO)
         {
             try
             {
@@ -74,7 +76,7 @@ namespace ProgettoAcademyShop.Controller
         }
 
         // Non gli passo id e data di registrazione
-        private Utente MapToUtente(UtenteDTO utenteDto)
+        private Utente MapToUtente(UtenteDTOperPOST utenteDto)
         {
             return new Utente
             {
