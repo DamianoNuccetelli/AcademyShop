@@ -117,7 +117,7 @@ namespace BusinessLayer
             }
         }
 
-        //Daniel
+        //Daniel -> Aggiunta e rimozione dell'utente dal db
         public async Task<IEnumerable<Utente>> GetUtentes()
         {
             return await oDL.GetUtentes();
@@ -221,6 +221,7 @@ namespace BusinessLayer
             return birthDate >= minDate && birthDate <= maxDate;
         }
 
+        //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
         {
             int idOrdine;
