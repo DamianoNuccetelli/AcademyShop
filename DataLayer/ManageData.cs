@@ -124,34 +124,6 @@ namespace DataLayer
             }
         }
 
-        public async Task<int?> RecuperaQuantitaProdottoAsync(int idOrdineEsistente)
-        {
-            try
-            {
-                // Esegui una query per recuperare la quantità del prodotto
-                var prodotto = await _context.DettaglioOrdines
-                    .Where(p => p.FkIdOrdine == idOrdineEsistente)
-                    .FirstOrDefaultAsync();
-
-                if (prodotto != null)
-                {
-                    // Restituisci la quantità del prodotto trovato
-                    return prodotto.Quantita;
-                }
-                else
-                {
-                    // Il prodotto non è stato trovato
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
-                // Qui puoi anche restituire null o un altro valore per indicare un errore
-                throw new Exception("Errore durante il recupero della quantità del prodotto.", ex);
-            }
-        }
-
         public async Task<int?> RecuperaIdProdottoAsync(int idOrdineEsistente)
         {
             try
@@ -163,7 +135,7 @@ namespace DataLayer
 
                 if (prodotto != null)
                 {
-                    // Restituisci la quantità del prodotto trovato
+                    // Restituisci l'id del prodotto trovato
                     return prodotto.FkIdProdotto;
                 }
                 else
@@ -179,6 +151,32 @@ namespace DataLayer
                 throw new Exception("Errore durante il recupero della quantità del prodotto.", ex);
             }
         }
+
+        public async Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto)
+        {
+            try
+            {
+                // Esegui una query per recuperare la quantità del prodotto
+                var prodotto = await _context.Prodottos.FindAsync(idProdotto);
+                if (prodotto != null)
+                {
+                    return prodotto.Quantità;
+                }
+                else
+                {
+                    throw new Exception("Prodotto non trovato.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
+                // Qui puoi anche restituire null o un altro valore per indicare un errore
+                throw new Exception("Errore durante il recupero della quantità del prodotto.", ex);
+            }
+        }
+
+        
 
         public async Task<bool> ModificaOrdineAsync(int idOrdineEsistente, int idProdotto, int quantita)
         {
