@@ -257,7 +257,7 @@ namespace AcademyShopAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, "Errore nella richiesta dei dati");
+                return StatusCode(400, "Errore nella richiesta dei dati\n" + ex.Message);
             }
         }
 

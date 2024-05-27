@@ -141,7 +141,7 @@ namespace BusinessLayer
 
             if (userId <= 0 || dettaglioOrdineId <= 0 || !userExists)
             {
-                throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");          
+                throw new ApplicationException("I parametri Id utente e Id Dettaglio ordine sono errati");          
             }
 
           
