@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AcademyShopDBContext>();
+builder.Services.AddScoped<BusinessLayer.ManageBusiness>();
+builder.Services.AddScoped<DataLayer.ManageData>();
 
 var app = builder.Build();
 
