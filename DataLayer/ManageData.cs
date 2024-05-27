@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
+using System.Transactions;
 
 namespace DataLayer
 {
@@ -338,6 +339,75 @@ namespace DataLayer
             {
                 throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
             }
+        }
+        public async Task<Prodotto> GetProdottoAsync(int id)
+        {
+#pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
+            return await _context.Prodottos.FindAsync(id);
+#pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
+        }
+        public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
+        {
+            int idOrdine;
+            Ordine ordine = new Ordine();
+
+            var dettaglioOrdine = new DettaglioOrdine();
+
+            // Creazione ordine 
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+
+                try
+                {
+#pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+                    Utente utente = await _context.Utentes.FindAsync(idUtente);
+#pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+
+                    ordine.FkIdUtente = utente.Id;
+                    ordine.FkIdStato = 1;
+                    ordine.DataRegistrazione = DateTime.Now;
+
+                    _context.Ordines.Add(ordine);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+
+                }
+                catch (Exception ex)
+                {// codice errore 500
+                    transactionScope.Dispose();
+                    throw new TransactionAbortedException();
+                }
+            }
+
+            // aggiornamento quantità prodotto e creazione nuovo dettaglio ordine
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+
+                try
+                {
+                    dettaglioOrdine.FkIdOrdine = ordine.Id;
+                    dettaglioOrdine.FkIdProdotto = prodotto.Id;
+                    dettaglioOrdine.Quantita = quantità;
+
+                    _context.Entry(prodotto).State = EntityState.Modified;
+                    _context.DettaglioOrdines.Add(dettaglioOrdine);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+                    return ordine.Id;
+
+                }
+                catch (Exception ex)
+                {// codice errore 500
+                    transactionScope.Dispose();
+                    throw new TransactionException();
+                }
+            }
+
+
         }
     }
 }
