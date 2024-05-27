@@ -77,7 +77,7 @@ namespace BusinessLayer
 
 
             // Recupera la quantità del prodotto
-            int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idOrdineEsistente);
+            int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
             if (quantitaProdottoDisponibile <= quantita || quantitaProdottoDisponibile == 0)
             {
                 return (false, "La quantità disponibile non è sufficiente.");
