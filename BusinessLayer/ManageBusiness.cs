@@ -107,7 +107,14 @@ namespace BusinessLayer
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-            return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            if(userId <= 0 || dettaglioOrdineId <= 0)
+            {
+                throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");
+            }
+            else
+            {
+                return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            }
         }
 
         //Daniel
@@ -214,6 +221,22 @@ namespace BusinessLayer
             return birthDate >= minDate && birthDate <= maxDate;
         }
 
+        public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
+        {
+            int idOrdine;
+            Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
 
+            if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
+            {
+                prodotto.Quantità -= quantità;
+
+                idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                return idOrdine;
+            }
+            else
+            {// codice errore 400
+                throw new ArgumentException();
+            }
+        }
     }
 }

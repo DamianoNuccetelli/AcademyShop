@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
 using BusinessLayer;
+using System.Transactions;
 
 namespace AcademyShopAPI.Controllers
 {
@@ -107,17 +108,6 @@ namespace AcademyShopAPI.Controllers
         }
 
 
-        // POST: api/Ordine
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Ordine>> PostOrdine(Ordine ordine)
-        {
-            _context.Ordines.Add(ordine);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOrdine", new { id = ordine.Id }, ordine);
-        }
-
         // DELETE: api/Ordine/5
         [HttpDelete]
         public async Task<IActionResult> DeleteOrdine(int idUtente, int idDettaglioOrdine)
@@ -178,6 +168,38 @@ namespace AcademyShopAPI.Controllers
         private bool OrdineExists(int id)
         {
             return _context.Ordines.Any(e => e.Id == id);
+        }
+
+        [HttpPost]
+        /* INSERIMENTO NUOVO ORDINE*/
+        public async Task<ActionResult<int>> NuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
+        {
+            // OrdineBusiness _business = new OrdineBusiness();
+            int idOrdine;
+
+            try
+            {
+                idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
+                return StatusCode(201, idOrdine);
+            }
+            catch (ArgumentException exArg)
+            {
+                return StatusCode(400, "Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.");
+            }
+            catch (TransactionAbortedException exTr)
+            {
+                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine");
+            }
+            catch (TransactionException exATr)
+            {
+                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'aggiornamento del database");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, "Generic Error");
+            }
+
+
         }
     }
 }
