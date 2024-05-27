@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
+using Microsoft.AspNetCore.Mvc;
+using System.Transactions;
 
 namespace DataLayer
 {
@@ -17,50 +19,7 @@ namespace DataLayer
         {
             _context = context;
         }
-        //Metodo  per verificare se utente è presente Florea Renato
-        public async Task<int?> UtenteExists(int id)
-        {
-            var utente = await _context.Utentes.Where(u => u.Id == id).FirstOrDefaultAsync();
 
-            if (utente != null)
-            {
-                return utente.Id;
-            }
-
-            else
-            {
-                return null;
-            }
-           
-        }
-        public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
-        {
-            try
-            {
-                var ordini = await _context.Ordines
-                    .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdiniByIdUserDTO
-                    {
-                        DataRegistrazione = o.DataRegistrazione,
-                        DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, // Assuming navigation property for Stato_Ordine
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id, // Assuming navigation properties and one-to-many relation
-                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                        Quantita = o.DettaglioOrdines.First().Quantita
-                    })
-                    .ToListAsync();
-
-                return ordini;
-                
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Non ci sono ordini per questo utente", ex);
-
-            }
-        }
-
-        
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -203,7 +162,7 @@ namespace DataLayer
 
                     if (dettaglioOrdine != null)
                     {
-                        dettaglioOrdine.Quantita -= quantita;
+                        dettaglioOrdine.Quantita += quantita;
                         _context.Entry(dettaglioOrdine).State = EntityState.Modified;
 
                         // Aggiorna la quantità del prodotto nel magazzino
@@ -237,6 +196,55 @@ namespace DataLayer
                 }
             }
         }
+        //Francesco
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Recupera l'ordine esistente
+                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
+                    if (ordine == null)
+                    {
+                        throw new Exception("Ordine non trovato.");
+                    }
+
+
+
+                    // Recupera il dettaglio ordine esistente
+                    var dettaglioOrdine = await _context.DettaglioOrdines
+                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
+                    // Aggiorno le quantità dei prodotti
+                    foreach (var dettaglio in ordine.DettaglioOrdines)
+                    {
+                        var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
+                        if (prodotto != null)
+                        {
+                            prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
+                        }
+                    }
+
+                    // Elimino dettaglio ordine
+                    _context.DettaglioOrdines.RemoveRange(ordine.DettaglioOrdines);
+
+                    // Elimino l'ordine
+                    _context.Ordines.Remove(ordine);
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return true; // Successo
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    // Gestione dell'errore
+                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                }
+            }
+        }
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
@@ -257,6 +265,152 @@ namespace DataLayer
                               DataAggiornamento = ordine.DataAggiornamento
                           }).FirstOrDefaultAsync();
 #pragma warning restore CS8603 
+        }
+
+        //Daniel -> Aggiunta e rimozione dell'utente dal db
+        public async Task<IEnumerable<Utente>> GetUtentes()
+        {
+            try
+            {
+                return await _context.Utentes.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero degli utenti.", ex);
+            }
+        }
+
+        public async Task<Utente> GetUtente(int id)
+        {
+            try
+            {
+                return await _context.Utentes.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero dell'utente con ID {id}.", ex);
+            }
+        }
+
+        public async Task<ActionResult<Utente>> PostUtente(Utente utente)
+        {
+            try
+            {
+                //Verifica dell'esistenza dell'utente:
+                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
+                {
+                    return new ContentResult
+                    {
+                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
+                        ContentType = "text/plain",
+                        StatusCode = 409
+                    };
+                }
+
+                //Imposto la data di registrazione a quella attuale
+                utente.DataRegistrazione = DateTime.UtcNow;
+
+                //Aggiunta dell'utente al contesto
+                _context.Utentes.Add(utente);
+                await _context.SaveChangesAsync();
+
+                //Restituzione della risposta di creazione
+                return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante la creazione dell'utente.", ex);
+            }
+        }
+
+        public async Task<string> DeleteUtente(int id)
+        {
+            try
+            {
+                //Cerca l'utente con l'ID specificato
+                var utente = await _context.Utentes.FindAsync(id);
+                if (utente == null)
+                {
+                    return "Utente non trovato.";
+                }
+
+                _context.Utentes.Remove(utente);
+                await _context.SaveChangesAsync();
+
+                // Restituisce un messaggio di conferma dell'eliminazione dell'utente
+                return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
+            }
+        }
+
+        //Adriano
+        public async Task<Prodotto> GetProdottoAsync(int id)
+        {
+#pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
+            return await _context.Prodottos.FindAsync(id);
+#pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
+        }
+        public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
+        {
+            Ordine ordine = new Ordine();
+
+            var dettaglioOrdine = new DettaglioOrdine();
+
+            // Creazione ordine 
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+
+                try
+                {
+
+                    ordine.FkIdUtente = idUtente;
+                    ordine.FkIdStato = 1;
+                    ordine.DataRegistrazione = DateTime.Now;
+
+                    _context.Ordines.Add(ordine);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+
+                }
+                catch (Exception)
+                {// codice errore 500
+                    transactionScope.Dispose();
+                    throw new TransactionAbortedException();
+                }
+            }
+
+            // aggiornamento quantità prodotto e creazione nuovo dettaglio ordine
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+
+                try
+                {
+                    dettaglioOrdine.FkIdOrdine = ordine.Id;
+                    dettaglioOrdine.FkIdProdotto = prodotto.Id;
+                    dettaglioOrdine.Quantita = quantità;
+
+                    _context.Entry(prodotto).State = EntityState.Modified;
+                    _context.DettaglioOrdines.Add(dettaglioOrdine);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+                    return ordine.Id;
+
+                }
+                catch (Exception)
+                {// codice errore 500
+                    transactionScope.Dispose();
+                    throw new TransactionException();
+                }
+            }
+
+
         }
     }
 }
