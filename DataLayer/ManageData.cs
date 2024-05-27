@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DataLayer
 {
@@ -18,6 +19,7 @@ namespace DataLayer
             _context = context;
         }
 
+        //Damiano
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -214,6 +216,79 @@ namespace DataLayer
                               DataAggiornamento = ordine.DataAggiornamento
                           }).FirstOrDefaultAsync();
 #pragma warning restore CS8603 
+        }
+
+        //Daniel
+        public async Task<IEnumerable<Utente>> GetUtentes()
+        {
+            try
+            {
+                return await _context.Utentes.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero degli utenti.", ex);
+            }
+        }
+
+        public async Task<Utente> GetUtente(int id)
+        {
+            try
+            {
+                return await _context.Utentes.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero dell'utente con ID {id}.", ex);
+            }
+        }
+
+        public async Task<ActionResult<Utente>> PostUtente(Utente utente)
+        {
+            try
+            {
+                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
+                {
+                    return new ContentResult
+                    {
+                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
+                        ContentType = "text/plain",
+                        StatusCode = 409
+                    };
+                }
+
+                utente.DataRegistrazione = DateTime.UtcNow;
+
+                _context.Utentes.Add(utente);
+                await _context.SaveChangesAsync();
+
+                return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante la creazione dell'utente.", ex);
+            }
+        }
+
+        public async Task<string> DeleteUtente(int id)
+        {
+            try
+            {
+                var utente = await _context.Utentes.FindAsync(id);
+                if (utente == null)
+                {
+                    return "Utente non trovato.";
+                }
+
+                _context.Utentes.Remove(utente);
+                await _context.SaveChangesAsync();
+
+                return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
+            }
         }
     }
 }
