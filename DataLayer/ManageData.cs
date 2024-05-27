@@ -163,7 +163,7 @@ namespace DataLayer
 
                     if (dettaglioOrdine != null)
                     {
-                        dettaglioOrdine.Quantita -= quantita;
+                        dettaglioOrdine.Quantita += quantita;
                         _context.Entry(dettaglioOrdine).State = EntityState.Modified;
 
                         // Aggiorna la quantità del prodotto nel magazzino
