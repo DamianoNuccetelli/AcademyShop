@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BusinessLayer
@@ -107,14 +108,15 @@ namespace BusinessLayer
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-            if(userId <= 0 || dettaglioOrdineId <= 0)
+            var userExists = await oDL.GetUtente(userId) != null;
+
+            if (userId <= 0 || dettaglioOrdineId <= 0 || !userExists)
             {
                 throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");          
             }
-            else
-            {
-                return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-            }
+
+          
+            return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
         }
 
         //Daniel -> Aggiunta e rimozione dell'utente dal db
