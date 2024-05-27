@@ -219,6 +219,10 @@ namespace AcademyShopAPI.Controllers
             {
                 return StatusCode(400, "Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.");
             }
+            catch (KeyNotFoundException)
+            {
+                return StatusCode(404, "Client Error. \nProdotto non presente nel database.");
+            }
             catch (TransactionAbortedException)
             {
                 return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine");

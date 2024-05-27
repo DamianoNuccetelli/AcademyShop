@@ -389,11 +389,17 @@ namespace DataLayer
         }
 
         //Adriano
-        public async Task<Prodotto> GetProdottoAsync(int id)
+        public async Task<Prodotto> GetProdottoAsync(int idProdotto)
         {
+            if (ProdottoExists(idProdotto)) { 
 #pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
-            return await _context.Prodottos.FindAsync(id);
+            return await _context.Prodottos.FindAsync(idProdotto);
 #pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
+       }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
         }
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
@@ -451,8 +457,11 @@ namespace DataLayer
                     throw new TransactionException();
                 }
             }
-
-
+           
+        }
+        public bool ProdottoExists(int id)
+        {
+            return _context.Prodottos.Any(e => e.Id == id);
         }
     }
 }

@@ -256,9 +256,12 @@ namespace BusinessLayer
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
         {
             int idOrdine;
+
+          
             Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
 
-            if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
+            if (prodotto != null && quantità != 0
+                && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
 
@@ -270,5 +273,6 @@ namespace BusinessLayer
                 throw new ArgumentException();
             }
         }
+        }
     }
-}
+
