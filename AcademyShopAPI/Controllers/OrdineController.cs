@@ -100,7 +100,7 @@ namespace AcademyShopAPI.Controllers
                     return BadRequest(); // Errore nell'operazione di modifica dell'ordine
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Gestione degli errori
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
@@ -158,7 +158,7 @@ namespace AcademyShopAPI.Controllers
                     return BadRequest(); // Errore nell'operazione di cancellazione dell'ordine
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Gestione degli errori
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
@@ -182,19 +182,19 @@ namespace AcademyShopAPI.Controllers
                 idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
                 return StatusCode(201, idOrdine);
             }
-            catch (ArgumentException exArg)
+            catch (ArgumentException)
             {
                 return StatusCode(400, "Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.");
             }
-            catch (TransactionAbortedException exTr)
+            catch (TransactionAbortedException)
             {
                 return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine");
             }
-            catch (TransactionException exATr)
+            catch (TransactionException)
             {
                 return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'aggiornamento del database");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(400, "Generic Error");
             }

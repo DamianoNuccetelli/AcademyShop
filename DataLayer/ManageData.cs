@@ -285,7 +285,9 @@ namespace DataLayer
         {
             try
             {
+#pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
                 return await _context.Utentes.FindAsync(id);
+#pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
             }
             catch (Exception ex)
             {
@@ -348,7 +350,6 @@ namespace DataLayer
         }
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
-            int idOrdine;
             Ordine ordine = new Ordine();
 
             var dettaglioOrdine = new DettaglioOrdine();
@@ -371,7 +372,7 @@ namespace DataLayer
                     transactionScope.Complete();
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {// codice errore 500
                     transactionScope.Dispose();
                     throw new TransactionAbortedException();
@@ -397,7 +398,7 @@ namespace DataLayer
                     return ordine.Id;
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {// codice errore 500
                     transactionScope.Dispose();
                     throw new TransactionException();

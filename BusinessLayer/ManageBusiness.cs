@@ -109,7 +109,7 @@ namespace BusinessLayer
         {
             if(userId <= 0 || dettaglioOrdineId <= 0)
             {
-                throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");
+                throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");          
             }
             else
             {

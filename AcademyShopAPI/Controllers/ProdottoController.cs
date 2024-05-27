@@ -28,15 +28,16 @@ namespace AcademyShopAPI.Controllers
             try
             {
                 var result = await _oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                
+                if(result == null)
+                {
+                    return StatusCode(400, "Errore, non sono presenti combinazioni di utenti/prodotti");
+                }
                 return Ok(result); 
             }
-            catch (ApplicationException ex)
+            catch (Exception)
             {
-                return StatusCode(400, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return StatusCode(400, "Errore nella richiesta dei dati");
             }
         }
 
