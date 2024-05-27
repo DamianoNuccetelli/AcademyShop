@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DataLayer
 {
@@ -18,6 +19,7 @@ namespace DataLayer
             _context = context;
         }
 
+        //Damiano
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -194,6 +196,55 @@ namespace DataLayer
                 }
             }
         }
+        //Francesco
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Recupera l'ordine esistente
+                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
+                    if (ordine == null)
+                    {
+                        throw new Exception("Ordine non trovato.");
+                    }
+
+
+
+                    // Recupera il dettaglio ordine esistente
+                    var dettaglioOrdine = await _context.DettaglioOrdines
+                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
+                    // Aggiorno le quantità dei prodotti
+                    foreach (var dettaglio in ordine.DettaglioOrdines)
+                    {
+                        var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
+                        if (prodotto != null)
+                        {
+                            prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
+                        }
+                    }
+
+                    // Elimino dettaglio ordine
+                    _context.DettaglioOrdines.RemoveRange(ordine.DettaglioOrdines);
+
+                    // Elimino l'ordine
+                    _context.Ordines.Remove(ordine);
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return true; // Successo
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    // Gestione dell'errore
+                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                }
+            }
+        }
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
@@ -216,53 +267,76 @@ namespace DataLayer
 #pragma warning restore CS8603 
         }
 
-        //Francesco
-        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        //Daniel
+        public async Task<IEnumerable<Utente>> GetUtentes()
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
+            try
             {
-                try
+                return await _context.Utentes.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero degli utenti.", ex);
+            }
+        }
+
+        public async Task<Utente> GetUtente(int id)
+        {
+            try
+            {
+                return await _context.Utentes.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero dell'utente con ID {id}.", ex);
+            }
+        }
+
+        public async Task<ActionResult<Utente>> PostUtente(Utente utente)
+        {
+            try
+            {
+                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
                 {
-                    // Recupera l'ordine esistente
-                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
-                    if (ordine == null)
+                    return new ContentResult
                     {
-                        throw new Exception("Ordine non trovato.");
-                    }
-
-                   
-
-                    // Recupera il dettaglio ordine esistente
-                    var dettaglioOrdine = await _context.DettaglioOrdines
-                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
-                        // Aggiorno le quantità dei prodotti
-                        foreach (var dettaglio in ordine.DettaglioOrdines)
-                        {
-                            var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
-                            if (prodotto != null)
-                            {
-                                prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
-                            }
-                        }
-
-                        // Elimino dettaglio ordine
-                        _context.DettaglioOrdines.RemoveRange(ordine.DettaglioOrdines);
-
-                        // Elimino l'ordine
-                        _context.Ordines.Remove(ordine);
-
-                        await _context.SaveChangesAsync();
-                        await transaction.CommitAsync();
-
-                        return true; // Successo
-                    }
-                
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    // Gestione dell'errore
-                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
+                        ContentType = "text/plain",
+                        StatusCode = 409
+                    };
                 }
+
+                utente.DataRegistrazione = DateTime.UtcNow;
+
+                _context.Utentes.Add(utente);
+                await _context.SaveChangesAsync();
+
+                return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante la creazione dell'utente.", ex);
+            }
+        }
+
+        public async Task<string> DeleteUtente(int id)
+        {
+            try
+            {
+                var utente = await _context.Utentes.FindAsync(id);
+                if (utente == null)
+                {
+                    return "Utente non trovato.";
+                }
+
+                _context.Utentes.Remove(utente);
+                await _context.SaveChangesAsync();
+
+                return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
             }
         }
     }

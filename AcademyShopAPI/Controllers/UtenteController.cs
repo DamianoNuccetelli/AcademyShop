@@ -6,102 +6,103 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
+using DtoLayer;
+using DtoLayer.Dto;
 
-namespace AcademyShopAPI.Controllers
+namespace ProgettoAcademyShop.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UtenteController : ControllerBase
     {
-        private readonly AcademyShopDBContext _context;
+        private readonly BusinessLayer.ManageBusiness _oBL;
 
-        public UtenteController(AcademyShopDBContext context)
+        public UtenteController(BusinessLayer.ManageBusiness oBL)
         {
-            _context = context;
+            _oBL = oBL;
         }
 
-        // GET: api/Utente
+        // GET USERS
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Utente>>> GetUtentes()
         {
-            return await _context.Utentes.ToListAsync();
-        }
-
-        // GET: api/Utente/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Utente>> GetUtente(int id)
-        {
-            var utente = await _context.Utentes.FindAsync(id);
-
-            if (utente == null)
-            {
-                return NotFound();
-            }
-
-            return utente;
-        }
-
-        // PUT: api/Utente/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUtente(int id, Utente utente)
-        {
-            if (id != utente.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(utente).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var utentes = await _oBL.GetUtentes();
+                return Ok(utentes);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!UtenteExists(id))
+                return StatusCode(500, $"Errore durante il recupero degli utenti: {ex.Message}");
+            }
+        }
+
+        // GET USER
+        [HttpGet("{id}", Name = "GetUtente")]
+        public async Task<ActionResult<Utente>> GetUtente(int id)
+        {
+            try
+            {
+                var utente = await _oBL.GetUtente(id);
+                if (utente == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                return utente;
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Utente
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Utente>> PostUtente(Utente utente)
-        {
-            _context.Utentes.Add(utente);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUtente", new { id = utente.Id }, utente);
-        }
-
-        // DELETE: api/Utente/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUtente(int id)
-        {
-            var utente = await _context.Utentes.FindAsync(id);
-            if (utente == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
             }
-
-            _context.Utentes.Remove(utente);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool UtenteExists(int id)
+        // ADD USER
+        [HttpPost]
+        public async Task<ActionResult<Utente>> PostUtente(UtenteDTO utenteDTO)
         {
-            return _context.Utentes.Any(e => e.Id == id);
+            try
+            {
+                // Esegue la mappatura dei dati da UtenteDto a Utente
+                var utente = MapToUtente(utenteDTO);
+                var result = await _oBL.PostUtente(utente);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Errore durante la creazione dell'utente: {ex.Message}");
+            }
+        }
+
+        // Non gli passo id e data di registrazione
+        private Utente MapToUtente(UtenteDTO utenteDto)
+        {
+            return new Utente
+            {
+                Cognome = utenteDto.Cognome,
+                Nome = utenteDto.Nome,
+                DataNascita = utenteDto.DataNascita,
+                CittaNascita = utenteDto.CittaNascita,
+                ProvinciaNascita = utenteDto.ProvinciaNascita,
+                Sesso = utenteDto.Sesso,
+                CodiceFiscale = utenteDto.CodiceFiscale,
+                Email = utenteDto.Email,
+                Password = utenteDto.Password
+            };
+        }
+
+        // DELETE USER
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> DeleteUtente(int id)
+        {
+            try
+            {
+                var result = await _oBL.DeleteUtente(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
+            }
         }
     }
 }
