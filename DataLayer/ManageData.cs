@@ -46,8 +46,8 @@ namespace DataLayer
                     {
                         DataRegistrazione = o.DataRegistrazione,
                         DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, // Assuming navigation property for Stato_Ordine
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id, // Assuming navigation properties and one-to-many relation
+                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
+                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
                         DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
                         Quantita = o.DettaglioOrdines.First().Quantita
                     })
