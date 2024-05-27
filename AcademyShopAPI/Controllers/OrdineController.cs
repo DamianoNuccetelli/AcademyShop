@@ -21,7 +21,41 @@ namespace AcademyShopAPI.Controllers
         {
            oBL = _oBL;
         }
+        //Florea Renato Chiamata al BusinessLayer 
+        [HttpGet("GetOrdiniByUserId/{userId}")]
+        public async Task<IActionResult> GetOrdiniByUserId(int userId)
+        {
 
+            try
+            {
+                int? utentePresente = await oBL.UtenteExists(userId);
+
+                if(utentePresente == null)
+                {
+                    return BadRequest("L'utente non esiste");
+                }
+
+                var ordini = await oBL.GetOrdiniByUserId(userId);
+                if (ordini.Count > 0)
+                {
+                    // Se ci sono ordini, restituisci gli ordini dell'utente
+                    return Ok( ordini);
+                }
+                else
+                {
+                    // Se non ci sono ordini, restituisci un messaggio appropriato
+                    return StatusCode(400, "Non ci sono ordini per questo utente.");
+                }
+            }
+           
+
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori qui 
+                return StatusCode(500, "Si è verificato un errore durante il recupero degli ordini: " + ex.Message);
+            }
+        }
+       
         // GET: api/Ordine
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ordine>>> GetOrdines()
