@@ -96,7 +96,14 @@ namespace BusinessLayer
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
-            return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            if(userId <= 0 || dettaglioOrdineId <= 0)
+            {
+                throw new ApplicationException("I parametri userId e dettaglioOrdineId sono errati");
+            }
+            else
+            {
+                return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            }
         }
 
         //Daniel
