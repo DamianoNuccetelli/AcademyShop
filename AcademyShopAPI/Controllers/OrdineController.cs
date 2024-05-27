@@ -238,7 +238,7 @@ namespace AcademyShopAPI.Controllers
 
 
         //NON CANCELLARE I DUE METODI COMMENTATI - GABRIELE 2021-06-15
-        [HttpGet("GetOrdineDettaglio/{userId}/{dettaglioOrdineId}")]
+        [HttpGet("GetOrdineByUser{userId}/{dettaglioOrdineId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
             try
