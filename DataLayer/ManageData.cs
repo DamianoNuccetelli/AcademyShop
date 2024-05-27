@@ -20,7 +20,48 @@ namespace DataLayer
             _context = context;
         }
 
-        //Damiano
+        //Metodo  per verificare se utente è presente Florea Renato
+        public async Task<int?> UtenteExists(int id)
+        {
+            var utente = await _context.Utentes.Where(u => u.Id == id).FirstOrDefaultAsync();
+
+            if (utente != null)
+            {
+                return utente.Id;
+            }
+
+            else
+            {
+                return null;
+            }
+
+        }
+        public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
+        {
+            try
+            {
+                var ordini = await _context.Ordines
+                    .Where(o => o.FkIdUtente == userId)
+                    .Select(o => new OrdiniByIdUserDTO
+                    {
+                        DataRegistrazione = o.DataRegistrazione,
+                        DataAggiornamento = o.DataAggiornamento,
+                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, // Assuming navigation property for Stato_Ordine
+                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id, // Assuming navigation properties and one-to-many relation
+                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                        Quantita = o.DettaglioOrdines.First().Quantita
+                    })
+                    .ToListAsync();
+
+                return ordini;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Non ci sono ordini per questo utente", ex);
+
+            }
+        }
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
