@@ -54,17 +54,17 @@ namespace BusinessLayer
             //Renato Florea chiamata al DataLayer
             public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
             {
-            try
-            {
-                    // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
-                    return await oDL.GetOrdiniByUserId(userId);            
+                try
+                {
+                        // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
+                        return await oDL.GetOrdiniByUserId(userId);            
+                }
+                catch (Exception ex)
+                {
+                    // Gestisci eventuali errori qui 
+                    throw new Exception("Errore durante il recupero dell'ID dell'utente nel business layer.", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                // Gestisci eventuali errori qui 
-                throw new Exception("Errore durante il recupero dell'ID dell'utente nel business layer.", ex);
-            }
-        }
 
 
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
@@ -332,16 +332,24 @@ namespace BusinessLayer
 
 
         //Adriano
-        public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
+        public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)
         {
-            Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
+            Prodotto prodotto;
+            if (oDL.prodottoExists(idProdotto))
+            {
+                prodotto = await oDL.getProdottoAsync(idProdotto);
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
 
             if (prodotto != null && quantità != 0
                 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
 
-                int idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
             }
             else
