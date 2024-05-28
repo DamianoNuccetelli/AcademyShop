@@ -405,7 +405,9 @@ namespace DataLayer
                 {// codice errore 500
                     transactionScope.Dispose();
                     //Cancellazione Ordine in caso di fallimento della seconda transazione
-                    await DeleteOrdineAsync(ordine.Id);
+                    // Elimino l'ordine
+                    _context.Ordines.Remove(ordine);
+                    await _context.SaveChangesAsync();
                     throw new TransactionException();
                 }
             }

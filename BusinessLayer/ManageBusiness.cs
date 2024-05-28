@@ -48,23 +48,49 @@ namespace BusinessLayer
                 throw new Exception("errore durante recupero id utente nel business layer", ex);
             }
         }
-        
 
-            //Renato Florea chiamata al DataLayer
-            public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+
+        //Renato Florea chiamata al DataLayer
+        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+        {
+            try
             {
-                
-                try
+                // Verifica se l'utente esiste
+                bool utenteExists = await oDL.CheckUtenteExistsById(userId);
+
+                if (!utenteExists)
                 {
-                        // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
-                        return await oDL.GetOrdiniByUserId(userId);            
+                    // Se l'utente non esiste, restituisci una risposta di errore 400 (Bad Request)
+                    throw new ArgumentException();
                 }
-                catch (Exception ex)
+
+                // Chiama il metodo corrispondente del data layer per recuperare gli ordini dell'utente
+                var ordini = await oDL.GetOrdiniByUserId(userId);
+
+                if (ordini.Count == 0)
                 {
-                    // Gestisci eventuali errori qui 
-                    throw new Exception("Errore durante il recupero dell'ID dell'utente nel business layer.", ex);
+                    // Se non ci sono ordini, restituisci un messaggio appropriato
+                    throw new InvalidOperationException();
                 }
+
+                // Se ci sono ordini, restituisci gli ordini dell'utente
+                return ordini;
             }
+            catch (InvalidOperationException o)
+            {
+                throw new Exception("Non ci sono ordini per questo utente", o);
+
+            }
+            catch (ArgumentException u)
+            {
+                throw new Exception("Utente non trovato", u);
+            }
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori qui 
+                throw new Exception("Errore durante il recupero degli ordini dell'utente.", ex);
+            }
+        }
 
         //--------------------------------------DAMIANO----------------------------------------------------------
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
