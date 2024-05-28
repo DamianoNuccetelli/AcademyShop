@@ -50,20 +50,20 @@ namespace BusinessLayer
         }
 
 
-        public async Task<(bool success, string message)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
+        public async Task<(bool success, string message, int statusCode)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
         {
             // Verifica l'esistenza dell'ordine
             int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
             if (idOrdineEsistente == null)
             {
-                return (false, "L'ordine non esiste.");
+                return (false, "L'ordine non esiste.", 404);
             }
 
             // Recupera lo stato dell'ordine
             int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
             if (statoOrdine == 3)
             {
-                return (false, "L'ordine è chiuso.");
+                return (false, "L'ordine è chiuso.", 400);
             }
 
 
@@ -71,7 +71,7 @@ namespace BusinessLayer
             int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
             if (idProdotto == null)
             {
-                return (false, "Il prodotto non esiste.");
+                return (false, "Il prodotto non esiste.", 404);
             }
 
 
@@ -79,17 +79,17 @@ namespace BusinessLayer
             int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
             if (quantitaProdottoDisponibile <= quantita || quantitaProdottoDisponibile == 0)
             {
-                return (false, "La quantità disponibile non è sufficiente.");
+                return (false, "La quantità disponibile non è sufficiente.", 400);
             }
 
             // Modifica l'ordine
             bool successo = await oDL.ModificaOrdineAsync((int)idOrdineEsistente, (int)idProdotto, quantita);
             if (!successo)
             {
-                return (false, "Errore nell'operazione di modifica dell'ordine.");
+                return (false, "Errore nell'operazione di modifica dell'ordine.", 500);
             }
 
-            return (true, string.Empty);
+            return (true, string.Empty, 204);
         }
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
@@ -313,9 +313,6 @@ namespace BusinessLayer
         //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
         {
-            int idOrdine;
-
-          
             Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
 
             if (prodotto != null && quantità != 0
@@ -323,7 +320,7 @@ namespace BusinessLayer
             {
                 prodotto.Quantità -= quantità;
 
-                idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                int idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
             }
             else
