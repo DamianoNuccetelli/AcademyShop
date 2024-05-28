@@ -94,7 +94,7 @@ namespace AcademyShopAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest(result.message); // Errore nell'operazione di modifica dell'ordine
+                    return StatusCode(result.statusCode, result.message); // Errore specifico con codice di stato appropriato
                 }
             }
             catch (Exception ex)
@@ -103,6 +103,7 @@ namespace AcademyShopAPI.Controllers
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
             }
         }
+
 
 
         // DELETE: api/Ordine/5
