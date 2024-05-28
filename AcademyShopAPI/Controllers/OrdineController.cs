@@ -140,9 +140,12 @@ namespace AcademyShopAPI.Controllers
 
                 // Chiamata al business layer per recuperare la quantità del prodotto
 
-                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idOrdineEsistente);
-
                 int? idProdotto = await oBL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+
+                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+
+                
 
                 if (idProdotto == null)
                 {
@@ -164,7 +167,7 @@ namespace AcademyShopAPI.Controllers
             catch (Exception)
             {
                 // Gestione degli errori
-                return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
+                return StatusCode(500, "Si è verificato un errore durante la cancellazione dell'ordine.");
             }
         }
 
