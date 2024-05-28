@@ -51,8 +51,9 @@ namespace BusinessLayer
         
 
             //Renato Florea chiamata al DataLayer
-            public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
+            public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
             {
+                
                 try
                 {
                         // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
