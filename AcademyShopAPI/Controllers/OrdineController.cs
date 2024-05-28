@@ -69,9 +69,9 @@ namespace AcademyShopAPI.Controllers
 
         [HttpPost]
         /* INSERIMENTO NUOVO ORDINE*/
-        public async Task<ActionResult<int>> nuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
+        public async Task<ActionResult<int>> nuovoOrdineAsync(int idUtente, int idProdotto, int quantità)
         {
-            var result = await  oBL.nuovoOrdine(idUtente, idprodotto, quantità);
+            var result = await  oBL.nuovoOrdine(idUtente, idProdotto, quantità);
             return result.Value >0 ? StatusCode(201, new { id = result.Value }) : result;
         }
 
