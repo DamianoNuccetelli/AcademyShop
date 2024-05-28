@@ -182,15 +182,53 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+
+        public async Task<ActionResult> DeleteOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
             {
-                return await oDL.DeleteOrdineAsync(idOrdineEsistente);
+                // Chiamata al business layer per verificare l'esistenza dell'ordine
+                int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
+
+                if (idOrdineEsistente == null)
+                {
+                    return ErrorContentResult("l'ordine non esiste", 404);
+                }
+
+                // Altri controlli di business, se necessario...
+                //Chiamata al business layer per recuperare lo stato dell'ordine
+
+                int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
+                if (statoOrdine == 3)
+                {
+                    return ErrorContentResult("l'ordine è chiuso", 404);
+
+                }
+
+                // Chiamata al business layer per recuperare la quantità del prodotto
+
+                int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+                int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+
+                // Chiamata al business layer per modificare l'ordine (transazioni)
+                bool successo = await oDL.DeleteOrdineAsync((int)idOrdineEsistente);
+
+                if (successo)
+                {
+                    return ErrorContentResult (204); // Operazione completata con successo
+                }
+                else
+                {
+                    return ErrorContentResult("Errore durante la cancellazione dell'ordine", 404);
+                    // Errore nell'operazione di cancellazione dell'ordine
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Errore durante la cancellazione dell'ordine nel business layer.", ex);
+                // Gestione degli errori
+                return ErrorContentResult("Si è verificato un errore durante la cancellazione dell'ordine", 404);
+
             }
         }
 
@@ -323,6 +361,15 @@ namespace BusinessLayer
             };
         }
 
+        private ContentResult ErrorContentResult(int statusCode = 400)
+        {
+            return new ContentResult
+            {
+                Content = string.Empty,
+                ContentType = "text/plain",
+                StatusCode = statusCode
+            };
+        }
 
         //Adriano
         public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)

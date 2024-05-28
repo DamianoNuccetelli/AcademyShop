@@ -115,63 +115,9 @@ namespace AcademyShopAPI.Controllers
         public async Task<IActionResult> DeleteOrdine(int idUtente, int idDettaglioOrdine)
         {
 
-            try
-            {
-                // Verifica dell'utente loggato
-                //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
-                var UtenteEsistente = await oBL.GetUtente(idUtente);
-                if (UtenteEsistente == null)
-                {
-                    return BadRequest("L'utente non esiste.");
-                }
-                // Chiamata al business layer per verificare l'esistenza dell'ordine
-                int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
-
-                if (idOrdineEsistente == null)
-                {
-                    return BadRequest("L'ordine non esiste.");
-                }
-
-                // Altri controlli di business, se necessario...
-                //Chiamata al business layer per recuperare lo stato dell'ordine
-
-                int statoOrdine = (int)await oBL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
-                if (statoOrdine == 3)
-                {
-                    return BadRequest("L'ordine è chiuso"); // Stato dell'ordine chiuso
-                }
-
-                // Chiamata al business layer per recuperare la quantità del prodotto
-
-                int? idProdotto = await oBL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
-
-
-                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idProdotto);
-
-                
-
-                if (idProdotto == null)
-                {
-                    return BadRequest("Il prodotto non esiste"); // Prodotto non esistente
-                }
-
-                // Chiamata al business layer per modificare l'ordine (transazioni)
-                bool successo = await oBL.DeleteOrdineAsync((int)idOrdineEsistente);
-
-                if (successo)
-                {
-                    return NoContent(); // Operazione completata con successo
-                }
-                else
-                {
-                    return BadRequest(); // Errore nell'operazione di cancellazione dell'ordine
-                }
-            }
-            catch (Exception)
-            {
-                // Gestione degli errori
-                return StatusCode(500, "Si è verificato un errore durante la cancellazione dell'ordine.");
-            }
+                var deleteOrder = await oBL.DeleteOrdineAsync(idUtente, idDettaglioOrdine);
+                return deleteOrder;
+            
         }
 
         private bool OrdineExists(int id)
