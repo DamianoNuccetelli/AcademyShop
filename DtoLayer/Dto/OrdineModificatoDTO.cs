@@ -8,10 +8,8 @@ namespace DtoLayer.Dto
 {
     public class OrdineModificatoDTO
     {
-        public int Id { get; set; }
-        public int FkIdUtente { get; set; }
-        public int FkIdStato { get; set; }
-        public DateTime DataRegistrazione { get; set; }
+       
+        public int StatoOrdine { get; set; }
         public DateTime? DataAggiornamento { get; set; }
        
     }

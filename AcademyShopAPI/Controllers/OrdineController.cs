@@ -87,24 +87,14 @@ namespace AcademyShopAPI.Controllers
         [HttpPut("{idUtente}/{idDettaglioOrdine}/{quantita}")]
         public async Task<IActionResult> PutOrdine(int idUtente, int idDettaglioOrdine, int quantita)
         {
-            try
-            {
-                var result = await oBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
+            var (success, message, statusCode, ordineModificato) = await oBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
 
-                if (result.success)
-                {
-                    return Ok(result.ordineModificato); // Restituisce il DTO dell'ordine modificato
-                }
-                else
-                {
-                    return StatusCode(result.statusCode, result.message); // Gestisce l'errore con un codice di stato appropriato
-                }
-            }
-            catch
+            if (success)
             {
-                // Gestione degli errori generici
-                return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
+                return Ok(ordineModificato);
             }
+
+            return StatusCode(statusCode, message);
         }
 
 
