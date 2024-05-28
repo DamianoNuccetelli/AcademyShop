@@ -90,11 +90,11 @@ namespace AcademyShopAPI.Controllers
 
                 if (result.success)
                 {
-                    return Ok(result.ordineModificato); // Operazione completata con successo e ritorna i dati dell'ordine modificato
+                    return Ok(result.ordineModificato); // Restituisce il DTO dell'ordine modificato
                 }
                 else
                 {
-                    return StatusCode(result.statusCode, result.message); // Errore specifico con codice di stato appropriato
+                    return StatusCode(result.statusCode, result.message); // Gestisce l'errore con un codice di stato appropriato
                 }
             }
             catch (Exception ex)

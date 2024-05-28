@@ -20,6 +20,20 @@ namespace BusinessLayer
         {
             oDL = _oDL;
         }
+
+
+        private OrdineModificatoDTO MapToDTO(Ordine ordine)
+        {
+            return new OrdineModificatoDTO
+            {
+                Id = ordine.Id,
+                FkIdUtente = ordine.FkIdUtente,
+                FkIdStato = ordine.FkIdStato,
+                DataRegistrazione = ordine.DataRegistrazione,
+                DataAggiornamento = ordine.DataAggiornamento
+               
+            };
+        }
         //Florea chiama dataLayer
         public async Task<int?> UtenteExists(int id)
         {
@@ -50,7 +64,7 @@ namespace BusinessLayer
         }
 
 
-        public async Task<(bool success, string message, int statusCode, Ordine? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
+        public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
         {
             // Verifica l'esistenza dell'ordine
             int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
@@ -87,10 +101,10 @@ namespace BusinessLayer
                 return (false, "Errore nell'operazione di modifica dell'ordine.", 500, null);
             }
 
-            // Recupera i dati dell'ordine modificato
             var ordineModificato = await oDL.RecuperaOrdineModificatoAsync((int)idOrdineEsistente);
+            var ordineModificatoDTO = MapToDTO(ordineModificato); // Mappa l'entità dell'ordine modificato a DTO
 
-            return (true, string.Empty, 200, ordineModificato);
+            return (true, string.Empty, 204, ordineModificatoDTO);
         }
 
 
@@ -290,7 +304,14 @@ namespace BusinessLayer
 
         public async Task<string> DeleteUtente(int id)
         {
-            return await oDL.DeleteUtente(id);
+            try
+            {
+                return await oDL.DeleteUtente(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Si è verificato un errore durante l'eliminazione dell'utente: {ex.Message}");
+            }
         }
 
         private bool IsValidCodiceFiscale(string codiceFiscale)

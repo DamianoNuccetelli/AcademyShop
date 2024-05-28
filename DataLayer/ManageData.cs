@@ -9,6 +9,7 @@ using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Transactions;
 using Azure.Core;
+using Microsoft.AspNetCore.Http;
 
 namespace DataLayer
 {
@@ -393,11 +394,9 @@ namespace DataLayer
                 //Verifica dell'esistenza dell'utente:
                 if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
                 {
-                    return new ContentResult
+                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
                     {
-                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
-                        ContentType = "text/plain",
-                        StatusCode = 409
+                        StatusCode = StatusCodes.Status409Conflict
                     };
                 }
 
@@ -410,6 +409,10 @@ namespace DataLayer
 
                 //Restituzione della risposta di creazione
                 return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception("Errore durante la creazione dell'utente. Problema con il database.", dbEx);
             }
             catch (Exception ex)
             {
@@ -433,6 +436,10 @@ namespace DataLayer
 
                 // Restituisce un messaggio di conferma dell'eliminazione dell'utente
                 return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}. Problema con il database.", dbEx);
             }
             catch (Exception ex)
             {
