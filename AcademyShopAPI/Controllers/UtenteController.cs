@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
 using DtoLayer;
 using DtoLayer.Dto;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace ProgettoAcademyShop.Controller
 {
@@ -77,6 +78,22 @@ namespace ProgettoAcademyShop.Controller
         {
                 var result = await _oBL.DeleteUtente(id);
                 return result;
+        }
+
+        // Leonardo
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        {
+            var (isSuccess, message) = _oBL.LoginUser(loginRequest.Email, loginRequest.Password);
+
+            if (isSuccess)
+            {
+                return Ok(new { Message = message });
+            }
+            else
+            {
+                return NotFound(new { Message = message });
+            }
         }
     }
 }

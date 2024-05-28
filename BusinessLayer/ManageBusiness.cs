@@ -442,6 +442,20 @@ namespace BusinessLayer
                 return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
             }
         }
+
+        // Leonardo
+        public (bool isSuccess, string message) LoginUser(string email, string password)
+        {
+            try
+            {
+                return oDL.LoginUser(email, password);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero di email e password dell'utente nel Business Layer.", ex);
+            }
         }
+    }
     }
 

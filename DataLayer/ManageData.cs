@@ -427,5 +427,30 @@ namespace DataLayer
         {
             return _context.DettaglioOrdines.Any(e => e.Id == id);
         }
+
+        // Leonardo
+        public (bool isSuccess, string message) LoginUser(string email, string password)
+        {
+            // Trova l'utente corrispondente all'email fornita
+            var user = _context.Utentes.SingleOrDefault(u => u.Email == email);
+
+            if (user == null)
+            {
+                // Utente non trovato
+                return (false, "Utente non trovato");
+            }
+
+            // Verifica la password
+            if (user.Password == password)
+            {
+                // Login avvenuto con successo
+                return (true, "Login avvenuto con successo");
+            }
+            else
+            {
+                // Password errata
+                return (false, "Password errata");
+            }
+        }
     }
 }
