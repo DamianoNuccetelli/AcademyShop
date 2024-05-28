@@ -28,51 +28,30 @@ namespace ProgettoAcademyShop.Controller
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Utente>>> GetUtentes()
         {
-            try
-            {
                 var utentes = await _oBL.GetUtentes();
                 return Ok(utentes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Errore durante il recupero degli utenti: {ex.Message}");
-            }
         }
 
         // GET USER
         [HttpGet("{id}", Name = "GetUtente")]
         public async Task<ActionResult<Utente>> GetUtente(int id)
         {
-            try
-            {
                 var utente = await _oBL.GetUtente(id);
                 if (utente == null)
                 {
                     return NotFound();
                 }
                 return utente;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
-            }
         }
 
         // ADD USER
         [HttpPost]
         public async Task<ActionResult<Utente>> PostUtente(UtenteDTOperPOST utenteDTO)
         {
-            try
-            {
                 // Esegue la mappatura dei dati da UtenteDto a Utente
                 var utente = MapToUtente(utenteDTO);
                 var result = await _oBL.PostUtente(utente);
                 return result;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Errore durante la creazione dell'utente: {ex.Message}");
-            }
         }
 
         // Non gli passo id e data di registrazione
@@ -96,15 +75,8 @@ namespace ProgettoAcademyShop.Controller
         [HttpDelete("{id}")]
         public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
-            try
-            {
                 var result = await _oBL.DeleteUtente(id);
                 return result;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
-            }
         }
     }
 }
