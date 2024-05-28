@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 
 namespace BusinessLayer
@@ -202,22 +203,28 @@ namespace BusinessLayer
             ContentResult result = new ContentResult();
             try
             {
-
                 // Recupera i dettagli dell'ordine
                 if (dettaglioOrdineId <= 0)
                 {
-                    throw new ArgumentException();
-                    result.StatusCode = 400;
-                    result.Content = "Ordine non trovato";
+                    throw new ArgumentException("L'ID dell'ordine non è valido.");
+                   
                 }
-            
+                if(oDL.DettaglioOrdineExists(dettaglioOrdineId) == false)
+                {
+                    throw new ArgumentException("Dettaglio ordine non trovato.");
+                }  
+
+                bool utenteExists = await oDL.CheckUtenteExistsById(userId);
+
+                if (utenteExists == false)
+                {
+                    throw new ArgumentException("Utente non trovato");
+                }
                 return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
             }
             catch (Exception ex)
             {
-                throw new Exception( ex.Message);
-                result.StatusCode = 400;
-                result.Content = "Errore, eccezione";
+                throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
             }
         }
        
