@@ -52,17 +52,17 @@ namespace BusinessLayer
             //Renato Florea chiamata al DataLayer
             public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
             {
-            try
-            {
-                    // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
-                    return await oDL.GetOrdiniByUserId(userId);            
+                try
+                {
+                        // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
+                        return await oDL.GetOrdiniByUserId(userId);            
+                }
+                catch (Exception ex)
+                {
+                    // Gestisci eventuali errori qui 
+                    throw new Exception("Errore durante il recupero dell'ID dell'utente nel business layer.", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                // Gestisci eventuali errori qui 
-                throw new Exception("Errore durante il recupero dell'ID dell'utente nel business layer.", ex);
-            }
-        }
 
 
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)

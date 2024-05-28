@@ -40,7 +40,7 @@ namespace AcademyShopAPI.Controllers
                 }
                 // Ottiene gli ordini dell'utente ereditandoli dal ManageBusiness
                 var ordini = await oBL.GetOrdiniByUserId(userId);
-                //Se la lista ordini contiene almeno un elemento, restituisce una risposta HTTP 200 (OK) con la lista degli ordini.
+                //Se la lista ordini contiene almeno un elemento, restituisce una risposta  (OK) con la lista degli ordini.
                 if (ordini.Count > 0)
                 {
                     // Se ci sono ordini, restituisci gli ordini dell'utente
