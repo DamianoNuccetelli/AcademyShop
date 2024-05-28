@@ -238,6 +238,29 @@ namespace DataLayer
                 }
             }
         }
+
+        public async Task<Ordine> RecuperaOrdineModificatoAsync(int idOrdine)
+        {
+            try
+            {
+                var ordine = await _context.Ordines
+                    .Include(o => o.DettaglioOrdines)
+                        .ThenInclude(d => d.FkIdProdottoNavigation)
+                    .Include(o => o.FkIdStatoNavigation)
+                    .FirstOrDefaultAsync(o => o.Id == idOrdine);
+
+                if (ordine == null)
+                {
+                    throw new Exception("Ordine non trovato.");
+                }
+
+                return ordine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero dell'ordine.", ex);
+            }
+        }
         //Francesco
         public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
         {

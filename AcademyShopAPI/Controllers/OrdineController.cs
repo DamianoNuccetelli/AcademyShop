@@ -90,7 +90,7 @@ namespace AcademyShopAPI.Controllers
 
                 if (result.success)
                 {
-                    return NoContent(); // Operazione completata con successo
+                    return Ok(result.ordineModificato); // Operazione completata con successo e ritorna i dati dell'ordine modificato
                 }
                 else
                 {
@@ -103,6 +103,7 @@ namespace AcademyShopAPI.Controllers
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
             }
         }
+
 
 
 

@@ -50,47 +50,49 @@ namespace BusinessLayer
         }
 
 
-        public async Task<(bool success, string message, int statusCode)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
+        public async Task<(bool success, string message, int statusCode, Ordine? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
         {
             // Verifica l'esistenza dell'ordine
             int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
             if (idOrdineEsistente == null)
             {
-                return (false, "L'ordine non esiste.", 404);
+                return (false, "L'ordine non esiste.", 404, null);
             }
 
             // Recupera lo stato dell'ordine
             int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
             if (statoOrdine == 3)
             {
-                return (false, "L'ordine è chiuso.", 400);
+                return (false, "L'ordine è chiuso.", 400, null);
             }
-
 
             // Recupera l'ID del prodotto
             int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
             if (idProdotto == null)
             {
-                return (false, "Il prodotto non esiste.", 404);
+                return (false, "Il prodotto non esiste.", 404, null);
             }
-
 
             // Recupera la quantità del prodotto
             int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
             if (quantitaProdottoDisponibile <= quantita || quantitaProdottoDisponibile == 0)
             {
-                return (false, "La quantità disponibile non è sufficiente.", 400);
+                return (false, "La quantità disponibile non è sufficiente.", 400, null);
             }
 
             // Modifica l'ordine
             bool successo = await oDL.ModificaOrdineAsync((int)idOrdineEsistente, (int)idProdotto, quantita);
             if (!successo)
             {
-                return (false, "Errore nell'operazione di modifica dell'ordine.", 500);
+                return (false, "Errore nell'operazione di modifica dell'ordine.", 500, null);
             }
 
-            return (true, string.Empty, 204);
+            // Recupera i dati dell'ordine modificato
+            var ordineModificato = await oDL.RecuperaOrdineModificatoAsync((int)idOrdineEsistente);
+
+            return (true, string.Empty, 200, ordineModificato);
         }
+
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
