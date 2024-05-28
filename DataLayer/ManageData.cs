@@ -406,8 +406,8 @@ namespace DataLayer
       
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
-            Ordine ordine = new Ordine();
-            DettaglioOrdine dettaglioOrdine = new DettaglioOrdine();
+            Ordine ordine = new();
+            DettaglioOrdine dettaglioOrdine = new();
 
             // Creazione ordine 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
