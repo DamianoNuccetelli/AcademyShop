@@ -94,12 +94,12 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
             try
             {
                 var result = await _oBL.DeleteUtente(id);
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {

@@ -100,9 +100,9 @@ namespace AcademyShopAPI.Controllers
                     return StatusCode(result.statusCode, result.message); // Gestisce l'errore con un codice di stato appropriato
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                // Gestione degli errori
+                // Gestione degli errori generici
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
             }
         }

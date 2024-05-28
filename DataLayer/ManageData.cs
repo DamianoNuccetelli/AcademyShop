@@ -423,19 +423,30 @@ namespace DataLayer
             }
         }
 
-        public async Task<string> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
-            var utente = await _context.Utentes.FindAsync(id);
-            if (utente == null)
+            try
             {
-                return "Utente non trovato.";
+                var utente = await _context.Utentes.FindAsync(id);
+                if (utente == null)
+                {
+                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
+                    {
+                        StatusCode = StatusCodes.Status409Conflict
+                    };
+                }
+
+                _context.Utentes.Remove(utente);
+                await _context.SaveChangesAsync();
+
+                return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
             }
-
-            _context.Utentes.Remove(utente);
-            await _context.SaveChangesAsync();
-
-            return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
+            }
         }
+
 
         //Adriano
 
