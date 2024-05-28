@@ -180,7 +180,7 @@ namespace AcademyShopAPI.Controllers
             try
             {
                 int idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
-                return StatusCode(201, idOrdine);
+                return StatusCode(201, new { id = idOrdine });
             }
             catch (ArgumentException)
             {
