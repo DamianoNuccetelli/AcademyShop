@@ -450,7 +450,7 @@ namespace DataLayer
 
         //Adriano
 
-        public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
+        public async Task<int> nuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             Ordine ordine = new();
             DettaglioOrdine dettaglioOrdine = new();
@@ -500,25 +500,20 @@ namespace DataLayer
                 catch (Exception)
                 {// codice errore 500
                     transactionScope.Dispose();
+                    //Cancellazione Ordine in caso di fallimento della seconda transazione
+                    await DeleteOrdineAsync(ordine.Id);
                     throw new TransactionException();
                 }
             }
            
         }
-        public async Task<Prodotto> GetProdottoAsync(int idProdotto)
+        public async Task<Prodotto> getProdottoAsync(int idProdotto)
         {    // Controllo esistenza del prodotto 
-            if (ProdottoExists(idProdotto))
-            {
                 #pragma warning disable CS8603
                 return await _context.Prodottos.FindAsync(idProdotto);
                 #pragma warning restore CS8603
-            }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
         }
-        public bool ProdottoExists(int id)
+        public bool prodottoExists(int id)
         {
             return _context.Prodottos.Any(e => e.Id == id);
         }

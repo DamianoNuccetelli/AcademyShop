@@ -344,16 +344,24 @@ namespace BusinessLayer
         }
 
         //Adriano
-        public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
+        public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)
         {
-            Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
+            Prodotto prodotto;
+            if (oDL.prodottoExists(idProdotto))
+            {
+                prodotto = await oDL.getProdottoAsync(idProdotto);
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
 
             if (prodotto != null && quantità != 0
                 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
 
-                int idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
             }
             else
