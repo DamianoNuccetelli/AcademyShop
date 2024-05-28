@@ -304,7 +304,23 @@ namespace BusinessLayer
 
         public async Task<string> DeleteUtente(int id)
         {
-            return await oDL.DeleteUtente(id);
+            try
+            {
+                // Controlla se l'utente esiste prima di procedere con l'eliminazione
+                var utente = await oDL.GetUtente(id);
+                if (utente == null)
+                {
+                    return "Utente non trovato.";
+                }
+
+                // Elimina l'utente utilizzando il data layer
+                return await oDL.DeleteUtente(id);
+            }
+            catch (Exception ex)
+            {
+                // Gestisce le eccezioni
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello della logica di business.", ex);
+            }
         }
 
         private bool IsValidCodiceFiscale(string codiceFiscale)
