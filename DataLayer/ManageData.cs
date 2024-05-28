@@ -210,10 +210,7 @@ namespace DataLayer
                     foreach (var dettaglio in ordine.DettaglioOrdines)
                     {
                         var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
-                        if (prodotto != null)
-                        {
-                            prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
-                        }
+                        prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
                     }
 
                     // Elimino dettaglio ordine

@@ -203,8 +203,12 @@ namespace BusinessLayer
                 // Chiamata al business layer per recuperare la quantità del prodotto
 
                 int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+                if (idProdotto == null)
+                {
+                    return ErrorContentResult("il prodotto non esiste", 404);
+                }
 
-                int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+                    int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
 
                 // Chiamata al business layer per modificare l'ordine (transazioni)
                 bool successo = await oDL.DeleteOrdineAsync((int)idOrdineEsistente);
