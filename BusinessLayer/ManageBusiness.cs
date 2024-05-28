@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Transactions;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 
 namespace BusinessLayer
@@ -49,8 +51,9 @@ namespace BusinessLayer
         
 
             //Renato Florea chiamata al DataLayer
-            public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
+            public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
             {
+                
                 try
                 {
                         // Chiama il metodo corrispondente del data layer per recuperare l'id dell'utente
@@ -193,22 +196,28 @@ namespace BusinessLayer
             ContentResult result = new ContentResult();
             try
             {
-
                 // Recupera i dettagli dell'ordine
                 if (dettaglioOrdineId <= 0)
                 {
-                    throw new ArgumentException();
-                    result.StatusCode = 400;
-                    result.Content = "Ordine non trovato";
+                    throw new ArgumentException("L'ID dell'ordine non è valido.");
+                   
                 }
-            
+                if(oDL.DettaglioOrdineExists(dettaglioOrdineId) == false)
+                {
+                    throw new ArgumentException("Dettaglio ordine non trovato.");
+                }  
+
+                bool utenteExists = await oDL.CheckUtenteExistsById(userId);
+
+                if (utenteExists == false)
+                {
+                    throw new ArgumentException("Utente non trovato");
+                }
                 return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
             }
             catch (Exception ex)
             {
-                throw new Exception( ex.Message);
-                result.StatusCode = 400;
-                result.Content = "Errore, eccezione";
+                throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
             }
         }
        
@@ -317,7 +326,7 @@ namespace BusinessLayer
 
 
         //Adriano
-        public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)
+        public async Task<ActionResult<int>> nuovoOrdine(int idUtente, int idProdotto, int quantità)
         {
             Prodotto prodotto;
             if (oDL.prodottoExists(idProdotto))
@@ -326,20 +335,34 @@ namespace BusinessLayer
             }
             else
             {
-                throw new KeyNotFoundException();
+               return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404);
             }
 
             if (prodotto != null && quantità != 0
                 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
-
+                try 
+                { 
                 int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
+                }
+                catch (TransactionAbortedException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
+                }
+                catch (TransactionException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
+                }
+                catch (Exception)
+                {
+                    return ErrorContentResult( "Generic Error", 400);
+                }
             }
             else
             {// codice errore 400
-                throw new ArgumentException();
+                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
             }
         }
         }

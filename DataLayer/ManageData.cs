@@ -39,20 +39,21 @@ namespace DataLayer
 
         }
         //Florea Renato operazione per ottenere i dati degli ordini ricevendo in input l'id utente 
-        public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
+        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
         {
             try
             {
 
                 var ordini = await _context.Ordines
                     .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdiniByIdUserDTO
+                    .Select(o => new OrdineDettaglioDTOperGET
                     {
+                        ProdottoNome = o.DettaglioOrdines.First().FkIdProdottoNavigation.Nome,
                         DataRegistrazione = o.DataRegistrazione,
                         DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione,
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                        StatoOrdineDescrizione = o.FkIdStatoNavigation.Descrizione,
+                        ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                        ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
                         Quantita = o.DettaglioOrdines.First().Quantita
                     })
                     .ToListAsync();
@@ -348,6 +349,11 @@ namespace DataLayer
             return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
+        public async Task<bool> CheckUtenteExistsById(int id)
+        {
+            return await _context.Utentes.AnyAsync(u => u.Id == id);
+        }
+
 
         //Adriano
 
@@ -417,6 +423,10 @@ namespace DataLayer
         public bool prodottoExists(int id)
         {
             return _context.Prodottos.Any(e => e.Id == id);
+        }
+        public bool DettaglioOrdineExists(int id)
+        {
+            return _context.DettaglioOrdines.Any(e => e.Id == id);
         }
     }
 }

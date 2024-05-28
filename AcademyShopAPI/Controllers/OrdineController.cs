@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
 using BusinessLayer;
 using System.Transactions;
+using Humanizer.Localisation;
 
 namespace AcademyShopAPI.Controllers
 {
@@ -15,7 +16,6 @@ namespace AcademyShopAPI.Controllers
     [ApiController]
     public class OrdineController : ControllerBase
     {
-        private readonly AcademyShopDBContext _context;
         private readonly ManageBusiness oBL;
 
         public OrdineController(ManageBusiness _oBL)
@@ -59,27 +59,6 @@ namespace AcademyShopAPI.Controllers
                 // Gestisci eventuali errori qui 
                 return StatusCode(500, "Si è verificato un errore durante il recupero degli ordini: " + ex.Message);
             }
-        }
-
-        // GET: api/Ordine
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ordine>>> GetOrdines()
-        {
-            return await _context.Ordines.ToListAsync();
-        }
-
-        // GET: api/Ordine/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Ordine>> GetOrdine(int id)
-        {
-            var ordine = await _context.Ordines.FindAsync(id);
-
-            if (ordine == null)
-            {
-                return NotFound();
-            }
-
-            return ordine;
         }
 
         // PUT: api/Ordine/5
@@ -138,7 +117,7 @@ namespace AcademyShopAPI.Controllers
 
                 int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idProdotto);
 
-                
+
 
                 if (idProdotto == null)
                 {
@@ -164,50 +143,28 @@ namespace AcademyShopAPI.Controllers
             }
         }
 
-        private bool OrdineExists(int id)
-        {
-            return _context.Ordines.Any(e => e.Id == id);
-        }
-
         [HttpPost]
         /* INSERIMENTO NUOVO ORDINE*/
         public async Task<ActionResult<int>> nuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
         {
-            try
-            {
-                int idOrdine = await oBL.nuovoOrdine(idUtente, idprodotto, quantità);
-                return StatusCode(201, new { id = idOrdine });
-            }
-            catch (ArgumentException)
-            {
-                return StatusCode(400, "Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.");
-            }
-            catch (KeyNotFoundException)
-            {
-                return StatusCode(404, "Client Error. \nProdotto non presente nel database.");
-            }
-            catch (TransactionAbortedException)
-            {
-                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine");
-            }
-            catch (TransactionException)
-            {
-                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'aggiornamento del database");
-            }
-            catch (Exception)
-            {
-                return StatusCode(400, "Generic Error");
-            }
-
-
+            var result = await  oBL.nuovoOrdine(idUtente, idprodotto, quantità);
+            return result.Value >0 ? StatusCode(201, new { id = result.Value }) : result;
         }
 
 
         [HttpGet("GetOrdineByUser&Dettaglio{userId}/{dettaglioOrdineId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
-            var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-            return Ok(result);
+            try
+            {
+                var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, "Si è verificato un errore durante il recupero dell'ordine: ---> " + ex.Message);
+            }
+
         }
 
 
