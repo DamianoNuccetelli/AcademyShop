@@ -56,11 +56,13 @@ namespace DataLayer
                 //        Quantita = o.DettaglioOrdines.First().Quantita
                 //    })
                 //    .ToListAsync();
+                ////// Esegui una query utilizzando LINQ per ottenere gli ordini per un utente specifico.////////
                 var ordini = await (from o in _context.Ordines
                                     join s in _context.StatoOrdines on o.FkIdStato equals s.Id
                                     join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
                                     join p in _context.Prodottos on d.FkIdProdotto equals p.Id
                                     where o.FkIdUtente == userId
+                                    // Seleziona i dati necessari per creare un oggetto OrdiniByIdUserDTO.
                                     select new OrdiniByIdUserDTO
                                     {
                                         DataRegistrazione = o.DataRegistrazione,
@@ -71,11 +73,12 @@ namespace DataLayer
                                         Quantita = d.Quantita
                                     }).ToListAsync();
 
-                return ordini;
+                return ordini; // Restituisce la lista degli ordini trovati.
 
             }
             catch (Exception ex)
             {
+                // In caso di eccezione, solleva una nuova eccezione con un messaggio specifico.
                 throw new Exception("Non ci sono ordini per questo utente", ex);
 
             }
@@ -391,15 +394,6 @@ namespace DataLayer
         {
             try
             {
-                //Verifica dell'esistenza dell'utente:
-                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
-                {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
-                    {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
-                }
-
                 //Imposto la data di registrazione a quella attuale
                 utente.DataRegistrazione = DateTime.UtcNow;
 
@@ -427,10 +421,9 @@ namespace DataLayer
                 var utente = await _context.Utentes.FindAsync(id);
                 if (utente == null)
                 {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
                     {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
+                        return new NotFoundObjectResult("Utente non trovato.");
+                    }
                 }
 
                 _context.Utentes.Remove(utente);
@@ -442,6 +435,11 @@ namespace DataLayer
             {
                 throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
             }
+        }
+
+        public async Task<bool> CheckUtenteExists(Utente utente)
+        {
+            return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
 

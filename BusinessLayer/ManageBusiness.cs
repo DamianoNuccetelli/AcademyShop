@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 
 namespace BusinessLayer
@@ -47,6 +48,7 @@ namespace BusinessLayer
                 throw new Exception("errore durante recupero id utente nel business layer", ex);
             }
         }
+        
 
             //Renato Florea chiamata al DataLayer
             public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
@@ -233,61 +235,34 @@ namespace BusinessLayer
         {
             try
             {
+                // Verifico se un utente è gia esistente
+                if (await oDL.CheckUtenteExists(utente))
+                {
+                    return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.", 409);
+                }
+
                 // Controllo tramite regex del codice fiscale
                 if (!IsValidCodiceFiscale(utente.CodiceFiscale))
                 {
-                    return new ContentResult
-                    {
-                        Content = "Il Codice Fiscale non è valido.",
-                        ContentType = "text/plain",
-                        StatusCode = 400
-                    };
+                    return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.");
                 }
 
                 // Controllo tramite regex dell'email
                 if (!IsValidEmail(utente.Email))
                 {
-                    return new ContentResult
-                    {
-                        Content = "L'email non è valida.",
-                        ContentType = "text/plain",
-                        StatusCode = 400
-                    };
+                    return ErrorContentResult("L'email non è valida.");
                 }
 
                 // Controllo sulla data di nascita (l'utente deve essere nato tra il 1900 e il giorno d'oggi)
                 if (!IsValidBirthDate(utente.DataNascita))
                 {
-                    return new ContentResult
-                    {
-                        Content = "La data di nascita non è valida.",
-                        ContentType = "text/plain",
-                        StatusCode = 400
-                    };
+                    return ErrorContentResult("La data di nascita non è valida.");
                 }
 
-                // Controlli di business (al posto di questi controlli utilizzo il campo required sul dto)
-                //if (string.IsNullOrWhiteSpace(utente.Cognome) || string.IsNullOrWhiteSpace(utente.Nome) ||
-                //    string.IsNullOrWhiteSpace(utente.CodiceFiscale) || string.IsNullOrWhiteSpace(utente.Password) ||
-                //    string.IsNullOrWhiteSpace(utente.CittaNascita) || string.IsNullOrWhiteSpace(utente.ProvinciaNascita) ||
-                //    string.IsNullOrWhiteSpace(utente.Sesso) || string.IsNullOrWhiteSpace(utente.Email))
-                //{
-                //    return new ContentResult
-                //    {
-                //        Content = "Tutti i campi sono obbligatori.",
-                //        ContentType = "text/plain",
-                //        StatusCode = 400
-                //    };
-                //}
 
                 if (utente.CodiceFiscale.Length != 16 || utente.Password.Length != 16 || utente.ProvinciaNascita.Length != 2 || (utente.Sesso != "M" && utente.Sesso != "F"))
                 {
-                    return new ContentResult
-                    {
-                        Content = "Uno o più campi non rispettano la lunghezza o i valori richiesti.",
-                        ContentType = "text/plain",
-                        StatusCode = 400
-                    };
+                    return ErrorContentResult("Uno o più campi non rispettano la lunghezza o i valori richiesti.");
                 }
 
                 return await oDL.PostUtente(utente);
@@ -337,6 +312,17 @@ namespace BusinessLayer
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
         }
+
+        private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
+        {
+            return new ContentResult
+            {
+                Content = errorMessage,
+                ContentType = "text/plain",
+                StatusCode = statusCode
+            };
+        }
+
 
         //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)

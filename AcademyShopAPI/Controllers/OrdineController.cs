@@ -30,14 +30,17 @@ namespace AcademyShopAPI.Controllers
 
             try
             {
+                // Verifica se l'utente esiste
                 int? utentePresente = await oBL.UtenteExists(userId);
 
                 if (utentePresente == null)
                 {
+                    // Se l'utente non esiste, restituisce una risposta di errore 400 (Bad Request)
                     return BadRequest("L'utente non esiste");
                 }
-
+                // Ottiene gli ordini dell'utente ereditandoli dal ManageBusiness
                 var ordini = await oBL.GetOrdiniByUserId(userId);
+                //Se la lista ordini contiene almeno un elemento, restituisce una risposta HTTP 200 (OK) con la lista degli ordini.
                 if (ordini.Count > 0)
                 {
                     // Se ci sono ordini, restituisci gli ordini dell'utente
@@ -140,9 +143,12 @@ namespace AcademyShopAPI.Controllers
 
                 // Chiamata al business layer per recuperare la quantità del prodotto
 
-                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idOrdineEsistente);
-
                 int? idProdotto = await oBL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+
+                int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+
+                
 
                 if (idProdotto == null)
                 {
@@ -164,7 +170,7 @@ namespace AcademyShopAPI.Controllers
             catch (Exception)
             {
                 // Gestione degli errori
-                return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
+                return StatusCode(500, "Si è verificato un errore durante la cancellazione dell'ordine.");
             }
         }
 
