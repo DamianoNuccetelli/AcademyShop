@@ -306,11 +306,17 @@ namespace BusinessLayer
         {
             try
             {
+                var utente = await oDL.GetUtente(id);
+                if (utente == null)
+                {
+                    return "Utente non trovato.";
+                }
+
                 return await oDL.DeleteUtente(id);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Si è verificato un errore durante l'eliminazione dell'utente: {ex.Message}");
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello della logica di business.", ex);
             }
         }
 

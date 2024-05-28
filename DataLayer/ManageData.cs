@@ -422,33 +422,20 @@ namespace DataLayer
 
         public async Task<string> DeleteUtente(int id)
         {
-            try
+            var utente = await _context.Utentes.FindAsync(id);
+            if (utente == null)
             {
-                //Cerca l'utente con l'ID specificato
-                var utente = await _context.Utentes.FindAsync(id);
-                if (utente == null)
-                {
-                    return "Utente non trovato.";
-                }
+                return "Utente non trovato.";
+            }
 
-                _context.Utentes.Remove(utente);
-                await _context.SaveChangesAsync();
+            _context.Utentes.Remove(utente);
+            await _context.SaveChangesAsync();
 
-                // Restituisce un messaggio di conferma dell'eliminazione dell'utente
-                return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
-            }
-            catch (DbUpdateException dbEx)
-            {
-                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}. Problema con il database.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
-            }
+            return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
         }
 
         //Adriano
-      
+
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             Ordine ordine = new();
