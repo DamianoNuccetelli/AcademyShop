@@ -304,7 +304,14 @@ namespace BusinessLayer
 
         public async Task<string> DeleteUtente(int id)
         {
-            return await oDL.DeleteUtente(id);
+            try
+            {
+                return await oDL.DeleteUtente(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Si è verificato un errore durante l'eliminazione dell'utente: {ex.Message}");
+            }
         }
 
         private bool IsValidCodiceFiscale(string codiceFiscale)
