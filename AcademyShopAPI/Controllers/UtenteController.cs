@@ -35,7 +35,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Errore durante il recupero degli utenti: {ex.Message}");
+                return StatusCode(500, $"Errore durante il recupero degli utenti: {ex.Message}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
+                return StatusCode(500, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
             }
         }
 
@@ -71,7 +71,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Errore durante la creazione dell'utente: {ex.Message}");
+                return StatusCode(500, $"Errore durante la creazione dell'utente: {ex.Message}");
             }
         }
 
@@ -94,16 +94,16 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
             try
             {
                 var result = await _oBL.DeleteUtente(id);
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
+                return StatusCode(500, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 
 namespace BusinessLayer
@@ -22,7 +23,7 @@ namespace BusinessLayer
         }
 
 
-        private OrdineModificatoDTO MapToDTO(Ordine ordine)
+        private OrdineModificatoDTO MapToDTO(Ordine ordine) 
         {
             return new OrdineModificatoDTO
             {
@@ -34,7 +35,7 @@ namespace BusinessLayer
                
             };
         }
-        //Florea chiama dataLayer
+        //Renato Florea; chiamata al dataLayer
         public async Task<int?> UtenteExists(int id)
         {
             try
@@ -47,6 +48,7 @@ namespace BusinessLayer
                 throw new Exception("errore durante recupero id utente nel business layer", ex);
             }
         }
+        
 
             //Renato Florea chiamata al DataLayer
             public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
@@ -237,6 +239,17 @@ namespace BusinessLayer
         {
             try
             {
+                // Verifico se un utente è gia esistente
+                if (await oDL.CheckUtenteExists(utente))
+                {
+                    return new ContentResult
+                    {
+                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
+                        ContentType = "text/plain",
+                        StatusCode = 409
+                    };
+                }
+
                 // Controllo tramite regex del codice fiscale
                 if (!IsValidCodiceFiscale(utente.CodiceFiscale))
                 {
@@ -270,19 +283,6 @@ namespace BusinessLayer
                     };
                 }
 
-                // Controlli di business (al posto di questi controlli utilizzo il campo required sul dto)
-                //if (string.IsNullOrWhiteSpace(utente.Cognome) || string.IsNullOrWhiteSpace(utente.Nome) ||
-                //    string.IsNullOrWhiteSpace(utente.CodiceFiscale) || string.IsNullOrWhiteSpace(utente.Password) ||
-                //    string.IsNullOrWhiteSpace(utente.CittaNascita) || string.IsNullOrWhiteSpace(utente.ProvinciaNascita) ||
-                //    string.IsNullOrWhiteSpace(utente.Sesso) || string.IsNullOrWhiteSpace(utente.Email))
-                //{
-                //    return new ContentResult
-                //    {
-                //        Content = "Tutti i campi sono obbligatori.",
-                //        ContentType = "text/plain",
-                //        StatusCode = 400
-                //    };
-                //}
 
                 if (utente.CodiceFiscale.Length != 16 || utente.Password.Length != 16 || utente.ProvinciaNascita.Length != 2 || (utente.Sesso != "M" && utente.Sesso != "F"))
                 {
@@ -302,9 +302,25 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<string> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
-            return await oDL.DeleteUtente(id);
+            try
+            {
+                var utente = await oDL.GetUtente(id);
+                if (utente == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                var result = await oDL.DeleteUtente(id);
+
+                //return Ok($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
+                return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello della logica di business.", ex);
+            }
         }
 
         private bool IsValidCodiceFiscale(string codiceFiscale)
@@ -325,6 +341,7 @@ namespace BusinessLayer
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
         }
+
 
         //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
