@@ -44,34 +44,34 @@ namespace DataLayer
             try
             {
 
-                //var ordini = await _context.Ordines
-                //    .Where(o => o.FkIdUtente == userId)
-                //    .Select(o => new OrdiniByIdUserDTO
-                //    {
-                //        DataRegistrazione = o.DataRegistrazione,
-                //        DataAggiornamento = o.DataAggiornamento,
-                //        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
-                //        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                //        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                //        Quantita = o.DettaglioOrdines.First().Quantita
-                //    })
-                //    .ToListAsync();
+                var ordini = await _context.Ordines
+                    .Where(o => o.FkIdUtente == userId)
+                    .Select(o => new OrdiniByIdUserDTO
+                    {
+                        DataRegistrazione = o.DataRegistrazione,
+                        DataAggiornamento = o.DataAggiornamento,
+                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione,
+                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                        Quantita = o.DettaglioOrdines.First().Quantita
+                    })
+                    .ToListAsync();
                 ////// Esegui una query utilizzando LINQ per ottenere gli ordini per un utente specifico.////////
-                var ordini = await (from o in _context.Ordines
-                                    join s in _context.StatoOrdines on o.FkIdStato equals s.Id
-                                    join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
-                                    join p in _context.Prodottos on d.FkIdProdotto equals p.Id
-                                    where o.FkIdUtente == userId
-                                    // Seleziona i dati necessari per creare un oggetto OrdiniByIdUserDTO.
-                                    select new OrdiniByIdUserDTO
-                                    {
-                                        DataRegistrazione = o.DataRegistrazione,
-                                        DataAggiornamento = o.DataAggiornamento,
-                                        DescrizioneStato = s.Descrizione,
-                                        IDProdotto = p.Id,
-                                        DescrizioneProdotto = p.Descrizione,
-                                        Quantita = d.Quantita
-                                    }).ToListAsync();
+                //var ordini = await (from o in _context.Ordines
+                //                    join s in _context.StatoOrdines on o.FkIdStato equals s.Id
+                //                    join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
+                //                    join p in _context.Prodottos on d.FkIdProdotto equals p.Id
+                //                    where o.FkIdUtente == userId
+                //                    // Seleziona i dati necessari per creare un oggetto OrdiniByIdUserDTO.
+                //                    select new OrdiniByIdUserDTO
+                //                    {
+                //                        DataRegistrazione = o.DataRegistrazione,
+                //                        DataAggiornamento = o.DataAggiornamento,
+                //                        DescrizioneStato = s.Descrizione,
+                //                        IDProdotto = p.Id,
+                //                        DescrizioneProdotto = p.Descrizione,
+                //                        Quantita = d.Quantita
+                //                    }).ToListAsync();
 
                 return ordini; // Restituisce la lista degli ordini trovati.
 
@@ -340,11 +340,11 @@ namespace DataLayer
                                          where ordine.FkIdUtente == userId && dettaglioOrdine.Id == dettaglioOrdineId
                                          select new OrdineDettaglioDTOperGET
                                          {
+                                             ProdottoId = prodotto.Id,
                                              ProdottoNome = prodotto.Nome,
                                              ProdottoDescrizione = prodotto.Descrizione,
                                              StatoOrdineDescrizione = statoOrdine.Descrizione,
                                              Quantita = dettaglioOrdine.Quantita,
-                                             ProdottoId = prodotto.Id,
                                              DataRegistrazione = ordine.DataRegistrazione,
                                              DataAggiornamento = ordine.DataAggiornamento
                                          }).FirstOrDefaultAsync();
@@ -394,15 +394,6 @@ namespace DataLayer
         {
             try
             {
-                //Verifica dell'esistenza dell'utente:
-                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
-                {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
-                    {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
-                }
-
                 //Imposto la data di registrazione a quella attuale
                 utente.DataRegistrazione = DateTime.UtcNow;
 
@@ -430,10 +421,9 @@ namespace DataLayer
                 var utente = await _context.Utentes.FindAsync(id);
                 if (utente == null)
                 {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
                     {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
+                        return new NotFoundObjectResult("Utente non trovato.");
+                    }
                 }
 
                 _context.Utentes.Remove(utente);
@@ -445,6 +435,11 @@ namespace DataLayer
             {
                 throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
             }
+        }
+
+        public async Task<bool> CheckUtenteExists(Utente utente)
+        {
+            return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
 
