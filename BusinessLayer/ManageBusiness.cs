@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Transactions;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 
@@ -28,10 +29,8 @@ namespace BusinessLayer
         {
             return new OrdineModificatoDTO
             {
-                Id = ordine.Id,
-                FkIdUtente = ordine.FkIdUtente,
-                FkIdStato = ordine.FkIdStato,
-                DataRegistrazione = ordine.DataRegistrazione,
+               
+                StatoOrdine = ordine.FkIdStato,
                 DataAggiornamento = ordine.DataAggiornamento
                
             };
@@ -93,50 +92,56 @@ namespace BusinessLayer
             }
         }
 
-
+        //--------------------------------------DAMIANO----------------------------------------------------------
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
         {
-            // Verifica l'esistenza dell'ordine
-            int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
+            var idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
             if (idOrdineEsistente == null)
             {
                 return (false, "L'ordine non esiste.", 404, null);
             }
 
-            // Recupera lo stato dell'ordine
-            int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
+            var statoOrdine = await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
             if (statoOrdine == 3)
             {
                 return (false, "L'ordine è chiuso.", 400, null);
             }
 
-            // Recupera l'ID del prodotto
-            int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+            var idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
             if (idProdotto == null)
             {
                 return (false, "Il prodotto non esiste.", 404, null);
             }
 
-            // Recupera la quantità del prodotto
-            int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+            var quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
             if (quantitaProdottoDisponibile <= quantita || quantitaProdottoDisponibile == 0)
             {
                 return (false, "La quantità disponibile non è sufficiente.", 400, null);
             }
 
-            // Modifica l'ordine
-            bool successo = await oDL.ModificaOrdineAsync((int)idOrdineEsistente, (int)idProdotto, quantita);
-            if (!successo)
+            // entità
+            var ordine = await oDL.RecuperaOrdineAsync((int)idOrdineEsistente);
+            var dettaglioOrdine = await oDL.RecuperaDettaglioOrdineAsync((int)idDettaglioOrdine);
+            var prodotto = await oDL.RecuperaProdottoAsync((int)idProdotto);
+
+            if (ordine == null || dettaglioOrdine == null || prodotto == null)
+            {
+                return (false, "Errore nel recupero dei dati.", 500, null);
+            }
+
+
+            // esecuzione transazione data layer
+            var success = await oDL.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, (int)statoOrdine, quantita);
+            if (!success)
             {
                 return (false, "Errore nell'operazione di modifica dell'ordine.", 500, null);
             }
 
             var ordineModificato = await oDL.RecuperaOrdineModificatoAsync((int)idOrdineEsistente);
-            var ordineModificatoDTO = MapToDTO(ordineModificato); // Mappa l'entità dell'ordine modificato a DTO
+            var ordineModificatoDTO = MapToDTO(ordineModificato);
 
             return (true, string.Empty, 204, ordineModificatoDTO);
         }
-
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
@@ -155,7 +160,7 @@ namespace BusinessLayer
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
-           // oDL = new ManageData(_context);
+            // oDL = new ManageData(_context);
             try
             {
                 // Chiama il metodo corrispondente del data layer per recuperare l'ID dell'ordine
@@ -196,29 +201,55 @@ namespace BusinessLayer
             }
         }
 
+        //----------------------------------------------DAMIANO---------------------------------------------------
 
-        public async Task<bool> ModificaOrdineAsync(int idOrdineEsistente, int idProdotto, int quantita)
+
+        public async Task<ActionResult> DeleteOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
             {
-                return await oDL.ModificaOrdineAsync(idOrdineEsistente, idProdotto, quantita);
-            }
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o rilanciandolo
-                throw new Exception("Errore durante la modifica dell'ordine nel business layer.", ex);
-            }
-        }
+                // Chiamata al business layer per verificare l'esistenza dell'ordine
+                int? idOrdineEsistente = await oDL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
 
-        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
-        {
-            try
-            {
-                return await oDL.DeleteOrdineAsync(idOrdineEsistente);
+                if (idOrdineEsistente == null)
+                {
+                    return ErrorContentResult("l'ordine non esiste", 404);
+                }
+
+                // Altri controlli di business, se necessario...
+                //Chiamata al business layer per recuperare lo stato dell'ordine
+
+                int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
+                if (statoOrdine == 3)
+                {
+                    return ErrorContentResult("l'ordine è chiuso", 404);
+
+                }
+
+                // Chiamata al business layer per recuperare la quantità del prodotto
+
+                int? idProdotto = await oDL.RecuperaIdProdottoAsync((int)idOrdineEsistente);
+
+                int? quantitaProdottoDisponibile = await oDL.RecuperaQuantitaProdottoAsync((int)idProdotto);
+
+                // Chiamata al business layer per modificare l'ordine (transazioni)
+                bool successo = await oDL.DeleteOrdineAsync((int)idOrdineEsistente);
+
+                if (successo)
+                {
+                    return ErrorContentResult (204); // Operazione completata con successo
+                }
+                else
+                {
+                    return ErrorContentResult("Errore durante la cancellazione dell'ordine", 404);
+                    // Errore nell'operazione di cancellazione dell'ordine
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Errore durante la cancellazione dell'ordine nel business layer.", ex);
+                // Gestione degli errori
+                return ErrorContentResult("Si è verificato un errore durante la cancellazione dell'ordine", 404);
+
             }
         }
 
@@ -357,9 +388,18 @@ namespace BusinessLayer
             };
         }
 
+        private ContentResult ErrorContentResult(int statusCode = 400)
+        {
+            return new ContentResult
+            {
+                Content = string.Empty,
+                ContentType = "text/plain",
+                StatusCode = statusCode
+            };
+        }
 
         //Adriano
-        public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)
+        public async Task<ActionResult<int>> nuovoOrdine(int idUtente, int idProdotto, int quantità)
         {
             Prodotto prodotto;
             if (oDL.prodottoExists(idProdotto))
@@ -368,20 +408,34 @@ namespace BusinessLayer
             }
             else
             {
-                throw new KeyNotFoundException();
+               return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404);
             }
 
             if (prodotto != null && quantità != 0
                 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
-
+                try 
+                { 
                 int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
+                }
+                catch (TransactionAbortedException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
+                }
+                catch (TransactionException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
+                }
+                catch (Exception)
+                {
+                    return ErrorContentResult( "Generic Error", 400);
+                }
             }
             else
             {// codice errore 400
-                throw new ArgumentException();
+                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
             }
         }
         }
