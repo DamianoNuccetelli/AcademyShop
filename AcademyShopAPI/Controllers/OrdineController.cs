@@ -149,7 +149,7 @@ namespace AcademyShopAPI.Controllers
 
                 int? quantitaProdottoDisponibile = await oBL.RecuperaQuantitaProdottoAsync((int)idProdotto);
 
-                
+
 
                 if (idProdotto == null)
                 {
@@ -192,8 +192,16 @@ namespace AcademyShopAPI.Controllers
         [HttpGet("GetOrdineByUser&Dettaglio{userId}/{dettaglioOrdineId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
-            var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-            return Ok(result);
+            try
+            {
+                var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, "Si è verificato un errore durante il recupero dell'ordine: ---> " + ex.Message);
+            }
+
         }
 
 
