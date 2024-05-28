@@ -39,20 +39,21 @@ namespace DataLayer
 
         }
         //Florea Renato operazione per ottenere i dati degli ordini ricevendo in input l'id utente 
-        public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
+        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
         {
             try
             {
 
                 var ordini = await _context.Ordines
                     .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdiniByIdUserDTO
+                    .Select(o => new OrdineDettaglioDTOperGET
                     {
+                        ProdottoNome = o.DettaglioOrdines.First().FkIdProdottoNavigation.Nome,
                         DataRegistrazione = o.DataRegistrazione,
                         DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione,
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                        StatoOrdineDescrizione = o.FkIdStatoNavigation.Descrizione,
+                        ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                        ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
                         Quantita = o.DettaglioOrdines.First().Quantita
                     })
                     .ToListAsync();
@@ -83,6 +84,26 @@ namespace DataLayer
 
             }
         }
+
+        //-----------------DAMIANO-----------------------//
+
+        public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
+        {
+            return await _context.Ordines.FindAsync(idOrdineEsistente);
+        }
+
+        public async Task<DettaglioOrdine?> RecuperaDettaglioOrdineAsync(int idDettaglioOrdine)
+        {
+            return await _context.DettaglioOrdines
+                .FirstOrDefaultAsync(d => d.Id == idDettaglioOrdine);
+        }
+
+        public async Task<Prodotto?> RecuperaProdottoAsync(int idProdotto)
+        {
+            return await _context.Prodottos.FindAsync(idProdotto);
+        }
+
+
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             var ordine = await _context.DettaglioOrdines
@@ -120,89 +141,52 @@ namespace DataLayer
             var prodotto = await _context.Prodottos.FindAsync(idProdotto);
             return prodotto?.Quantità;
         }
-        
 
-        public async Task<bool> ModificaOrdineAsync(int idOrdineEsistente, int idProdotto, int quantita)
+
+        public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    // Recupera l'ordine esistente
-                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
-                    if (ordine == null)
-                    {
-                        throw new Exception("Ordine non trovato.");
-                    }
-
-                    // Aggiorna la data di aggiornamento e lo stato dell'ordine
+                    // Aggiornamento campi degli oggetti
                     ordine.DataAggiornamento = DateTime.Now;
-                    ordine.FkIdStato = 2; // Assumendo che 2 sia l'ID dello stato "AGGIORNATO"
+                    ordine.FkIdStato = statoOrdine;
+                    dettaglioOrdine.Quantita += quantita;
+                    prodotto.Quantità -= quantita;
+
+                    // Imposta lo stato degli oggetti come modificati
                     _context.Entry(ordine).State = EntityState.Modified;
+                    _context.Entry(dettaglioOrdine).State = EntityState.Modified;
+                    _context.Entry(prodotto).State = EntityState.Modified;
 
-                    // Recupera il dettaglio ordine esistente
-                    var dettaglioOrdine = await _context.DettaglioOrdines
-                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
-
-                    if (dettaglioOrdine != null)
-                    {
-                        dettaglioOrdine.Quantita += quantita;
-                        _context.Entry(dettaglioOrdine).State = EntityState.Modified;
-
-                        // Aggiorna la quantità del prodotto nel magazzino
-                        var prodotto = await _context.Prodottos.FindAsync(idProdotto);
-                        if (prodotto != null)
-                        {
-                            prodotto.Quantità -= quantita;
-                            _context.Entry(prodotto).State = EntityState.Modified;
-                        }
-                        else
-                        {
-                            throw new Exception("Prodotto non trovato.");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Dettaglio ordine non trovato.");
-                    }
-
-                    // Salva tutte le modifiche nel contesto
+                    // Salva le modifiche nel database
                     await _context.SaveChangesAsync();
+
+                    // Commit della transazione
                     await transaction.CommitAsync();
 
                     return true; // Operazione completata con successo
                 }
-                catch (Exception ex)
+                catch
                 {
+                    // Rollback della transazione in caso di errore
                     await transaction.RollbackAsync();
-                    // Gestione dell'errore
-                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                    throw;
                 }
             }
         }
 
-        public async Task<Ordine> RecuperaOrdineModificatoAsync(int idOrdine)
+        public async Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine)
         {
-            try
-            {
-                var ordine = await _context.Ordines
-                    .Include(o => o.DettaglioOrdines)
-                        .ThenInclude(d => d.FkIdProdottoNavigation)
-                    .Include(o => o.FkIdStatoNavigation)
-                    .FirstOrDefaultAsync(o => o.Id == idOrdine);
-
-                if (ordine == null)
-                {
-                    throw new Exception("Ordine non trovato.");
-                }
-
-                return ordine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante il recupero dell'ordine.", ex);
-            }
+            return await _context.Ordines
+                .Include(o => o.DettaglioOrdines)
+                    .ThenInclude(d => d.FkIdProdottoNavigation)
+                .Include(o => o.FkIdStatoNavigation)
+                .FirstOrDefaultAsync(o => o.Id == idOrdine);
         }
+
+        //---------------------------------------------------------------------------------
         //Francesco
         public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
         {
@@ -365,6 +349,11 @@ namespace DataLayer
             return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
+        public async Task<bool> CheckUtenteExistsById(int id)
+        {
+            return await _context.Utentes.AnyAsync(u => u.Id == id);
+        }
+
 
         //Adriano
 
@@ -434,6 +423,10 @@ namespace DataLayer
         public bool prodottoExists(int id)
         {
             return _context.Prodottos.Any(e => e.Id == id);
+        }
+        public bool DettaglioOrdineExists(int id)
+        {
+            return _context.DettaglioOrdines.Any(e => e.Id == id);
         }
     }
 }
