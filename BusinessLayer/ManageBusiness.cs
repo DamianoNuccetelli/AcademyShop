@@ -344,7 +344,6 @@ namespace BusinessLayer
             else
             {
                return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404);
-                //throw new KeyNotFoundException();
             }
 
             if (prodotto != null && quantità != 0

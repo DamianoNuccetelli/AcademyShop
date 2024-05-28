@@ -16,7 +16,6 @@ namespace AcademyShopAPI.Controllers
     [ApiController]
     public class OrdineController : ControllerBase
     {
-        private readonly AcademyShopDBContext _context;
         private readonly ManageBusiness oBL;
 
         public OrdineController(ManageBusiness _oBL)
@@ -60,27 +59,6 @@ namespace AcademyShopAPI.Controllers
                 // Gestisci eventuali errori qui 
                 return StatusCode(500, "Si è verificato un errore durante il recupero degli ordini: " + ex.Message);
             }
-        }
-
-        // GET: api/Ordine
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ordine>>> GetOrdines()
-        {
-            return await _context.Ordines.ToListAsync();
-        }
-
-        // GET: api/Ordine/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Ordine>> GetOrdine(int id)
-        {
-            var ordine = await _context.Ordines.FindAsync(id);
-
-            if (ordine == null)
-            {
-                return NotFound();
-            }
-
-            return ordine;
         }
 
         // PUT: api/Ordine/5
@@ -173,11 +151,6 @@ namespace AcademyShopAPI.Controllers
                 // Gestione degli errori
                 return StatusCode(500, "Si è verificato un errore durante la cancellazione dell'ordine.");
             }
-        }
-
-        private bool OrdineExists(int id)
-        {
-            return _context.Ordines.Any(e => e.Id == id);
         }
 
         [HttpPost]
