@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Transactions;
 
 
 namespace BusinessLayer
@@ -325,7 +326,7 @@ namespace BusinessLayer
 
 
         //Adriano
-        public async Task<int> nuovoOrdine(int idUtente, int idProdotto, int quantità)
+        public async Task<ActionResult<int>> nuovoOrdine(int idUtente, int idProdotto, int quantità)
         {
             Prodotto prodotto;
             if (oDL.prodottoExists(idProdotto))
@@ -334,20 +335,35 @@ namespace BusinessLayer
             }
             else
             {
-                throw new KeyNotFoundException();
+               return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404);
+                //throw new KeyNotFoundException();
             }
 
             if (prodotto != null && quantità != 0
                 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità;
-
+                try 
+                { 
                 int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
+                }
+                catch (TransactionAbortedException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
+                }
+                catch (TransactionException)
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
+                }
+                catch (Exception)
+                {
+                    return ErrorContentResult( "Generic Error", 400);
+                }
             }
             else
             {// codice errore 400
-                throw new ArgumentException();
+                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
             }
         }
         }

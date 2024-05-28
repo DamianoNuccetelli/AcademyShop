@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AcademyShopAPI.Models;
 using BusinessLayer;
 using System.Transactions;
+using Humanizer.Localisation;
 
 namespace AcademyShopAPI.Controllers
 {
@@ -183,33 +184,8 @@ namespace AcademyShopAPI.Controllers
         /* INSERIMENTO NUOVO ORDINE*/
         public async Task<ActionResult<int>> nuovoOrdineAsync(int idUtente, int idprodotto, int quantità)
         {
-            try
-            {
-                int idOrdine = await oBL.nuovoOrdine(idUtente, idprodotto, quantità);
-                return StatusCode(201, new { id = idOrdine });
-            }
-            catch (ArgumentException)
-            {
-                return StatusCode(400, "Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.");
-            }
-            catch (KeyNotFoundException)
-            {
-                return StatusCode(404, "Client Error. \nProdotto non presente nel database.");
-            }
-            catch (TransactionAbortedException)
-            {
-                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine");
-            }
-            catch (TransactionException)
-            {
-                return StatusCode(500, "Server Error.\nSi è verificato un errore durante l'aggiornamento del database");
-            }
-            catch (Exception)
-            {
-                return StatusCode(400, "Generic Error");
-            }
-
-
+            var result = await  oBL.nuovoOrdine(idUtente, idprodotto, quantità);
+            return result.Value >0 ? StatusCode(201, new { id = result.Value }) : result;
         }
 
 
