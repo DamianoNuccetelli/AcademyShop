@@ -90,11 +90,11 @@ namespace AcademyShopAPI.Controllers
 
                 if (result.success)
                 {
-                    return NoContent(); // Operazione completata con successo
+                    return Ok(result.ordineModificato); // Restituisce il DTO dell'ordine modificato
                 }
                 else
                 {
-                    return StatusCode(result.statusCode, result.message); // Errore specifico con codice di stato appropriato
+                    return StatusCode(result.statusCode, result.message); // Gestisce l'errore con un codice di stato appropriato
                 }
             }
             catch (Exception ex)
@@ -103,6 +103,7 @@ namespace AcademyShopAPI.Controllers
                 return StatusCode(500, "Si è verificato un errore durante la modifica dell'ordine.");
             }
         }
+
 
 
 
@@ -115,7 +116,11 @@ namespace AcademyShopAPI.Controllers
             {
                 // Verifica dell'utente loggato
                 //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
-
+                var UtenteEsistente = await oBL.GetUtente(idUtente);
+                if (UtenteEsistente == null)
+                {
+                    return BadRequest("L'utente non esiste.");
+                }
                 // Chiamata al business layer per verificare l'esistenza dell'ordine
                 int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
 
@@ -175,7 +180,7 @@ namespace AcademyShopAPI.Controllers
             try
             {
                 int idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
-                return StatusCode(201, idOrdine);
+                return StatusCode(201, new { id = idOrdine });
             }
             catch (ArgumentException)
             {

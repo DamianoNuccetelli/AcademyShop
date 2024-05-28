@@ -35,7 +35,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Errore durante il recupero degli utenti: {ex.Message}");
+                return StatusCode(400, $"Errore durante il recupero degli utenti: {ex.Message}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
+                return StatusCode(400, $"Errore durante il recupero dell'utente con ID {id}: {ex.Message}");
             }
         }
 
@@ -71,7 +71,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Errore durante la creazione dell'utente: {ex.Message}");
+                return StatusCode(400, $"Errore durante la creazione dell'utente: {ex.Message}");
             }
         }
 
@@ -103,7 +103,7 @@ namespace ProgettoAcademyShop.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
+                return StatusCode(400, $"Errore durante l'eliminazione dell'utente con ID {id}: {ex.Message}");
             }
         }
     }

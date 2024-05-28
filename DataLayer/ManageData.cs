@@ -9,6 +9,7 @@ using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Transactions;
 using Azure.Core;
+using Microsoft.AspNetCore.Http;
 
 namespace DataLayer
 {
@@ -37,22 +38,38 @@ namespace DataLayer
             }
 
         }
+        //Florea Renato operazione per ottenere i dati degli ordini ricevendo in input l'id utente 
         public async Task<List<OrdiniByIdUserDTO>> GetOrdiniByUserId(int userId)
         {
             try
             {
-                var ordini = await _context.Ordines
-                    .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdiniByIdUserDTO
-                    {
-                        DataRegistrazione = o.DataRegistrazione,
-                        DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                        Quantita = o.DettaglioOrdines.First().Quantita
-                    })
-                    .ToListAsync();
+
+                //var ordini = await _context.Ordines
+                //    .Where(o => o.FkIdUtente == userId)
+                //    .Select(o => new OrdiniByIdUserDTO
+                //    {
+                //        DataRegistrazione = o.DataRegistrazione,
+                //        DataAggiornamento = o.DataAggiornamento,
+                //        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
+                //        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                //        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                //        Quantita = o.DettaglioOrdines.First().Quantita
+                //    })
+                //    .ToListAsync();
+                var ordini = await (from o in _context.Ordines
+                                    join s in _context.StatoOrdines on o.FkIdStato equals s.Id
+                                    join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
+                                    join p in _context.Prodottos on d.FkIdProdotto equals p.Id
+                                    where o.FkIdUtente == userId
+                                    select new OrdiniByIdUserDTO
+                                    {
+                                        DataRegistrazione = o.DataRegistrazione,
+                                        DataAggiornamento = o.DataAggiornamento,
+                                        DescrizioneStato = s.Descrizione,
+                                        IDProdotto = p.Id,
+                                        DescrizioneProdotto = p.Descrizione,
+                                        Quantita = d.Quantita
+                                    }).ToListAsync();
 
                 return ordini;
 
@@ -237,6 +254,29 @@ namespace DataLayer
                 }
             }
         }
+
+        public async Task<Ordine> RecuperaOrdineModificatoAsync(int idOrdine)
+        {
+            try
+            {
+                var ordine = await _context.Ordines
+                    .Include(o => o.DettaglioOrdines)
+                        .ThenInclude(d => d.FkIdProdottoNavigation)
+                    .Include(o => o.FkIdStatoNavigation)
+                    .FirstOrDefaultAsync(o => o.Id == idOrdine);
+
+                if (ordine == null)
+                {
+                    throw new Exception("Ordine non trovato.");
+                }
+
+                return ordine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il recupero dell'ordine.", ex);
+            }
+        }
         //Francesco
         public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
         {
@@ -354,11 +394,9 @@ namespace DataLayer
                 //Verifica dell'esistenza dell'utente:
                 if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
                 {
-                    return new ContentResult
+                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
                     {
-                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
-                        ContentType = "text/plain",
-                        StatusCode = 409
+                        StatusCode = StatusCodes.Status409Conflict
                     };
                 }
 
@@ -371,6 +409,10 @@ namespace DataLayer
 
                 //Restituzione della risposta di creazione
                 return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception("Errore durante la creazione dell'utente. Problema con il database.", dbEx);
             }
             catch (Exception ex)
             {
@@ -395,6 +437,10 @@ namespace DataLayer
                 // Restituisce un messaggio di conferma dell'eliminazione dell'utente
                 return $"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.";
             }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}. Problema con il database.", dbEx);
+            }
             catch (Exception ex)
             {
                 throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id}.", ex);
@@ -405,8 +451,8 @@ namespace DataLayer
       
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
-            Ordine ordine = new Ordine();
-            DettaglioOrdine dettaglioOrdine = new DettaglioOrdine();
+            Ordine ordine = new();
+            DettaglioOrdine dettaglioOrdine = new();
 
             // Creazione ordine 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
