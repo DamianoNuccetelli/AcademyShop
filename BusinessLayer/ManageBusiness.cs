@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 
 namespace BusinessLayer
@@ -237,6 +238,17 @@ namespace BusinessLayer
         {
             try
             {
+                // Verifico se un utente è gia esistente
+                if (await oDL.CheckUtenteExists(utente))
+                {
+                    return new ContentResult
+                    {
+                        Content = "Un utente con lo stesso codice fiscale o email esiste già.",
+                        ContentType = "text/plain",
+                        StatusCode = 409
+                    };
+                }
+
                 // Controllo tramite regex del codice fiscale
                 if (!IsValidCodiceFiscale(utente.CodiceFiscale))
                 {
@@ -270,19 +282,6 @@ namespace BusinessLayer
                     };
                 }
 
-                // Controlli di business (al posto di questi controlli utilizzo il campo required sul dto)
-                //if (string.IsNullOrWhiteSpace(utente.Cognome) || string.IsNullOrWhiteSpace(utente.Nome) ||
-                //    string.IsNullOrWhiteSpace(utente.CodiceFiscale) || string.IsNullOrWhiteSpace(utente.Password) ||
-                //    string.IsNullOrWhiteSpace(utente.CittaNascita) || string.IsNullOrWhiteSpace(utente.ProvinciaNascita) ||
-                //    string.IsNullOrWhiteSpace(utente.Sesso) || string.IsNullOrWhiteSpace(utente.Email))
-                //{
-                //    return new ContentResult
-                //    {
-                //        Content = "Tutti i campi sono obbligatori.",
-                //        ContentType = "text/plain",
-                //        StatusCode = 400
-                //    };
-                //}
 
                 if (utente.CodiceFiscale.Length != 16 || utente.Password.Length != 16 || utente.ProvinciaNascita.Length != 2 || (utente.Sesso != "M" && utente.Sesso != "F"))
                 {
@@ -341,6 +340,7 @@ namespace BusinessLayer
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
         }
+
 
         //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)

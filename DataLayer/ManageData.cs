@@ -391,15 +391,6 @@ namespace DataLayer
         {
             try
             {
-                //Verifica dell'esistenza dell'utente:
-                if (await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email))
-                {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
-                    {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
-                }
-
                 //Imposto la data di registrazione a quella attuale
                 utente.DataRegistrazione = DateTime.UtcNow;
 
@@ -427,10 +418,9 @@ namespace DataLayer
                 var utente = await _context.Utentes.FindAsync(id);
                 if (utente == null)
                 {
-                    return new ObjectResult("Un utente con lo stesso codice fiscale o email esiste già.")
                     {
-                        StatusCode = StatusCodes.Status409Conflict
-                    };
+                        return new NotFoundObjectResult("Utente non trovato.");
+                    }
                 }
 
                 _context.Utentes.Remove(utente);
@@ -442,6 +432,11 @@ namespace DataLayer
             {
                 throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
             }
+        }
+
+        public async Task<bool> CheckUtenteExists(Utente utente)
+        {
+            return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
 
