@@ -337,11 +337,11 @@ namespace DataLayer
                                          where ordine.FkIdUtente == userId && dettaglioOrdine.Id == dettaglioOrdineId
                                          select new OrdineDettaglioDTOperGET
                                          {
+                                             ProdottoId = prodotto.Id,
                                              ProdottoNome = prodotto.Nome,
                                              ProdottoDescrizione = prodotto.Descrizione,
                                              StatoOrdineDescrizione = statoOrdine.Descrizione,
                                              Quantita = dettaglioOrdine.Quantita,
-                                             ProdottoId = prodotto.Id,
                                              DataRegistrazione = ordine.DataRegistrazione,
                                              DataAggiornamento = ordine.DataAggiornamento
                                          }).FirstOrDefaultAsync();

@@ -20,10 +20,10 @@ namespace AcademyShopAPI.Controllers
 
         public OrdineController(ManageBusiness _oBL)
         {
-           oBL = _oBL;
+            oBL = _oBL;
         }
         //Florea Renato Chiamata al BusinessLayer 
-        
+
         [HttpGet("GetAllOrdiniByUserId/{userId}")]
         public async Task<IActionResult> GetOrdiniByUserId(int userId)
         {
@@ -32,7 +32,7 @@ namespace AcademyShopAPI.Controllers
             {
                 int? utentePresente = await oBL.UtenteExists(userId);
 
-                if(utentePresente == null)
+                if (utentePresente == null)
                 {
                     return BadRequest("L'utente non esiste");
                 }
@@ -41,7 +41,7 @@ namespace AcademyShopAPI.Controllers
                 if (ordini.Count > 0)
                 {
                     // Se ci sono ordini, restituisci gli ordini dell'utente
-                    return Ok( ordini);
+                    return Ok(ordini);
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace AcademyShopAPI.Controllers
                     return StatusCode(400, "Non ci sono ordini per questo utente.");
                 }
             }
-           
+
 
             catch (Exception ex)
             {
@@ -57,7 +57,7 @@ namespace AcademyShopAPI.Controllers
                 return StatusCode(500, "Si è verificato un errore durante il recupero degli ordini: " + ex.Message);
             }
         }
-       
+
         // GET: api/Ordine
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ordine>>> GetOrdines()
@@ -210,20 +210,8 @@ namespace AcademyShopAPI.Controllers
         [HttpGet("GetOrdineByUser&Dettaglio{userId}/{dettaglioOrdineId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
-            try
-            {
-                var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-
-                if (result == null)
-                {
-                    return StatusCode(400, "Errore, non sono presenti combinazioni di utenti/prodotti");
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, "Errore nella richiesta dei dati\n" + ex.Message);
-            }
+            var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            return Ok(result);
         }
 
 

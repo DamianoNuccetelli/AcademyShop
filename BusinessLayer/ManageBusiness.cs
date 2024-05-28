@@ -196,29 +196,25 @@ namespace BusinessLayer
 
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
+            ContentResult result = new ContentResult();
             try
             {
-                // Recupera la password dell'utente
-                string? password = await oDL.GetUserPassword(userId);
-
-                if (password == null)
-                {
-                    throw new ApplicationException("Utente non trovato");
-                }
-
-                // Verifica se l'utente esiste e la password è corretta
-                bool userIsValid = await oDL.VerificaUserAsync(userId, password);
-                if (!userIsValid)
-                {
-                    throw new ApplicationException("User ID o password incorretti");
-                }
 
                 // Recupera i dettagli dell'ordine
+                if (dettaglioOrdineId <= 0)
+                {
+                    throw new ArgumentException();
+                    result.StatusCode = 400;
+                    result.Content = "Ordine non trovato";
+                }
+            
                 return await oDL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante il recupero dell'ordine", ex);
+                throw new Exception( ex.Message);
+                result.StatusCode = 400;
+                result.Content = "Errore, eccezione";
             }
         }
        
