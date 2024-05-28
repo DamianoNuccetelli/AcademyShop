@@ -56,11 +56,13 @@ namespace DataLayer
                 //        Quantita = o.DettaglioOrdines.First().Quantita
                 //    })
                 //    .ToListAsync();
+                ////// Esegui una query utilizzando LINQ per ottenere gli ordini per un utente specifico.////////
                 var ordini = await (from o in _context.Ordines
                                     join s in _context.StatoOrdines on o.FkIdStato equals s.Id
                                     join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
                                     join p in _context.Prodottos on d.FkIdProdotto equals p.Id
                                     where o.FkIdUtente == userId
+                                    // Seleziona i dati necessari per creare un oggetto OrdiniByIdUserDTO.
                                     select new OrdiniByIdUserDTO
                                     {
                                         DataRegistrazione = o.DataRegistrazione,
@@ -71,11 +73,12 @@ namespace DataLayer
                                         Quantita = d.Quantita
                                     }).ToListAsync();
 
-                return ordini;
+                return ordini; // Restituisce la lista degli ordini trovati.
 
             }
             catch (Exception ex)
             {
+                // In caso di eccezione, solleva una nuova eccezione con un messaggio specifico.
                 throw new Exception("Non ci sono ordini per questo utente", ex);
 
             }
