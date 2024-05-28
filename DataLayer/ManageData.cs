@@ -85,118 +85,41 @@ namespace DataLayer
         }
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
-            try
-            {
-                // Esegui una query per recuperare l'ID dell'ordine
-                var ordine = await _context.DettaglioOrdines
-               .Where(dettaglio => dettaglio.Id == idDettaglioOrdine)
-               .Join(_context.Ordines,
-                     dettaglio => dettaglio.FkIdOrdine,
-                     ordine => ordine.Id,
-                     (dettaglio, ordine) => ordine)
-               .Where(ordine => ordine.FkIdUtente == idUtente)
-               .FirstOrDefaultAsync();
+            var ordine = await _context.DettaglioOrdines
+                .Where(dettaglio => dettaglio.Id == idDettaglioOrdine)
+                .Join(_context.Ordines,
+                      dettaglio => dettaglio.FkIdOrdine,
+                      ordine => ordine.Id,
+                      (dettaglio, ordine) => ordine)
+                .Where(ordine => ordine.FkIdUtente == idUtente)
+                .FirstOrDefaultAsync();
 
-                if (ordine != null)
-                {
-                    // Restituisci l'ID dell'ordine trovato
-                    return ordine.Id;
-                }
-                else
-                {
-                    // L'ordine non è stato trovato
-                    return null;
-                }
-            }
-
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
-                // Qui puoi anche restituire null o un altro valore per indicare un errore
-                throw new Exception("Errore durante il recupero dell'ID dell'ordine.", ex);
-            }
+            return ordine?.Id;
         }
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
-            try
-            {
-                // Esegui una query per recuperare l'ordine con lo stato desiderato
-                var ordine = await _context.Ordines
-                    .Where(o => o.Id == idOrdineEsistente)
-                    .FirstOrDefaultAsync();
+            var ordine = await _context.Ordines
+                .Where(o => o.Id == idOrdineEsistente)
+                .FirstOrDefaultAsync();
 
-                if (ordine != null)
-                {
-                    // Restituisci l'ID dell'ordine trovato
-                    return ordine.FkIdStato;
-                }
-                else
-                {
-                    // L'ordine con lo stato specificato non è stato trovato
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
-                // Qui puoi anche restituire null o un altro valore per indicare un errore
-                throw new Exception("Errore durante il recupero dell'ID dell'ordine basato sullo stato.", ex);
-            }
+            return ordine?.FkIdStato;
         }
 
         public async Task<int?> RecuperaIdProdottoAsync(int idOrdineEsistente)
         {
-            try
-            {
-                // Esegui una query per recuperare la quantità del prodotto
-                var prodotto = await _context.DettaglioOrdines
-                    .Where(p => p.FkIdOrdine == idOrdineEsistente)
-                    .FirstOrDefaultAsync();
+            var prodotto = await _context.DettaglioOrdines
+                .Where(p => p.FkIdOrdine == idOrdineEsistente)
+                .FirstOrDefaultAsync();
 
-                if (prodotto != null)
-                {
-                    // Restituisci l'id del prodotto trovato
-                    return prodotto.FkIdProdotto;
-                }
-                else
-                {
-                    // Il prodotto non è stato trovato
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
-                // Qui puoi anche restituire null o un altro valore per indicare un errore
-                throw new Exception("Errore durante il recupero della quantità del prodotto.", ex);
-            }
+            return prodotto?.FkIdProdotto;
         }
 
         public async Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto)
         {
-            try
-            {
-                // Esegui una query per recuperare la quantità del prodotto
-                var prodotto = await _context.Prodottos.FindAsync(idProdotto);
-                if (prodotto != null)
-                {
-                    return prodotto.Quantità;
-                }
-                else
-                {
-                    throw new Exception("Prodotto non trovato.");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // Gestisci l'errore, ad esempio registrandolo o sollevando un'eccezione
-                // Qui puoi anche restituire null o un altro valore per indicare un errore
-                throw new Exception("Errore durante il recupero della quantità del prodotto.", ex);
-            }
+            var prodotto = await _context.Prodottos.FindAsync(idProdotto);
+            return prodotto?.Quantità;
         }
-
         
 
         public async Task<bool> ModificaOrdineAsync(int idOrdineEsistente, int idProdotto, int quantita)
