@@ -442,6 +442,11 @@ namespace DataLayer
             return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
         }
 
+        public async Task<bool> CheckUtenteExistsById(int id)
+        {
+            return await _context.Utentes.AnyAsync(u => u.Id == id);
+        }
+
 
         //Adriano
 
@@ -516,6 +521,10 @@ namespace DataLayer
         public bool ProdottoExists(int id)
         {
             return _context.Prodottos.Any(e => e.Id == id);
+        }
+        public bool DettaglioOrdineExists(int id)
+        {
+            return _context.DettaglioOrdines.Any(e => e.Id == id);
         }
     }
 }
