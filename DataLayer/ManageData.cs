@@ -402,23 +402,11 @@ namespace DataLayer
         }
 
         //Adriano
-        public async Task<Prodotto> GetProdottoAsync(int idProdotto)
-        {
-            if (ProdottoExists(idProdotto)) { 
-#pragma warning disable CS8603 // Possibile restituzione di riferimento Null.
-            return await _context.Prodottos.FindAsync(idProdotto);
-#pragma warning restore CS8603 // Possibile restituzione di riferimento Null.
-       }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
-        }
+      
         public async Task<int> NuovoOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             Ordine ordine = new Ordine();
-
-            var dettaglioOrdine = new DettaglioOrdine();
+            DettaglioOrdine dettaglioOrdine = new DettaglioOrdine();
 
             // Creazione ordine 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
@@ -426,13 +414,11 @@ namespace DataLayer
 
                 try
                 {
-
                     ordine.FkIdUtente = idUtente;
                     ordine.FkIdStato = 1;
                     ordine.DataRegistrazione = DateTime.Now;
 
                     _context.Ordines.Add(ordine);
-
                     await _context.SaveChangesAsync();
 
                     transactionScope.Complete();
@@ -471,6 +457,19 @@ namespace DataLayer
                 }
             }
            
+        }
+        public async Task<Prodotto> GetProdottoAsync(int idProdotto)
+        {    // Controllo esistenza del prodotto 
+            if (ProdottoExists(idProdotto))
+            {
+                #pragma warning disable CS8603
+                return await _context.Prodottos.FindAsync(idProdotto);
+                #pragma warning restore CS8603
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
         }
         public bool ProdottoExists(int id)
         {

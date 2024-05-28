@@ -314,9 +314,6 @@ namespace BusinessLayer
         //Adriano
         public async Task<int> NuovoOrdine(int idUtente, int idprodotto, int quantità)
         {
-            int idOrdine;
-
-          
             Prodotto prodotto = await oDL.GetProdottoAsync(idprodotto);
 
             if (prodotto != null && quantità != 0
@@ -324,7 +321,7 @@ namespace BusinessLayer
             {
                 prodotto.Quantità -= quantità;
 
-                idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
+                int idOrdine = await oDL.NuovoOrdine(idUtente, prodotto, quantità);
                 return idOrdine;
             }
             else
