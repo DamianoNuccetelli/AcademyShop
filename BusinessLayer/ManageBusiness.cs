@@ -302,17 +302,20 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<string> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
             try
             {
                 var utente = await oDL.GetUtente(id);
                 if (utente == null)
                 {
-                    return "Utente non trovato.";
+                    return new NotFoundResult();
                 }
 
-                return await oDL.DeleteUtente(id);
+                var result = await oDL.DeleteUtente(id);
+
+                //return Ok($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
+                return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
             }
             catch (Exception ex)
             {
