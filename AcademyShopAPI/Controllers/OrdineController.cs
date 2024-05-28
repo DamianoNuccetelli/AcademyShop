@@ -90,11 +90,11 @@ namespace AcademyShopAPI.Controllers
 
                 if (result.success)
                 {
-                    return Ok(result.ordineModificato); // Operazione completata con successo e ritorna i dati dell'ordine modificato
+                    return Ok(result.ordineModificato); // Restituisce il DTO dell'ordine modificato
                 }
                 else
                 {
-                    return StatusCode(result.statusCode, result.message); // Errore specifico con codice di stato appropriato
+                    return StatusCode(result.statusCode, result.message); // Gestisce l'errore con un codice di stato appropriato
                 }
             }
             catch (Exception ex)
@@ -116,7 +116,11 @@ namespace AcademyShopAPI.Controllers
             {
                 // Verifica dell'utente loggato
                 //int idUtenteLoggato = (int)await oBL.RecuperaIdUtente(password, email);
-
+                var UtenteEsistente = await oBL.GetUtente(idUtente);
+                if (UtenteEsistente == null)
+                {
+                    return BadRequest("L'utente non esiste.");
+                }
                 // Chiamata al business layer per verificare l'esistenza dell'ordine
                 int? idOrdineEsistente = await oBL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
 
@@ -176,7 +180,7 @@ namespace AcademyShopAPI.Controllers
             try
             {
                 int idOrdine = await oBL.NuovoOrdine(idUtente, idprodotto, quantità);
-                return StatusCode(201, idOrdine);
+                return StatusCode(201, new { id = idOrdine });
             }
             catch (ArgumentException)
             {
@@ -203,9 +207,7 @@ namespace AcademyShopAPI.Controllers
         }
 
 
-
-        //NON CANCELLARE I DUE METODI COMMENTATI - GABRIELE 2021-06-15
-        [HttpGet("GetOrdineByUser{userId}/{dettaglioOrdineId}")]
+        [HttpGet("GetOrdineByUser&Dettaglio{userId}/{dettaglioOrdineId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
             try

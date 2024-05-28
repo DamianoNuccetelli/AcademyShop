@@ -43,18 +43,33 @@ namespace DataLayer
         {
             try
             {
-                var ordini = await _context.Ordines
-                    .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdiniByIdUserDTO
-                    {
-                        DataRegistrazione = o.DataRegistrazione,
-                        DataAggiornamento = o.DataAggiornamento,
-                        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
-                        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                        Quantita = o.DettaglioOrdines.First().Quantita
-                    })
-                    .ToListAsync();
+
+                //var ordini = await _context.Ordines
+                //    .Where(o => o.FkIdUtente == userId)
+                //    .Select(o => new OrdiniByIdUserDTO
+                //    {
+                //        DataRegistrazione = o.DataRegistrazione,
+                //        DataAggiornamento = o.DataAggiornamento,
+                //        DescrizioneStato = o.FkIdStatoNavigation.Descrizione, 
+                //        IDProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                //        DescrizioneProdotto = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                //        Quantita = o.DettaglioOrdines.First().Quantita
+                //    })
+                //    .ToListAsync();
+                var ordini = await (from o in _context.Ordines
+                                    join s in _context.StatoOrdines on o.FkIdStato equals s.Id
+                                    join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
+                                    join p in _context.Prodottos on d.FkIdProdotto equals p.Id
+                                    where o.FkIdUtente == userId
+                                    select new OrdiniByIdUserDTO
+                                    {
+                                        DataRegistrazione = o.DataRegistrazione,
+                                        DataAggiornamento = o.DataAggiornamento,
+                                        DescrizioneStato = s.Descrizione,
+                                        IDProdotto = p.Id,
+                                        DescrizioneProdotto = p.Descrizione,
+                                        Quantita = d.Quantita
+                                    }).ToListAsync();
 
                 return ordini;
 
