@@ -94,5 +94,32 @@ namespace DataLayer
         }
 
 
+
+        // Leonardo
+        public async Task<Utente> LoginUser(string email, string password)
+        {
+            try
+            {
+                Utente utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                return utente;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+
+        }
+
+
+        private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
+        {
+            return new ContentResult
+            {
+                Content = errorMessage,
+                ContentType = "text/plain",
+                StatusCode = statusCode
+            };
+        }
+
     }
 }

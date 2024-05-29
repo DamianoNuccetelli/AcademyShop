@@ -13,8 +13,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AcademyShopDBContext>();
 builder.Services.AddScoped<BusinessLayer.ManageBusiness>();
 builder.Services.AddScoped<BusinessLayer.ManageUtenteBusiness>();
+builder.Services.AddScoped<BusinessLayer.ManageProdottoBusiness>();
+builder.Services.AddScoped<BusinessLayer.ManageOrdineBusiness>();
 builder.Services.AddScoped<DataLayer.ManageData>();
 builder.Services.AddScoped<DataLayer.ManageUtenteData>();
+builder.Services.AddScoped<DataLayer.ManageProdottoData>();
+builder.Services.AddScoped<DataLayer.ManageOrdineData>();
+
+
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -115,6 +115,26 @@ namespace BusinessLayer
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
         }
+        // Leonardo
+        public async Task<ActionResult<int>> LoginUser(string email, string password)
+        {
+            try
+            {
+                Utente utente = await oUDL.LoginUser(email, password);
 
+                if (utente != null)
+                {
+                    return utente.Id;
+                }
+                else
+                {
+                    return ErrorContentResult("Client Error. \nEmail o Password non corretta.", 404);
+                }
+            }
+            catch (Exception ex)
+            {
+                return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'accesso del database", 500);
+            }
+        }
     }
 }

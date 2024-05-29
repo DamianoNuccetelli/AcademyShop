@@ -17,10 +17,13 @@ namespace AcademyShopAPI.Controllers
     public class OrdineController : ControllerBase
     {
         private readonly ManageBusiness oBL;
+        private readonly ManageOrdineBusiness oOBL;
+        private readonly ManageUtenteBusiness oUBL;
 
-        public OrdineController(ManageBusiness _oBL)
+        public OrdineController(ManageOrdineBusiness _oOBL, ManageUtenteBusiness _oUBL)
         {
-            oBL = _oBL;
+            oOBL = _oOBL;
+            oUBL = _oUBL;
         }
         //Florea Renato Chiamata al BusinessLayer 
         [HttpGet("GetAllOrdiniByUserId/{userId}")]
@@ -28,7 +31,7 @@ namespace AcademyShopAPI.Controllers
         {
             try
             {
-                var ordini = await oBL.GetOrdiniByUserId(userId);
+                var ordini = await oOBL.GetOrdiniByUserId(userId);
                
                     return Ok(ordini);  
             }
@@ -44,7 +47,7 @@ namespace AcademyShopAPI.Controllers
         [HttpPut("{idUtente}/{idDettaglioOrdine}/{quantita}")]
         public async Task<IActionResult> PutOrdine(int idUtente, int idDettaglioOrdine, int quantita)
         {
-            var (success, message, statusCode, ordineModificato) = await oBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
+            var (success, message, statusCode, ordineModificato) = await oOBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
 
             return success ? StatusCode(200, ordineModificato) : StatusCode(statusCode, message);
 
@@ -56,7 +59,7 @@ namespace AcademyShopAPI.Controllers
         public async Task<IActionResult> DeleteOrdine(int idUtente, int idDettaglioOrdine)
         {
 
-                var deleteOrder = await oBL.DeleteOrdineAsync(idUtente, idDettaglioOrdine);
+                var deleteOrder = await oOBL.DeleteOrdineAsync(idUtente, idDettaglioOrdine);
                 return deleteOrder;
             
         }
@@ -65,7 +68,7 @@ namespace AcademyShopAPI.Controllers
         /* INSERIMENTO NUOVO ORDINE*/
         public async Task<ActionResult<int>> nuovoOrdineAsync(int idUtente, int idProdotto, int quantità)
         {
-            var result = await  oBL.nuovoOrdine(idUtente, idProdotto, quantità);
+            var result = await  oOBL.nuovoOrdine(idUtente, idProdotto, quantità);
             return result.Value >0 ? StatusCode(201, new { id = result.Value }) : result;
         }
 
@@ -75,7 +78,7 @@ namespace AcademyShopAPI.Controllers
         {
             try
             {
-                var result = await oBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                var result = await oOBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
                 return Ok(result);
             }
             catch (Exception ex)

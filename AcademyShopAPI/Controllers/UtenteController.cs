@@ -77,9 +77,9 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Utente>> DeleteUtente(int id)
+        public async Task<bool> DeleteUtente(int id)
         {
-                var result = await _oBL.DeleteUtente(id);
+                var result = await _oUBL.DeleteUtenteAsync(id);
                 return result;
         }
 
@@ -87,7 +87,7 @@ namespace ProgettoAcademyShop.Controller
         [HttpPost("Login")]
         public async Task<ActionResult<int>> Login(string email, string password)
         {
-            var result = await _oBL.LoginUser(email, password);
+            var result = await _oUBL.LoginUser(email, password);
             return result.Value > 0 ? Ok(new { id = result.Value })  : result;
         }
     }
