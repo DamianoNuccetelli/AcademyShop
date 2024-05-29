@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Transactions;
 using Azure.Core;
 using Microsoft.AspNetCore.Http;
+using Humanizer.Localisation;
 using DataLayer.Repository;
 
 namespace DataLayer
@@ -417,28 +418,17 @@ namespace DataLayer
         }
 
         // Leonardo
-        public (bool isSuccess, string message) LoginUser(string email, string password)
+        public async Task<Utente> LoginUser(string email, string password)
         {
-            // Trova l'utente corrispondente all'email fornita
-            var user = _context.Utentes.SingleOrDefault(u => u.Email == email);
-
-            if (user == null)
+            try
             {
-                // Utente non trovato
-                return (false, "Utente non trovato");
-            }
-
-            // Verifica la password
-            if (user.Password == password)
+             Utente utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            return utente;
+            }catch (Exception)
             {
-                // Login avvenuto con successo
-                return (true, "Login avvenuto con successo");
+                throw new Exception();
             }
-            else
-            {
-                // Password errata
-                return (false, "Password errata");
-            }
+          
         }
     }
 }

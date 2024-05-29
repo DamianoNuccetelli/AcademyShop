@@ -85,18 +85,10 @@ namespace ProgettoAcademyShop.Controller
 
         // Leonardo
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        public async Task<ActionResult<int>> Login(string email, string password)
         {
-            var (isSuccess, message) = _oBL.LoginUser(loginRequest.Email, loginRequest.Password);
-
-            if (isSuccess)
-            {
-                return Ok(new { Message = message });
-            }
-            else
-            {
-                return NotFound(new { Message = message });
-            }
+            var result = await _oBL.LoginUser(email, password);
+            return result.Value > 0 ? Ok(new { id = result.Value })  : result;
         }
     }
 }

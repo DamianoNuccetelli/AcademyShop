@@ -488,16 +488,23 @@ namespace BusinessLayer
         }
 
         // Leonardo
-        public (bool isSuccess, string message) LoginUser(string email, string password)
+        public async Task<ActionResult<int>> LoginUser(string email, string password)
         {
             try
-            {
-                return oDL.LoginUser(email, password);
+            {   Utente utente = await oDL.LoginUser(email, password);
+                
+                if (utente != null)
+                {
+                    return utente.Id;
+                }
+                else
+                {
+                    return ErrorContentResult("Client Error. \nEmail o Password non corretta.", 404);
+                }
             }
-
             catch (Exception ex)
             {
-                throw new Exception("Errore durante il recupero di email e password dell'utente nel Business Layer.", ex);
+               return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'accesso del database", 500);
             }
         }
     }
