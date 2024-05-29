@@ -312,7 +312,8 @@ namespace DataLayer
         {
             try
             {
-                var utente = await _context.Utentes.FindAsync(id);
+                //var utente = await _context.Utentes.FindAsync(id);
+                var utente = await _utenteRepository.GetByIdAsync(id);
                 if (utente == null)
                 {
                     {
@@ -320,8 +321,7 @@ namespace DataLayer
                     }
                 }
 
-                _context.Utentes.Remove(utente);
-                await _context.SaveChangesAsync();
+                await _utenteRepository.DeleteAsync(id);
 
                 return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
             }
