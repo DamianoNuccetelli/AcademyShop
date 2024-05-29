@@ -223,7 +223,7 @@ namespace DataLayer
                 {
                     await transaction.RollbackAsync();
                     // Gestione dell'errore
-                    throw new Exception("Errore durante la modifica dell'ordine.", ex);
+                    throw new Exception("Errore durante la cancellazione dell'ordine.", ex);
                 }
             }
         }
