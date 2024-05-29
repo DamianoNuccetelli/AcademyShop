@@ -488,11 +488,21 @@ namespace BusinessLayer
         }
 
         // Leonardo
-        public (bool isSuccess, string message) LoginUser(string email, string password)
+        public async Task<ActionResult<int>> LoginUser(string email, string password)
         {
             try
             {
-                return oDL.LoginUser(email, password);
+                int idUtente =await oDL.LoginUser(email, password);
+                if (idUtente != null)
+                {
+                    return idUtente;
+                }
+                else
+                {
+                    return ErrorContentResult("Client Error. \nL'Utente non presente nel database.", 404);
+                }
+
+                
             }
 
             catch (Exception ex)
