@@ -196,12 +196,6 @@ namespace DataLayer
                 {
                     // Recupera l'ordine esistente
                     var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
-                    if (ordine == null)
-                    {
-                        throw new Exception("Ordine non trovato.");
-                    }
-
-
 
                     // Recupera il dettaglio ordine esistente
                     var dettaglioOrdine = await _context.DettaglioOrdines
