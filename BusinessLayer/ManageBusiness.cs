@@ -492,22 +492,11 @@ namespace BusinessLayer
         {
             try
             {
-                int idUtente =await oDL.LoginUser(email, password);
-                if (idUtente != null)
-                {
-                    return idUtente;
-                }
-                else
-                {
-                    return ErrorContentResult("Client Error. \nL'Utente non presente nel database.", 404);
-                }
-
-                
+                return await oDL.LoginUser(email, password);
             }
-
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Errore durante il recupero di email e password dell'utente nel Business Layer.", ex);
+                return ErrorContentResult("Client Error. \nL'Utente non è presente nel database.", 404);
             }
         }
     }

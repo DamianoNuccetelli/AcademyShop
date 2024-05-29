@@ -433,9 +433,15 @@ namespace DataLayer
         // Leonardo
         public async Task<int> LoginUser(string email, string password)
         {
-            // Trova l'utente corrispondente all'email fornita
-            Utente utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            try
+            {
+             Utente utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
             return utente.Id;
+            }catch (Exception)
+            {
+                throw new Exception();
+            }
+          
         }
     }
 }
