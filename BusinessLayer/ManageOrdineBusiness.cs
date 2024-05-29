@@ -20,7 +20,7 @@ namespace BusinessLayer
         private readonly ManageOrdineData oODL;
         private readonly ManageUtenteData oUDL;
 
-        public ManageOrdineBusiness(ManageOrdineData _oODL, IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet, ManageOrdineData manageOrdineData, ManageUtenteData _oUDL)
+        public ManageOrdineBusiness(IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet, ManageOrdineData manageOrdineData, ManageUtenteData _oUDL)
         { 
             _ordineDtoPerGet = ordineDtoPerGet;
             oODL = manageOrdineData;
