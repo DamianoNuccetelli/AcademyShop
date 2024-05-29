@@ -293,54 +293,6 @@ namespace DataLayer
             }
         }
 
-        //DANIEL CON REPOSITORY
-        public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
-        {
-            try
-            {
-                utente.DataRegistrazione = DateTime.UtcNow;
-                await _utenteRepository.AddAsync(utente);
-                return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante la creazione dell'utente.", ex);
-            }
-        }
-
-        public async Task<ActionResult<Utente>> DeleteUtente(int id)
-        {
-            try
-            {
-                //var utente = await _context.Utentes.FindAsync(id);
-                var utente = await _utenteRepository.GetByIdAsync(id);
-                if (utente == null)
-                {
-                    {
-                        return new NotFoundObjectResult("Utente non trovato.");
-                    }
-                }
-
-                await _utenteRepository.DeleteAsync(id);
-
-                return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
-            }
-        }
-
-        public async Task<bool> CheckUtenteExists(Utente utente)
-        {
-            return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
-        }
-
-        public async Task<bool> CheckUtenteExistsById(int id)
-        {
-            return await _context.Utentes.AnyAsync(u => u.Id == id);
-        }
-
 
         //Adriano
 

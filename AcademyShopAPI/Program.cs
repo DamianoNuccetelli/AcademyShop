@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AcademyShopDBContext>();
 builder.Services.AddScoped<BusinessLayer.ManageBusiness>();
 builder.Services.AddScoped<BusinessLayer.ManageUtenteBusiness>();
 builder.Services.AddScoped<DataLayer.ManageData>();
+builder.Services.AddScoped<DataLayer.ManageUtenteData>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

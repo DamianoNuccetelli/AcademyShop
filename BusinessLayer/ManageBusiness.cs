@@ -19,10 +19,12 @@ namespace BusinessLayer
     {
 
         private readonly ManageData oDL;
+        private readonly ManageUtenteData oUDL;
 
-        public ManageBusiness(ManageData _oDL)
+        public ManageBusiness(ManageData _oDL, ManageUtenteData oUDL)
         {
             oDL = _oDL;
+            this.oUDL = oUDL;
         }
 
 
@@ -57,7 +59,7 @@ namespace BusinessLayer
             try
             {
                 // Verifica se l'utente esiste
-                bool utenteExists = await oDL.CheckUtenteExistsById(userId);
+                bool utenteExists = await oUDL.CheckUtenteExistsById(userId);
 
                 if (!utenteExists)
                 {
@@ -319,7 +321,7 @@ namespace BusinessLayer
                     throw new ArgumentException("Dettaglio ordine non trovato.");
                 }  
 
-                bool utenteExists = await oDL.CheckUtenteExistsById(userId);
+                bool utenteExists = await oUDL.CheckUtenteExistsById(userId);
 
                 if (utenteExists == false)
                 {
@@ -349,7 +351,7 @@ namespace BusinessLayer
             try
             {
                 // Verifico se un utente è gia esistente
-                if (await oDL.CheckUtenteExists(utente))
+                if (await oUDL.CheckUtenteExists(utente))
                 {
                     return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.", 409);
                 }
@@ -378,7 +380,7 @@ namespace BusinessLayer
                     return ErrorContentResult("Uno o più campi non rispettano la lunghezza o i valori richiesti.");
                 }
 
-                return await oDL.AddUtenteAsync(utente);
+                return await oUDL.AddUtenteAsync(utente);
             }
             catch (Exception ex)
             {
@@ -396,7 +398,7 @@ namespace BusinessLayer
                     return new NotFoundResult();
                 }
 
-                var result = await oDL.DeleteUtente(id);
+                var result = await oUDL.DeleteUtente(id);
 
                 //return Ok($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
                 return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");

@@ -14,16 +14,13 @@ namespace BusinessLayer
     public class ManageUtenteBusiness
     {
         private readonly IRepositoryWithDtoAsync<Utente, UtenteDTO> _repo;
-        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> _repoUtentePost;
-        private readonly IRepositoryAsync<Utente> _repoUtente;
-        private readonly ManageData oDL;
+        private readonly ManageUtenteData oUDL;
 
-        public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> repoUtentePost, IRepositoryAsync<Utente> repoUtente, ManageData _oDL)
+        
+        public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, ManageUtenteData oUDL)
         {
             _repo = repo;
-            _repoUtentePost = repoUtentePost;
-            _repoUtente = repoUtente;
-            oDL = _oDL;
+            this.oUDL = oUDL;
         }
 
         public async Task<IEnumerable<UtenteDTO>> GetAllUtentiAsync()
@@ -42,7 +39,7 @@ namespace BusinessLayer
             try
             {
                 // Verifico se un utente è gia esistente
-                if (await oDL.CheckUtenteExists(utente))
+                if (await oUDL.CheckUtenteExists(utente))
                 {
                     return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.", 409);
                 }
@@ -71,7 +68,7 @@ namespace BusinessLayer
                     return ErrorContentResult("Uno o più campi non rispettano la lunghezza o i valori richiesti.");
                 }
 
-                return await oDL.AddUtenteAsync(utente);
+                return await oUDL.AddUtenteAsync(utente);
             }
             catch (Exception ex)
             {
