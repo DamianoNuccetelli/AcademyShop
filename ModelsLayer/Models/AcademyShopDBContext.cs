@@ -19,7 +19,6 @@ public partial class AcademyShopDBContext : DbContext
     }
 
     public virtual DbSet<DettaglioOrdine> DettaglioOrdines { get; set; }
-    public virtual DbSet<DettaglioOrdineDto> DettaglioOrdineDto { get; set; }
 
     public virtual DbSet<Ordine> Ordines { get; set; }
 
