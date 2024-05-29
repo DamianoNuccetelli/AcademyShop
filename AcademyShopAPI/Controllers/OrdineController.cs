@@ -48,7 +48,7 @@ namespace AcademyShopAPI.Controllers
 
             if (success)
             {
-                return Ok(ordineModificato);
+                return StatusCode(200, ordineModificato);
             }
 
             return StatusCode(statusCode, message);

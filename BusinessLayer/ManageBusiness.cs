@@ -140,7 +140,7 @@ namespace BusinessLayer
             var ordineModificato = await oDL.RecuperaOrdineModificatoAsync((int)idOrdineEsistente);
             var ordineModificatoDTO = MapToDTO(ordineModificato);
 
-            return (true, string.Empty, 204, ordineModificatoDTO);
+            return (true, string.Empty, 200, ordineModificatoDTO);
         }
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
