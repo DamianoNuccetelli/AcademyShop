@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Add repositories
 builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 builder.Services.AddScoped(typeof(IRepositoryWithDtoAsync<,>), typeof(RepositoryWithDtoAsync<,>));
+builder.Services.AddScoped(typeof(IPutOrderRepository), typeof(PutOrderRepository));
 
 var app = builder.Build();
 

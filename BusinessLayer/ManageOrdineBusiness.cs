@@ -14,14 +14,14 @@ namespace BusinessLayer
 {
     public class ManageOrdineBusiness
     {
-        private readonly IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> _ordineModificatoDto; //Damiano
+        //private readonly IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> _ordineModificatoDto; Damiano
+        //private readonly IPutOrderRepository _orderPutRepository; Damiano
         private readonly IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> _ordineDtoPerGet; //Gabriele e Renato
         private readonly ManageOrdineData oODL;
         private readonly ManageUtenteData oUDL;
 
-        public ManageOrdineBusiness(IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> ordineModificatoDto, IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet, ManageOrdineData manageOrdineData, ManageUtenteData _oUDL)
-        {
-            _ordineModificatoDto = ordineModificatoDto;
+        public ManageOrdineBusiness(ManageOrdineData _oODL, IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet, ManageOrdineData manageOrdineData, ManageUtenteData _oUDL)
+        { 
             _ordineDtoPerGet = ordineDtoPerGet;
             oODL = manageOrdineData;
             oUDL = _oUDL;

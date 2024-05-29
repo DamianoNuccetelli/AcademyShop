@@ -14,11 +14,13 @@ namespace DataLayer
 {
     public class ManageOrdineData
     {
+        private readonly IPutOrderRepository _orderPutRepository; //Damiano
         private readonly AcademyShopDBContext _context;
         private readonly IRepositoryAsync<Ordine> repo;
 
-        public ManageOrdineData(AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo)
+        public ManageOrdineData(IPutOrderRepository orderPutRepository, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo)
         {
+            _orderPutRepository = orderPutRepository;
             repo = _repo;
             _context = _academyShopDBContext;
         }
@@ -75,101 +77,49 @@ namespace DataLayer
 
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {
-            return await _context.Ordines.FindAsync(idOrdineEsistente);
+            return await _orderPutRepository.RecuperaOrdineAsync(idOrdineEsistente);
         }
 
         public async Task<DettaglioOrdine?> RecuperaDettaglioOrdineAsync(int idDettaglioOrdine)
         {
-            return await _context.DettaglioOrdines
-                .FirstOrDefaultAsync(d => d.Id == idDettaglioOrdine);
+            return await _orderPutRepository.RecuperaDettaglioOrdineAsync(idDettaglioOrdine);
         }
 
         public async Task<Prodotto?> RecuperaProdottoAsync(int idProdotto)
         {
-            return await _context.Prodottos.FindAsync(idProdotto);
+            return await _orderPutRepository.RecuperaProdottoAsync(idProdotto);
         }
 
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
-            var ordine = await _context.DettaglioOrdines
-                .Where(dettaglio => dettaglio.Id == idDettaglioOrdine)
-                .Join(_context.Ordines,
-                      dettaglio => dettaglio.FkIdOrdine,
-                      ordine => ordine.Id,
-                      (dettaglio, ordine) => ordine)
-                .Where(ordine => ordine.FkIdUtente == idUtente)
-                .FirstOrDefaultAsync();
-
-            return ordine?.Id;
+            return await _orderPutRepository.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
         }
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
-            var ordine = await _context.Ordines
-                .Where(o => o.Id == idOrdineEsistente)
-                .FirstOrDefaultAsync();
-
-            return ordine?.FkIdStato;
+           return await _orderPutRepository.RecuperaStatoOrdineAsync(idOrdineEsistente);
         }
 
         public async Task<int?> RecuperaIdProdottoAsync(int idOrdineEsistente)
         {
-            var prodotto = await _context.DettaglioOrdines
-                .Where(p => p.FkIdOrdine == idOrdineEsistente)
-                .FirstOrDefaultAsync();
-
-            return prodotto?.FkIdProdotto;
+           return await _orderPutRepository.RecuperaIdProdottoAsync(idOrdineEsistente);
         }
 
         public async Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto)
         {
-            var prodotto = await _context.Prodottos.FindAsync(idProdotto);
-            return prodotto?.Quantità;
+            return await _orderPutRepository.RecuperaQuantitaProdottoAsync(idProdotto);
         }
 
 
         public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
-            {
-                try
-                {
-                    // Aggiornamento campi degli oggetti
-                    ordine.DataAggiornamento = DateTime.Now;
-                    ordine.FkIdStato = statoOrdine;
-                    dettaglioOrdine.Quantita += quantita;
-                    prodotto.Quantità -= quantita;
-
-                    // Imposta lo stato degli oggetti come modificati
-                    _context.Entry(ordine).State = EntityState.Modified;
-                    _context.Entry(dettaglioOrdine).State = EntityState.Modified;
-                    _context.Entry(prodotto).State = EntityState.Modified;
-
-                    // Salva le modifiche nel database
-                    await _context.SaveChangesAsync();
-
-                    // Commit della transazione
-                    await transaction.CommitAsync();
-
-                    return true; // Operazione completata con successo
-                }
-                catch
-                {
-                    // Rollback della transazione in caso di errore
-                    await transaction.RollbackAsync();
-                    throw;
-                }
-            }
+           return await _orderPutRepository.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, statoOrdine, quantita);
         }
 
         public async Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine)
         {
-            return await _context.Ordines
-                .Include(o => o.DettaglioOrdines)
-                    .ThenInclude(d => d.FkIdProdottoNavigation)
-                .Include(o => o.FkIdStatoNavigation)
-                .FirstOrDefaultAsync(o => o.Id == idOrdine);
+           return await _orderPutRepository.RecuperaOrdineModificatoAsync(idOrdine);
         }
 
         //---------------------------------------------------------------------------------
