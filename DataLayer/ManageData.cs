@@ -369,8 +369,8 @@ namespace DataLayer
                     transactionScope.Complete();
 
                 }
-                catch (Exception)
-                {// codice errore 500
+                catch (Exception)// codice errore 500
+                {
                     transactionScope.Dispose();
                     throw new TransactionAbortedException();
                 }
@@ -395,11 +395,10 @@ namespace DataLayer
                     return ordine.Id;
 
                 }
-                catch (Exception)
-                {// codice errore 500
+                catch (Exception)// codice errore 500
+                {
                     transactionScope.Dispose();
                     //Cancellazione Ordine in caso di fallimento della seconda transazione
-                    // Elimino l'ordine
                     _context.Ordines.Remove(ordine);
                     await _context.SaveChangesAsync();
                     throw new TransactionException();

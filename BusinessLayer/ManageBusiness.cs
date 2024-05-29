@@ -454,7 +454,7 @@ namespace BusinessLayer
             {
                 prodotto = await oDL.getProdottoAsync(idProdotto);
             }
-            else
+            else// codice errore 404
             {
                return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404);
             }
@@ -465,24 +465,24 @@ namespace BusinessLayer
                 prodotto.Quantità -= quantità;
                 try 
                 { 
-                int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
-                return idOrdine;
+                    int idOrdine = await oDL.nuovoOrdine(idUtente, prodotto, quantità);
+                    return idOrdine;// codice 201
                 }
-                catch (TransactionAbortedException)
+                catch (TransactionAbortedException)// codice errore 500
                 {
                     return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
                 }
-                catch (TransactionException)
+                catch (TransactionException)// codice errore 500
                 {
                     return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
                 }
-                catch (Exception)
+                catch (Exception)// codice errore 400
                 {
                     return ErrorContentResult( "Generic Error", 400);
                 }
             }
-            else
-            {// codice errore 400
+            else// codice errore 400
+            {
                 return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
             }
         }
