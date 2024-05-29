@@ -87,16 +87,6 @@ namespace ProgettoAcademyShop.Controller
         [HttpPost("Login")]
         public async Task<ActionResult<int>> Login(string email, string password)
         {
-            /*  var (isSuccess, message) = 
-
-              if (isSuccess)
-              {
-                  return Ok(new { Message = message });
-              }
-              else
-              {
-                  return NotFound(new { Message = message });
-              }*/
             var result = await _oBL.LoginUser(email, password);
             return result.Value > 0 ? Ok(new { id = result.Value })  : result;
         }

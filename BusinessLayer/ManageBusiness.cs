@@ -491,23 +491,20 @@ namespace BusinessLayer
         public async Task<ActionResult<int>> LoginUser(string email, string password)
         {
             try
-            {
-                int idUtente =await oDL.LoginUser(email, password);
-                if (idUtente != null)
+            {   Utente utente = await oDL.LoginUser(email, password);
+                
+                if (utente != null)
                 {
-                    return idUtente;
+                    return utente.Id;
                 }
                 else
                 {
-                    return ErrorContentResult("Client Error. \nL'Utente non presente nel database.", 404);
+                    return ErrorContentResult("Client Error. \nEmail o Password non corretta.", 404);
                 }
-
-                
             }
-
             catch (Exception ex)
             {
-                throw new Exception("Errore durante il recupero di email e password dell'utente nel Business Layer.", ex);
+               return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'accesso del database", 500);
             }
         }
     }
