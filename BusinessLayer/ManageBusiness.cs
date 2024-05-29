@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Transactions;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BusinessLayer
@@ -141,6 +142,49 @@ namespace BusinessLayer
             var ordineModificatoDTO = MapToDTO(ordineModificato);
 
             return (true, string.Empty, 200, ordineModificatoDTO);
+        }
+
+        public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
+        {
+            try
+            {
+                return await oDL.RecuperaOrdineAsync(idOrdineEsistente);
+            }
+
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori qui o riportali al chiamante
+                throw new Exception("Errore durante il recupero dell'entità Ordine nel business layer.", ex);
+            }
+        }
+
+        public async Task<DettaglioOrdine?> RecuperaDettaglioOrdineAsync(int idDettaglioOrdine)
+        {
+
+            try
+            {
+                return await oDL.RecuperaDettaglioOrdineAsync(idDettaglioOrdine);
+            }
+
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori qui o riportali al chiamante
+                throw new Exception("Errore durante il recupero dell'entità DettaglioOrdine nel business layer.", ex);
+            }
+        }
+
+        public async Task<Prodotto?> RecuperaProdottoAsync(int idProdotto)
+        {
+            try
+            {
+                return await oDL.RecuperaProdottoAsync(idProdotto);
+            }
+
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori qui o riportali al chiamante
+                throw new Exception("Errore durante il recupero dell'entità Prodotto nel business layer.", ex);
+            }
         }
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
