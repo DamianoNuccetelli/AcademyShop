@@ -213,7 +213,7 @@ namespace BusinessLayer
 
                 if (idOrdineEsistente == null)
                 {
-                    return ErrorContentResult("l'ordine non esiste", 404);
+                    return ErrorContentResult("l'ordine non esiste", 400);
                 }
 
                 // Altri controlli di business, se necessario...
@@ -222,7 +222,7 @@ namespace BusinessLayer
                 int statoOrdine = (int)await oDL.RecuperaStatoOrdineAsync((int)idOrdineEsistente);
                 if (statoOrdine == 3)
                 {
-                    return ErrorContentResult("l'ordine è chiuso", 404);
+                    return ErrorContentResult("l'ordine è chiuso", 400);
 
                 }
 
@@ -245,14 +245,14 @@ namespace BusinessLayer
                 }
                 else
                 {
-                    return ErrorContentResult("Errore durante la cancellazione dell'ordine", 404);
+                    return ErrorContentResult("Errore durante la cancellazione dell'ordine", 400);
                     // Errore nell'operazione di cancellazione dell'ordine
                 }
             }
             catch (Exception)
             {
                 // Gestione degli errori
-                return ErrorContentResult("Si è verificato un errore durante la cancellazione dell'ordine", 404);
+                return ErrorContentResult("Si è verificato un errore durante la cancellazione dell'ordine", 400);
 
             }
         }
