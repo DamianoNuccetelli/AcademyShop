@@ -6,24 +6,14 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public interface IRepositoryAsync<T>
+    public interface IRepositoryAsync<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(int id);
         Task<T> GetDetailsAsync(int id);
         Task<T> AddAsync(T entity);
-        Task<Boolean> UpdateAsync(T entity);
-        Task<Boolean> DeleteAsync(int id);
-
-        Task<T> AddUtenteAsync(T entity);
-
+        Task<bool> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(int id);
     }
 
-    public interface IRepositorySyncronous<T>
-    {
-        IEnumerable<T> GetAll();
-        T GetById(int id);
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(int id);
-    }
 }

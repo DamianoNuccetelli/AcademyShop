@@ -17,16 +17,13 @@ namespace DataLayer
     public class ManageData
     {
         private readonly AcademyShopDBContext _context;
-        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTO> _repo;
-        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> _repoUtentePost;
-        private readonly IRepositoryAsync<Utente> _repoUtente;
+        private readonly IRepositoryAsync<Utente> _utenteRepository;
 
-        public ManageData(AcademyShopDBContext context, IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> repoUtentePost, IRepositoryAsync<Utente> repoUtente)
+
+        public ManageData(AcademyShopDBContext context, IRepositoryAsync<Utente> utenteRepository)
         {
             _context = context;
-            _repo = repo;
-            _repoUtentePost = repoUtentePost;
-            _repoUtente = repoUtente;
+            _utenteRepository = utenteRepository;
         }
 
         //Metodo  per verificare se utente è presente Florea Renato
@@ -300,19 +297,9 @@ namespace DataLayer
         {
             try
             {
-                //Imposto la data di registrazione a quella attuale
                 utente.DataRegistrazione = DateTime.UtcNow;
-
-                //Aggiunta dell'utente al contesto
-                _context.Utentes.Add(utente);
-                await _context.SaveChangesAsync();
-
-                //Restituzione della risposta di creazione
+                await _utenteRepository.AddAsync(utente);
                 return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
-            }
-            catch (DbUpdateException dbEx)
-            {
-                throw new Exception("Errore durante la creazione dell'utente. Problema con il database.", dbEx);
             }
             catch (Exception ex)
             {
