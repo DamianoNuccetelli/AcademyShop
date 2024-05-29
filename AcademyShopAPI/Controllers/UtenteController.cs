@@ -9,6 +9,7 @@ using AcademyShopAPI.Models;
 using DtoLayer;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Identity.Data;
+using BusinessLayer;
 
 namespace ProgettoAcademyShop.Controller
 {
@@ -19,10 +20,12 @@ namespace ProgettoAcademyShop.Controller
     public class UtenteController : ControllerBase
     {
         private readonly BusinessLayer.ManageBusiness _oBL;
+        private readonly ManageUtenteBusiness _oUBL; //Oggetto Utente Business Layer
 
-        public UtenteController(BusinessLayer.ManageBusiness oBL)
+        public UtenteController(BusinessLayer.ManageBusiness oBL, ManageUtenteBusiness oUBL)
         {
             _oBL = oBL;
+            _oUBL = oUBL;
         }
 
         // GET USERS
@@ -47,11 +50,11 @@ namespace ProgettoAcademyShop.Controller
 
         // ADD USER
         [HttpPost]
-        public async Task<ActionResult<Utente>> PostUtente(UtenteDTOperPOST utenteDTO)
+        public async Task<ActionResult<Utente>> AddUtenteAsync(UtenteDTOperPOST utenteDTO)
         {
                 // Esegue la mappatura dei dati da UtenteDto a Utente
                 var utente = MapToUtente(utenteDTO);
-                var result = await _oBL.PostUtente(utente);
+                var result = await _oUBL.AddUtenteAsync(utente);
                 return result;
         }
 

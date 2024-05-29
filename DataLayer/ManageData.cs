@@ -11,16 +11,23 @@ using System.Transactions;
 using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Humanizer.Localisation;
+using DataLayer.Repository;
 
 namespace DataLayer
 {
     public class ManageData
     {
         private readonly AcademyShopDBContext _context;
+        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTO> _repo;
+        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> _repoUtentePost;
+        private readonly IRepositoryAsync<Utente> _repoUtente;
 
-        public ManageData(AcademyShopDBContext context)
+        public ManageData(AcademyShopDBContext context, IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, IRepositoryWithDtoAsync<Utente, UtenteDTOperPOST> repoUtentePost, IRepositoryAsync<Utente> repoUtente)
         {
             _context = context;
+            _repo = repo;
+            _repoUtentePost = repoUtentePost;
+            _repoUtente = repoUtente;
         }
 
         //Metodo  per verificare se utente è presente Florea Renato
@@ -289,7 +296,8 @@ namespace DataLayer
             }
         }
 
-        public async Task<ActionResult<Utente>> PostUtente(Utente utente)
+        //DANIEL CON REPOSITORY
+        public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
             try
             {

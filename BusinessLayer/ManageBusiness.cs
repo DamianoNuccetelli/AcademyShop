@@ -378,7 +378,7 @@ namespace BusinessLayer
                     return ErrorContentResult("Uno o più campi non rispettano la lunghezza o i valori richiesti.");
                 }
 
-                return await oDL.PostUtente(utente);
+                return await oDL.AddUtenteAsync(utente);
             }
             catch (Exception ex)
             {

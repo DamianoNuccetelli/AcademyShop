@@ -1,4 +1,6 @@
 using AcademyShopAPI.Models;
+using DataLayer.Repository;
+using DtoLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AcademyShopDBContext>();
 builder.Services.AddScoped<BusinessLayer.ManageBusiness>();
+builder.Services.AddScoped<BusinessLayer.ManageUtenteBusiness>();
 builder.Services.AddScoped<DataLayer.ManageData>();
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Add repositories
+builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+builder.Services.AddScoped(typeof(IRepositoryWithDtoAsync<,>), typeof(RepositoryWithDtoAsync<,>));
 
 var app = builder.Build();
 
