@@ -46,15 +46,9 @@ namespace AcademyShopAPI.Controllers
         {
             var (success, message, statusCode, ordineModificato) = await oBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
 
-            if (success)
-            {
-                return StatusCode(200, ordineModificato);
-            }
+            return success ? StatusCode(200, ordineModificato) : StatusCode(statusCode, message);
 
-            return StatusCode(statusCode, message);
         }
-
-
 
 
         // DELETE: api/Ordine/5
