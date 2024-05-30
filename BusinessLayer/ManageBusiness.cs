@@ -31,15 +31,15 @@ namespace BusinessLayer
 
         
         //Daniel -> Aggiunta e rimozione dell'utente dal db
-        public async Task<IEnumerable<Utente>> GetUtentes()
-        {
-            return await oUDL.GetUtentes();
-        }
+        //public async Task<IEnumerable<Utente>> GetUtentes()
+        //{
+        //    return await oUDL.GetUtentes();
+        //}
 
-        public async Task<Utente> GetUtente(int id)
-        {
-            return await oUDL.GetUtente(id);
-        }
+        //public async Task<Utente> GetUtente(int id)
+        //{
+        //    return await oUDL.GetUtente(id);
+        //}
 
         //public async Task<ActionResult<Utente>> PostUtente(Utente utente)
         //{

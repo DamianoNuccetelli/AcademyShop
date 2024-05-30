@@ -32,7 +32,7 @@ namespace ProgettoAcademyShop.Controller
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Utente>>> GetUtentes()
         {
-                var utentes = await _oBL.GetUtentes();
+                var utentes = await _oUBL.GetUtentes();
                 return Ok(utentes);
         }
 
@@ -40,7 +40,7 @@ namespace ProgettoAcademyShop.Controller
         [HttpGet("{id}", Name = "GetUtente")]
         public async Task<ActionResult<Utente>> GetUtente(int id)
         {
-                var utente = await _oBL.GetUtente(id);
+                var utente = await _oUBL.GetUtente(id);
                 if (utente == null)
                 {
                     return NotFound();

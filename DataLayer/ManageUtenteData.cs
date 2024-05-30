@@ -14,72 +14,123 @@ namespace DataLayer
     public class ManageUtenteData
     {
         private readonly AcademyShopDBContext _context;
-        private readonly IRepositoryAsync<Utente> _utenteRepository;
+        private readonly IRepositoryUtente _utenteRepository;
 
-        public ManageUtenteData(AcademyShopDBContext context, IRepositoryAsync<Utente> utenteRepository)
+        public ManageUtenteData(AcademyShopDBContext context, IRepositoryUtente utenteRepository)
         {
             _context = context;
             _utenteRepository = utenteRepository;
         }
 
-        //DANIEL CON REPOSITORY
+        ////DANIEL CON REPOSITORY
+
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
-                //Imposto la data di registrazione a quella attuale
-                utente.DataRegistrazione = DateTime.UtcNow;
-
-                await _utenteRepository.AddAsync(utente);
-                return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
-
-                // var result = await _utenteRepository.AddAsync(utente);
-                // return new CreatedAtRouteResult(nameof(GetUtente), new { id = createdUtente.Id }, result);
+            return await _utenteRepository.AddUtenteAsync(utente);
         }
-
 
         public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
-                var utente = await _utenteRepository.GetByIdAsync(id);
-
-                await _utenteRepository.DeleteAsync(id);
-                //var result = await _utenteRepository.DeleteAsync(id);
-
-            return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
+            return await _utenteRepository.DeleteUtente(id);
         }
-
 
         public async Task<bool> CheckUtenteExists(Utente utente)
         {
-            return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
+            return await _utenteRepository.CheckUtenteExists(utente);
         }
 
         public async Task<bool> CheckUtenteExistsById(int id)
         {
-            return await _context.Utentes.AnyAsync(u => u.Id == id);
+            return await _utenteRepository.CheckUtenteExistsById(id);
         }
-        //Daniel -> Aggiunta e rimozione dell'utente dal db
+
         public async Task<IEnumerable<Utente>> GetUtentes()
         {
-            try
-            {
-                return await _context.Utentes.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante il recupero degli utenti.", ex);
-            }
+            return await _utenteRepository.GetUtentes();
         }
 
         public async Task<Utente> GetUtente(int id)
         {
-            try
-            {
-                return await _context.Utentes.FindAsync(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Errore durante il recupero dell'utente con ID {id}.", ex);
-            }
+            return await _utenteRepository.GetUtente(id);
         }
+
+        public async Task<IEnumerable<Utente>> GetAllAsync()
+        {
+            return await _utenteRepository.GetAllAsync();
+        }
+
+        public async Task<Utente> GetByIdAsync(int id)
+        {
+            return await _utenteRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Utente> AddAsync(Utente utente)
+        {
+            return await _utenteRepository.AddAsync(utente);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _utenteRepository.DeleteAsync(id);
+        }
+
+        //public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
+        //{
+        //        //Imposto la data di registrazione a quella attuale
+        //        utente.DataRegistrazione = DateTime.UtcNow;
+
+        //        await __utenteRepository.AddAsync(utente);
+        //        return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
+
+        //        // var result = await __utenteRepository.AddAsync(utente);
+        //        // return new CreatedAtRouteResult(nameof(GetUtente), new { id = createdUtente.Id }, result);
+        //}
+
+
+        //public async Task<ActionResult<Utente>> DeleteUtente(int id)
+        //{
+        //        var utente = await __utenteRepository.GetByIdAsync(id);
+
+        //        await __utenteRepository.DeleteAsync(id);
+        //        //var result = await __utenteRepository.DeleteAsync(id);
+
+        //    return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
+        //}
+
+
+        //public async Task<bool> CheckUtenteExists(Utente utente)
+        //{
+        //    return await _context.Utentes.AnyAsync(u => u.CodiceFiscale == utente.CodiceFiscale || u.Email == utente.Email);
+        //}
+
+        //public async Task<bool> CheckUtenteExistsById(int id)
+        //{
+        //    return await _context.Utentes.AnyAsync(u => u.Id == id);
+        //}
+        ////Daniel -> Aggiunta e rimozione dell'utente dal db
+        //public async Task<IEnumerable<Utente>> GetUtentes()
+        //{
+        //    try
+        //    {
+        //        return await _context.Utentes.ToListAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore durante il recupero degli utenti.", ex);
+        //    }
+        //}
+
+        //public async Task<Utente> GetUtente(int id)
+        //{
+        //    try
+        //    {
+        //        return await _context.Utentes.FindAsync(id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Errore durante il recupero dell'utente con ID {id}.", ex);
+        //    }
+        //}
 
 
 

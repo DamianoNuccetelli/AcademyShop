@@ -16,6 +16,7 @@ namespace BusinessLayer
     {
         private readonly IRepositoryWithDtoAsync<Utente, UtenteDTO> _repo;
         private readonly ManageUtenteData oUDL;
+        
 
         
         public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, ManageUtenteData _oUDL)
@@ -24,14 +25,14 @@ namespace BusinessLayer
             oUDL = _oUDL;
         }
 
-        public async Task<IEnumerable<UtenteDTO>> GetAllUtentiAsync()
+        public async Task<IEnumerable<Utente>> GetAllUtentiAsync()
         {
-            return await _repo.GetAllAsync();
+            return await oUDL.GetAllAsync();
         }
 
-        public async Task<UtenteDTO> GetUtenteDetailsAsync(int id)
+        public async Task<Utente> GetUtenteDetailsAsync(int id)
         {
-            return await _repo.GetDetailsAsync(id);
+            return await oUDL.GetByIdAsync(id);
         }
 
         //DANIEL ADD UTENTE 
