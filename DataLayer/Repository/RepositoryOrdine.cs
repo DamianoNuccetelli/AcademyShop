@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DataLayer.Repository
 {
@@ -212,7 +213,78 @@ namespace DataLayer.Repository
             }
         } //Fine renato
 
+        public async Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità)
+        {
+            Ordine ordine = new();
+            DettaglioOrdine dettaglioOrdine = new();
 
+            // Creazione ordine 
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
 
+                try
+                {
+                    ordine.FkIdUtente = idUtente;
+                    ordine.FkIdStato = 1;
+                    ordine.DataRegistrazione = DateTime.Now;
+
+                    _context.Ordines.Add(ordine);
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+
+                }
+                catch (Exception)// codice errore 500
+                {
+                    transactionScope.Dispose();
+                    throw new TransactionAbortedException();
+                }
+            }
+
+            // aggiornamento quantità prodotto e creazione nuovo dettaglio ordine
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+
+                try
+                {
+                    dettaglioOrdine.FkIdOrdine = ordine.Id;
+                    dettaglioOrdine.FkIdProdotto = prodotto.Id;
+                    dettaglioOrdine.Quantita = quantità;
+
+                    _context.Entry(prodotto).State = EntityState.Modified;
+                    _context.DettaglioOrdines.Add(dettaglioOrdine);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionScope.Complete();
+                    return ordine.Id;
+
+                }
+                catch (Exception)// codice errore 500
+                {
+                    transactionScope.Dispose();
+                    //Cancellazione Ordine in caso di fallimento della seconda transazione
+                    _context.Ordines.Remove(ordine);
+                    await _context.SaveChangesAsync();
+                    throw new TransactionException();
+                }
+            }
+            //
+        }
+
+        public async Task<Prodotto> getProdottoAsync(int idProdotto)
+        {
+            // Controllo esistenza del prodotto 
+#pragma warning disable CS8603
+            return await _context.Prodottos.FindAsync(idProdotto);
+#pragma warning restore CS8603
+        }
+
+        public bool prodottoExists(int id)
+        {
+            return _context.Prodottos.Any(e => e.Id == id);
+        }
     }
+
 }
+
