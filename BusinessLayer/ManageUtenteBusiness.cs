@@ -26,12 +26,27 @@ namespace BusinessLayer
         //Daniel -> Aggiunta e rimozione dell'utente dal db
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
-            return await oUDL.GetUtentesAsync();
+            try
+            {
+                return await oUDL.GetUtentesAsync();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero degli utenti: {ex.Message}");
+            }
+            
         }
 
         public async Task<Utente> GetUtenteByIdAsync(int id)
         {
-            return await oUDL.GetUtenteByIdAsync(id);
+            try
+            {
+                return await oUDL.GetUtenteByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero degll' utente: {ex.Message}");
+            }
         }
 
         //DANIEL ADD UTENTE 

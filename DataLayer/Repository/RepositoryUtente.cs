@@ -23,14 +23,7 @@ namespace DataLayer.Repository
         //Aggiunta e rimozione dell'utente dal db
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
-            try
-            {
-                return await _context.Utentes.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante il recupero degli utenti.", ex);
-            }
+            return await _context.Utentes.ToListAsync();
         }
 
         public async Task<Utente> GetUtenteByIdAsync(int id)
