@@ -14,17 +14,18 @@ namespace BusinessLayer
 {
     public class ManageOrdineBusiness
     {
-        private readonly IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> _ordineModificatoDto; //Damiano
-        private readonly IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> _ordineDtoPerGet; //Gabriele e Renato
+        //private readonly IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> _ordineModificatoDto; Damiano
+        //private readonly IPutOrderRepository _orderPutRepository; Damiano
+        //private readonly IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> _ordineDtoPerGet; //Gabriele e Renato
         private readonly ManageOrdineData oODL;
         private readonly ManageUtenteData oUDL;
 
-        public ManageOrdineBusiness(IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> ordineModificatoDto, IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet, ManageOrdineData manageOrdineData, ManageUtenteData _oUDL)
-        {
-            _ordineModificatoDto = ordineModificatoDto;
-            _ordineDtoPerGet = ordineDtoPerGet;
+
+        //IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet,   COSTRUTTORE NON UTILIZZATO  ----    _ordineDtoPerGet = ordineDtoPerGet;
+        public ManageOrdineBusiness( ManageOrdineData manageOrdineData, ManageUtenteData manageUtenteData)
+        {   
             oODL = manageOrdineData;
-            oUDL = _oUDL;
+            oUDL = manageUtenteData;
         }
 
         private OrdineModificatoDTO MapToDTO(Ordine ordine)
@@ -188,8 +189,6 @@ namespace BusinessLayer
             }
         }
 
-
-
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -203,7 +202,6 @@ namespace BusinessLayer
                 throw new Exception("Errore durante il recupero dell'ID dell'ordine nel business layer.", ex);
             }
         }
-
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {

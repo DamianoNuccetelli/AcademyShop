@@ -18,10 +18,10 @@ namespace BusinessLayer
         private readonly ManageUtenteData oUDL;
 
         
-        public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, ManageUtenteData oUDL)
+        public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, ManageUtenteData _oUDL)
         {
             _repo = repo;
-            this.oUDL = oUDL;
+            oUDL = _oUDL;
         }
 
         public async Task<IEnumerable<UtenteDTO>> GetAllUtentiAsync()
@@ -129,6 +129,17 @@ namespace BusinessLayer
             DateOnly minDate = new DateOnly(1900, 1, 1);
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
+        }
+
+        //Daniel -> Aggiunta e rimozione dell'utente dal db
+        public async Task<IEnumerable<Utente>> GetUtentes()
+        {
+            return await oUDL.GetUtentes();
+        }
+
+        public async Task<Utente> GetUtente(int id)
+        {
+            return await oUDL.GetUtente(id);
         }
         // Leonardo
         public async Task<ActionResult<int>> LoginUser(string email, string password)
