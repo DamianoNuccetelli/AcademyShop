@@ -109,6 +109,48 @@ namespace DataLayer.Repository
                 .Include(o => o.FkIdStatoNavigation)
                 .FirstOrDefaultAsync(o => o.Id == idOrdine);
         }
+
+        //FRANCESCO METODO DELETE
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Recupera l'ordine esistente
+                    var ordine = await _context.Ordines.FindAsync(idOrdineEsistente);
+
+                    // Recupera il dettaglio ordine esistente
+                    var dettaglioOrdine = await _context.DettaglioOrdines
+                        .FirstOrDefaultAsync(d => d.FkIdOrdine == idOrdineEsistente);
+                    // Aggiorno le quantità dei prodotti
+                    foreach (var dettaglio in ordine.DettaglioOrdines)
+                    {
+                        var prodotto = await _context.Prodottos.FirstOrDefaultAsync(p => p.Id == dettaglio.FkIdProdotto);
+                        prodotto.Quantità += dettaglio.Quantita;  // Rimetto in stock i prodotti dell'ordine eliminato
+                    }
+
+                    // Elimino dettaglio ordine
+                    _context.DettaglioOrdines.RemoveRange(ordine.DettaglioOrdines);
+
+                    // Elimino l'ordine
+                    _context.Ordines.Remove(ordine);
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return true; // Successo
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    // Gestione dell'errore
+                    throw new Exception("Errore durante la cancellazione dell'ordine.", ex);
+                }
+            }
+        }
+
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {

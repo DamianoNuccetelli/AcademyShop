@@ -20,7 +20,9 @@ namespace DataLayer.Repository
         Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto);
         Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita);
         Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine);
+        //FRANCESCO
 
+        Task<bool> DeleteOrdineAsync(int idOrdineEsistente);
         //Gabriele
         Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId);
         Task<string?> GetUserPassword(int userId);
