@@ -299,7 +299,7 @@ namespace BusinessLayer
             }
             else// codice errore 400
             {
-                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
+                return ErrorContentResult("Client Error. \nQuantità non valida.", 400);
             }
         }
         //Francesco
