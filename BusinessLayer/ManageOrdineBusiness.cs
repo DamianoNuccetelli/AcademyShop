@@ -343,19 +343,28 @@ namespace BusinessLayer
                 throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
             }
         }
-        public async Task<ActionResult<int>> nuovoOrdine(int idUtente, int idProdotto, int quantità)
+        public async Task<ActionResult<int>>addOrdine(int idUtente, int idProdotto, int quantità)
         {
-            Prodotto prodotto; if (oODL.prodottoExists(idProdotto)) { prodotto = await oODL.getProdottoAsync(idProdotto); }
+            Prodotto prodotto; 
+            if (oODL.prodottoExists(idProdotto)) 
+            { 
+                prodotto = await oODL.getProdottoAsync(idProdotto); 
+            }
             else// codice errore 404
-            { return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404); }
+            {
+                return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404); 
+            }
             if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
             {
                 prodotto.Quantità -= quantità; try
                 {
-                    int idOrdine = await oODL.nuovoOrdine(idUtente, prodotto, quantità); return idOrdine;// codice 201
+                    int idOrdine = await oODL.addOrdine(idUtente, prodotto, quantità);
+                    return idOrdine;// codice 201
                 }
                 catch (TransactionAbortedException)// codice errore 500
-                { return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500); }
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
+                }
                 catch (TransactionException)// codice errore 500
                 {
                     return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);

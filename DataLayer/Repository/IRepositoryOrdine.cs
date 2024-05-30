@@ -31,5 +31,10 @@ namespace DataLayer.Repository
         //Renato
         Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId);
 
+        Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità);
+
+        Task<Prodotto> getProdottoAsync(int idProdotto);
+
+        bool prodottoExists(int id);
     }
 }
