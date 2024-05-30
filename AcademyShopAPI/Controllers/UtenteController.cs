@@ -58,6 +58,7 @@ namespace ProgettoAcademyShop.Controller
                 return result;
         }
 
+
         // Non gli passo id e data di registrazione
         private Utente MapToUtente(UtenteDTOperPOST utenteDto)
         {
@@ -77,11 +78,12 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteUtente(int id)
+        public async Task<ActionResult<bool>> DeleteUtente(int id)
         {
-                var result = await _oUBL.DeleteUtenteAsync(id);
-                return result;
+            var result = await _oUBL.DeleteUtenteAsync(id);
+            return result;
         }
+
 
         // Leonardo
         [HttpPost("Login")]

@@ -2,6 +2,7 @@
 using DataLayer;
 using DataLayer.Repository;
 using DtoLayer.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -75,15 +76,29 @@ namespace BusinessLayer
                 throw new Exception($"Errore durante la creazione dell'utente: {ex.Message}");
             }
         }
-        //CRUD
+
         public async Task<bool> UpdateUtenteAsync(UtenteDTO utente)
         {
             return await _repo.UpdateAsync(utente);
         }
-        //CRUD
-        public async Task<bool> DeleteUtenteAsync(int id)
+
+        public async Task<ActionResult<bool>> DeleteUtenteAsync(int id)
         {
-            return await _repo.DeleteAsync(id);
+            try
+            {
+                var result = await _repo.DeleteAsync(id);
+                if (!result)
+                {
+                    return ErrorContentResult("Errore: Utente non trovato.", 500);
+                }
+
+                return new OkObjectResult("Utente eliminato con successo.");
+            }
+            catch (Exception ex)
+            {
+                
+                return ErrorContentResult($"Errore durante la cancellazione dell'utente: {ex.Message}", 500);
+            }
         }
 
         //DANIEL 

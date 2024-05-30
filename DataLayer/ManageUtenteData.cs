@@ -1,5 +1,6 @@
 ﻿using AcademyShopAPI.Models;
 using DataLayer.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,40 +25,27 @@ namespace DataLayer
         //DANIEL CON REPOSITORY
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
-            try
-            {
+                //Imposto la data di registrazione a quella attuale
                 utente.DataRegistrazione = DateTime.UtcNow;
+
                 await _utenteRepository.AddAsync(utente);
                 return new CreatedAtRouteResult(nameof(GetUtente), new { id = utente.Id }, utente);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante la creazione dell'utente.", ex);
-            }
+
+                // var result = await _utenteRepository.AddAsync(utente);
+                // return new CreatedAtRouteResult(nameof(GetUtente), new { id = createdUtente.Id }, result);
         }
+
 
         public async Task<ActionResult<Utente>> DeleteUtente(int id)
         {
-            try
-            {
-                //var utente = await _context.Utentes.FindAsync(id);
                 var utente = await _utenteRepository.GetByIdAsync(id);
-                if (utente == null)
-                {
-                    {
-                        return new NotFoundObjectResult("Utente non trovato.");
-                    }
-                }
 
                 await _utenteRepository.DeleteAsync(id);
+                //var result = await _utenteRepository.DeleteAsync(id);
 
-                return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Errore durante l'eliminazione dell'utente con ID {id} nel livello dei dati.", ex);
-            }
+            return new OkObjectResult($"Utente '{utente.Nome} {utente.Cognome}' eliminato con successo.");
         }
+
 
         public async Task<bool> CheckUtenteExists(Utente utente)
         {

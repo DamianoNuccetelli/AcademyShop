@@ -33,6 +33,11 @@ namespace DataLayer.Repository
 
         public async Task<T> AddAsync(T entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             _context.Set<T>().Add(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -40,24 +45,18 @@ namespace DataLayer.Repository
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            try
-            {
                 _dbSet.Update(entity);
                 await _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                return true;                 
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);
+
             if (entity == null)
             {
-                return false;
+                return false; 
             }
 
             _dbSet.Remove(entity);
