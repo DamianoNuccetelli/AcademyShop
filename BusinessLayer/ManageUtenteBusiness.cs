@@ -77,26 +77,31 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<Utente> UpdateUtenteAsync(Utente utente)
-        {
-            return await oUDL.UpdateUtenteAsync(utente);
-        }
 
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             try
             {
-                var result = await _repo.DeleteAsync(id);
-                if (!result)
+                // Controlla se l'utente esiste prima di tentare l'eliminazione
+                var utente = await oUDL.GetUtenteByIdAsync(id);
+                if (utente == null)
                 {
-                    return ErrorContentResult("Errore: Utente non trovato.", 500);
+                    return ErrorContentResult("Errore: Utente non trovato.", 404);
                 }
 
-                return new OkObjectResult("Utente eliminato con successo.");
+                // Effettua l'eliminazione dell'utente
+                var result = await oUDL.DeleteUtenteAsync(id);
+                if (result != null)
+                {
+                    return new OkObjectResult("Utente eliminato con successo.");
+                }
+                else
+                {
+                    return ErrorContentResult("Errore durante l'eliminazione dell'utente.", 500);
+                }
             }
             catch (Exception ex)
             {
-                
                 return ErrorContentResult($"Errore durante la cancellazione dell'utente: {ex.Message}", 500);
             }
         }

@@ -55,13 +55,6 @@ namespace DataLayer
         }
 
 
-
-       public async Task<Utente> UpdateUtenteAsync(Utente utente)
-        {
-            return await _utenteRepository.UpdateUtenteAsync(utente);
-        }
-
-
         // Leonardo
         public async Task<Utente> LoginUser(string email, string password)
         {

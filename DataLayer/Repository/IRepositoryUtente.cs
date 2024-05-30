@@ -18,13 +18,6 @@ namespace DataLayer.Repository
         Task<ActionResult<Utente>> DeleteUtenteAsync(int id);
         Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente);
         Task<bool> CheckUtenteExistsById(int id);
-        Task<IEnumerable<Utente>> GetUtentes();
-        Task<Utente> GetUtente(int id);
-        Task<IEnumerable<Utente>> GetAllAsync();
-        Task<Utente> GetByIdAsync(int id);
-        Task<Utente> AddAsync(Utente utente);
-        Task<Utente> UpdateUtenteAsync(Utente utente);
-        Task<bool> DeleteAsync(int id);
 
         //Leonardo
         Task<Utente> LoginUser(string email, string password);
