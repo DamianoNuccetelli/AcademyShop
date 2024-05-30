@@ -14,14 +14,8 @@ namespace BusinessLayer
 {
     public class ManageOrdineBusiness
     {
-        //private readonly IRepositoryWithDtoAsync<Ordine, OrdineModificatoDTO> _ordineModificatoDto; Damiano
-        //private readonly IPutOrderRepository _orderPutRepository; Damiano
-        //private readonly IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> _ordineDtoPerGet; //Gabriele e Renato
         private readonly ManageOrdineData oODL;
         private readonly ManageUtenteData oUDL;
-
-
-        //IRepositoryWithDtoAsync<Ordine, OrdineDettaglioDTOperGET> ordineDtoPerGet,   COSTRUTTORE NON UTILIZZATO  ----    _ordineDtoPerGet = ordineDtoPerGet;
         public ManageOrdineBusiness( ManageOrdineData manageOrdineData, ManageUtenteData manageUtenteData)
         {   
             oODL = manageOrdineData;
@@ -32,13 +26,11 @@ namespace BusinessLayer
         {
             return new OrdineModificatoDTO
             {
-
                 StatoOrdine = ordine.FkIdStato,
                 DataAggiornamento = ordine.DataAggiornamento
-
             };
         }
-        //Renato Florea; chiamata al dataLayer
+        //Renato Florea
         public async Task<int?> UtenteExists(int id)
         {
             try
@@ -51,9 +43,6 @@ namespace BusinessLayer
                 throw new Exception("errore durante recupero id utente nel business layer", ex);
             }
         }
-
-
-        //Renato Florea chiamata al DataLayer
         public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
         {
             try
@@ -94,8 +83,37 @@ namespace BusinessLayer
                 throw new Exception("Errore durante il recupero degli ordini dell'utente.", ex);
             }
         }
+        //Gabriele
+        public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
+        {
+            ContentResult result = new ContentResult();
+            try
+            {
+                // Recupera i dettagli dell'ordine
+                if (dettaglioOrdineId <= 0)
+                {
+                    throw new ArgumentException("L'ID dell'ordine non è valido.");
 
-        //--------------------------------------DAMIANO----------------------------------------------------------
+                }
+                if (oODL.DettaglioOrdineExists(dettaglioOrdineId) == false)
+                {
+                    throw new ArgumentException("Dettaglio ordine non trovato.");
+                }
+
+                bool utenteExists = await oUDL.CheckUtenteExistsById(userId);
+
+                if (utenteExists == false)
+                {
+                    throw new ArgumentException("Utente non trovato");
+                }
+                return await oODL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
+            }
+        }
+        //DAMIANO
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
         {
             var idOrdineEsistente = await oODL.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
@@ -246,9 +264,45 @@ namespace BusinessLayer
             }
         }
 
-        //----------------------------------------------DAMIANO---------------------------------------------------
-
-
+      
+        //Adriano
+        public async Task<ActionResult<int>>addOrdine(int idUtente, int idProdotto, int quantità)
+        {
+            Prodotto prodotto; 
+            if (oODL.prodottoExists(idProdotto)) 
+            { 
+                prodotto = await oODL.getProdottoAsync(idProdotto); 
+            }
+            else// codice errore 404
+            {
+                return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404); 
+            }
+            if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
+            {
+                prodotto.Quantità -= quantità; try
+                {
+                    int idOrdine = await oODL.addOrdine(idUtente, prodotto, quantità);
+                    return idOrdine;// codice 201
+                }
+                catch (TransactionAbortedException)// codice errore 500
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
+                }
+                catch (TransactionException)// codice errore 500
+                {
+                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
+                }
+                catch (Exception)// codice errore 400
+                {
+                    return ErrorContentResult("Generic Error", 400);
+                }
+            }
+            else// codice errore 400
+            {
+                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
+            }
+        }
+        //Francesco
         public async Task<ActionResult> DeleteOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -301,7 +355,7 @@ namespace BusinessLayer
 
             }
         }
-
+        //Daniel
         private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
         {
             return new ContentResult
@@ -310,73 +364,6 @@ namespace BusinessLayer
                 ContentType = "text/plain",
                 StatusCode = statusCode
             };
-        }
-
-        //Gabriele
-        public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
-        {
-            ContentResult result = new ContentResult();
-            try
-            {
-                // Recupera i dettagli dell'ordine
-                if (dettaglioOrdineId <= 0)
-                {
-                    throw new ArgumentException("L'ID dell'ordine non è valido.");
-
-                }
-                if (oODL.DettaglioOrdineExists(dettaglioOrdineId) == false)
-                {
-                    throw new ArgumentException("Dettaglio ordine non trovato.");
-                }
-
-                bool utenteExists = await oUDL.CheckUtenteExistsById(userId);
-
-                if (utenteExists == false)
-                {
-                    throw new ArgumentException("Utente non trovato");
-                }
-                return await oODL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
-            }
-        }
-        public async Task<ActionResult<int>>addOrdine(int idUtente, int idProdotto, int quantità)
-        {
-            Prodotto prodotto; 
-            if (oODL.prodottoExists(idProdotto)) 
-            { 
-                prodotto = await oODL.getProdottoAsync(idProdotto); 
-            }
-            else// codice errore 404
-            {
-                return ErrorContentResult("Client Error. \nProdotto non presente nel database.", 404); 
-            }
-            if (prodotto != null && quantità != 0 && prodotto.Quantità >= quantità)
-            {
-                prodotto.Quantità -= quantità; try
-                {
-                    int idOrdine = await oODL.addOrdine(idUtente, prodotto, quantità);
-                    return idOrdine;// codice 201
-                }
-                catch (TransactionAbortedException)// codice errore 500
-                {
-                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'inserimento dell'ordine", 500);
-                }
-                catch (TransactionException)// codice errore 500
-                {
-                    return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'aggiornamento del database", 500);
-                }
-                catch (Exception)// codice errore 400
-                {
-                    return ErrorContentResult("Generic Error", 400);
-                }
-            }
-            else// codice errore 400
-            {
-                return ErrorContentResult("Client Error. \nLa reperibilità del prodotto è minore della richiesta effettuata.", 400);
-            }
         }
 
 

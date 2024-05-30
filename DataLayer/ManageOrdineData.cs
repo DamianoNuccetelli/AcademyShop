@@ -15,25 +15,51 @@ namespace DataLayer
     public class ManageOrdineData
     {
         private readonly AcademyShopDBContext _context;
-        private readonly IRepositoryAsync<Ordine> repo;
         private readonly IRepositoryOrdine _repositoryOrdine;
 
-        public ManageOrdineData(IRepositoryOrdine repositoryOrdine, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo)
+        public ManageOrdineData(IRepositoryOrdine repositoryOrdine, AcademyShopDBContext _academyShopDBContext)
         {
            _repositoryOrdine = repositoryOrdine;
-            repo = _repo;
             _context = _academyShopDBContext;
         }
 
-
-        //Florea Renato operazione per ottenere i dati degli ordini ricevendo in input l'id utente 
+        //Florea Renato 
         public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
         {
             return await _repositoryOrdine.GetOrdiniByUserId(userId);
         }
+        public async Task<int?> UtenteExists(int id)
+        {
+            var utente = await _context.Utentes.Where(u => u.Id == id).FirstOrDefaultAsync();
 
-        //-----------------DAMIANO-----------------------//
+            if (utente != null)
+            {
+                return utente.Id;
+            }
 
+            else
+            {
+                return null;
+            }
+
+        }
+        //Gabriele
+        public async Task<OrdineDettaglioDTOperGET?> GetOrdineDettaglioAsync(int userId, int idDettaglioOrdine)
+        {
+            return await _repositoryOrdine.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
+        }
+
+        public async Task<string?> RecuperaPasswordUtenteAsync(int userId)
+        {
+            return await _repositoryOrdine.GetUserPassword(userId);
+        }
+
+        public async Task<bool> VerificaUtenteAsync(int userId, string password)
+        {
+            return await _repositoryOrdine.VerificaUserAsync(userId, password);
+        }
+
+        //DAMIANO
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {
             return await _repositoryOrdine.RecuperaOrdineAsync(idOrdineEsistente);
@@ -80,42 +106,18 @@ namespace DataLayer
         {
            return await _repositoryOrdine.RecuperaOrdineModificatoAsync(idOrdine);
         }
-
-        //---------------------------------------------------------------------------------
-        //Francesco
-        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
-        {
-            return await _repositoryOrdine.DeleteOrdineAsync(idOrdineEsistente);
-        }
-        //Gabriele
-        public async Task<OrdineDettaglioDTOperGET?> GetOrdineDettaglioAsync(int userId, int idDettaglioOrdine)
-        {
-            return await _repositoryOrdine.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
-        }
-
-        public async Task<string?> RecuperaPasswordUtenteAsync(int userId)
-        {
-            return await _repositoryOrdine.GetUserPassword(userId);
-        }
-
-        public async Task<bool> VerificaUtenteAsync(int userId, string password)
-        {
-            return await _repositoryOrdine.VerificaUserAsync(userId, password);
-        }
-        //Fine Gabriele
-
-
-
+       
+        //Adriano
         public async Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             return await _repositoryOrdine.addOrdine(idUtente, prodotto, quantità);
 
         }
         public async Task<Prodotto> getProdottoAsync(int idProdotto)
-        {    // Controllo esistenza del prodotto 
-#pragma warning disable CS8603
+        {// Controllo esistenza del prodotto 
+            #pragma warning disable CS8603
             return await _context.Prodottos.FindAsync(idProdotto);
-#pragma warning restore CS8603
+            #pragma warning restore CS8603
         }
         public bool prodottoExists(int id)
         {
@@ -125,36 +127,11 @@ namespace DataLayer
         {
             return _context.DettaglioOrdines.Any(e => e.Id == id);
         }
-
-
-        //Metodo  per verificare se utente è presente Florea Renato
-        public async Task<int?> UtenteExists(int id)
+        //Francesco
+        public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
         {
-            var utente = await _context.Utentes.Where(u => u.Id == id).FirstOrDefaultAsync();
-
-            if (utente != null)
-            {
-                return utente.Id;
-            }
-
-            else
-            {
-                return null;
-            }
-
+            return await _repositoryOrdine.DeleteOrdineAsync(idOrdineEsistente);
         }
-
-        private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
-        {
-            return new ContentResult
-            {
-                Content = errorMessage,
-                ContentType = "text/plain",
-                StatusCode = statusCode
-            };
-        }
-
-
 
     }
 }
