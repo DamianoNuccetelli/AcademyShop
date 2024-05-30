@@ -11,7 +11,7 @@ namespace DataLayer.Repository
 {
     public interface IRepositoryUtente
     {
-        //-------------Daniel---------------//
+        //Daniel
         Task<IEnumerable<Utente>> GetUtentesAsync();
         Task<Utente> GetUtenteByIdAsync(int id);
         Task<ActionResult<Utente>> AddUtenteAsync(Utente utente);

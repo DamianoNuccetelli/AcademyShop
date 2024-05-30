@@ -13,13 +13,12 @@ using BusinessLayer;
 
 namespace ProgettoAcademyShop.Controller
 {
-    //Task Daniel Roberti -> Aggiunta ed eliminazione utente dal db
-
+    //Daniel
     [Route("api/[controller]")]
     [ApiController]
     public class UtenteController : ControllerBase
     {
-        private readonly ManageUtenteBusiness _oUBL; //Oggetto Utente Business Layer
+        private readonly ManageUtenteBusiness _oUBL;
 
         public UtenteController(ManageUtenteBusiness oUBL)
         {

@@ -19,8 +19,7 @@ namespace DataLayer.Repository
             _context = context;
         }
 
-        //DANIEL CON REPOSITORY
-        //Aggiunta e rimozione dell'utente dal db
+        //DANIEL 
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
             return await _context.Utentes.ToListAsync();
@@ -63,17 +62,15 @@ namespace DataLayer.Repository
         {
             return await _context.Utentes.AnyAsync(u => u.Id == id);
         }
-
-
-
-
         // Leonardo
         public async Task<Utente> LoginUser(string email, string password)
         {
             try
             {
                 Utente? utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                #pragma warning disable CS8603
                 return utente;
+                #pragma warning restore CS8603
             }
             catch (Exception)
             {

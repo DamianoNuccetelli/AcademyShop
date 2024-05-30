@@ -15,15 +15,13 @@ namespace BusinessLayer
     public class ManageUtenteBusiness
     {
         private readonly ManageUtenteData oUDL;
-        private readonly IRepositoryUtente _repo;
           
-        public ManageUtenteBusiness(ManageUtenteData _oUDL, IRepositoryUtente repo)
+        public ManageUtenteBusiness(ManageUtenteData _oUDL)
         {
             oUDL = _oUDL;
-            _repo = repo;
         }
 
-        //Daniel -> Aggiunta e rimozione dell'utente dal db
+        //Daniel
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
             try
@@ -48,8 +46,6 @@ namespace BusinessLayer
                 throw new Exception($"Errore durante il recupero degll' utente: {ex.Message}");
             }
         }
-
-        //DANIEL ADD UTENTE 
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
             try
@@ -91,8 +87,6 @@ namespace BusinessLayer
                 throw new Exception($"Errore durante la creazione dell'utente: {ex.Message}");
             }
         }
-
-
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             try
@@ -120,8 +114,6 @@ namespace BusinessLayer
                 return ErrorContentResult($"Errore durante la cancellazione dell'utente: {ex.Message}", 500);
             }
         }
-
-
         private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
         {
             return new ContentResult
@@ -130,8 +122,7 @@ namespace BusinessLayer
                 ContentType = "text/plain",
                 StatusCode = statusCode
             };
-        }
-        
+        }     
         private bool IsValidCodiceFiscale(string codiceFiscale)
         {
             string regexPattern = @"^[A-Z]{6}\d{2}[ABCDEHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$";
@@ -150,8 +141,6 @@ namespace BusinessLayer
             DateOnly maxDate = DateOnly.FromDateTime(DateTime.UtcNow);
             return birthDate >= minDate && birthDate <= maxDate;
         }
-
-       
         // Leonardo
         public async Task<ActionResult<int>> LoginUser(string email, string password)
         {

@@ -13,17 +13,13 @@ namespace DataLayer
 {
     public class ManageUtenteData
     {
-        private readonly AcademyShopDBContext _context;
         private readonly IRepositoryUtente _utenteRepository;
-
-        public ManageUtenteData(AcademyShopDBContext context, IRepositoryUtente utenteRepository)
+        public ManageUtenteData( IRepositoryUtente utenteRepository)
         {
-            _context = context;
             _utenteRepository = utenteRepository;
         }
 
-        ////DANIEL CON REPOSITORY
-
+        //DANIEL 
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
             return await _utenteRepository.GetUtentesAsync();
@@ -54,14 +50,11 @@ namespace DataLayer
             return await _utenteRepository.CheckUtenteExistsById(id);
         }
 
-
         // Leonardo
         public async Task<Utente> LoginUser(string email, string password)
         {
             return await _utenteRepository.LoginUser(email, password);
         }
-
-
 
     }
 }
