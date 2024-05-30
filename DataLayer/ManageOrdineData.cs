@@ -14,19 +14,15 @@ namespace DataLayer
 {
     public class ManageOrdineData
     {
-        private readonly IPutOrderRepository _repositoryOrdineAA; //Damiano
         private readonly AcademyShopDBContext _context;
         private readonly IRepositoryAsync<Ordine> repo;
-        private readonly IRepositoryGetOrdini _repositoryGetOrdini;
         private readonly IRepositoryOrdine _repositoryOrdine;
 
-        public ManageOrdineData(/*IPutOrderRepository orderPutRepository*/IRepositoryOrdine repositoryOrdine, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo, IRepositoryGetOrdini repositoryGetOrdini)
+        public ManageOrdineData(IRepositoryOrdine repositoryOrdine, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo)
         {
-           // _repositoryOrdine = orderPutRepository;
            _repositoryOrdine = repositoryOrdine;
             repo = _repo;
             _context = _academyShopDBContext;
-            _repositoryGetOrdini = repositoryGetOrdini;
         }
 
 
