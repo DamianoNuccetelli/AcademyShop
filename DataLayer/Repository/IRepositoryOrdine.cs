@@ -28,5 +28,8 @@ namespace DataLayer.Repository
         Task<string?> GetUserPassword(int userId);
         Task<bool> VerificaUserAsync(int userId, string password);
 
+        //Renato
+        Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId);
+
     }
 }

@@ -189,8 +189,6 @@ namespace BusinessLayer
             }
         }
 
-
-
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
             try
@@ -204,7 +202,6 @@ namespace BusinessLayer
                 throw new Exception("Errore durante il recupero dell'ID dell'ordine nel business layer.", ex);
             }
         }
-
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
