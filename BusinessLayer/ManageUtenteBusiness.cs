@@ -14,15 +14,13 @@ namespace BusinessLayer
 {
     public class ManageUtenteBusiness
     {
-        private readonly IRepositoryWithDtoAsync<Utente, UtenteDTO> _repo;
         private readonly ManageUtenteData oUDL;
-        
-
-        
-        public ManageUtenteBusiness(IRepositoryWithDtoAsync<Utente, UtenteDTO> repo, ManageUtenteData _oUDL)
+        private readonly IRepositoryUtente _repo;
+          
+        public ManageUtenteBusiness(ManageUtenteData _oUDL, IRepositoryUtente repo)
         {
-            _repo = repo;
             oUDL = _oUDL;
+            _repo = repo;
         }
 
         //Daniel -> Aggiunta e rimozione dell'utente dal db
@@ -79,9 +77,9 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<bool> UpdateUtenteAsync(UtenteDTO utente)
+        public async Task<Utente> UpdateUtenteAsync(Utente utente)
         {
-            return await _repo.UpdateAsync(utente);
+            return await oUDL.UpdateUtenteAsync(utente);
         }
 
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
@@ -150,7 +148,7 @@ namespace BusinessLayer
                     return ErrorContentResult("Client Error. \nEmail o Password non corretta.", 404);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return ErrorContentResult("Server Error.\nSi è verificato un errore durante l'accesso del database", 500);
             }

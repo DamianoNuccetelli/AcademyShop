@@ -13,11 +13,9 @@ namespace AcademyShopAPI.Controllers
     [ApiController]
     public class ProdottoController : ControllerBase
     {
-        private readonly BusinessLayer.ManageBusiness _oBL;
-
-        public ProdottoController(BusinessLayer.ManageBusiness oBL)
+        public ProdottoController()
         {
-            _oBL = oBL;
+            
         }
    
 

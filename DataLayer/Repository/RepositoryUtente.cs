@@ -1,6 +1,7 @@
 ﻿using AcademyShopAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,20 @@ namespace DataLayer.Repository
 
 
 
+        // Leonardo
+        public async Task<Utente> LoginUser(string email, string password)
+        {
+            try
+            {
+                Utente? utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                return utente;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
 
+        }
 
 
     }

@@ -10,6 +10,12 @@ namespace DataLayer.Repository
 {
     public interface IRepositoryOrdine
     {
+        //Renato
+        Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId);
+        //Gabriele
+        Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId);
+        Task<string?> GetUserPassword(int userId);
+        Task<bool> VerificaUserAsync(int userId, string password);
         //Damiano
         Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente);
         Task<DettaglioOrdine?> RecuperaDettaglioOrdineAsync(int idDettaglioOrdine);
@@ -20,21 +26,12 @@ namespace DataLayer.Repository
         Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto);
         Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita);
         Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine);
-        //FRANCESCO
-
-        Task<bool> DeleteOrdineAsync(int idOrdineEsistente);
-        //Gabriele
-        Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId);
-        Task<string?> GetUserPassword(int userId);
-        Task<bool> VerificaUserAsync(int userId, string password);
-
-        //Renato
-        Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId);
-
+        //Adriano
         Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità);
-
         Task<Prodotto> getProdottoAsync(int idProdotto);
-
         bool prodottoExists(int id);
+        //FRANCESCO
+        Task<bool> DeleteOrdineAsync(int idOrdineEsistente);
+      
     }
 }

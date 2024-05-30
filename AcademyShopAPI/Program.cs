@@ -11,12 +11,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AcademyShopDBContext>();
 //BusinessLayer
-builder.Services.AddScoped<BusinessLayer.ManageBusiness>();
 builder.Services.AddScoped<BusinessLayer.ManageUtenteBusiness>();
 builder.Services.AddScoped<BusinessLayer.ManageProdottoBusiness>();
 builder.Services.AddScoped<BusinessLayer.ManageOrdineBusiness>();
 //DataLayer
-builder.Services.AddScoped<DataLayer.ManageData>();
 builder.Services.AddScoped<DataLayer.ManageUtenteData>();
 builder.Services.AddScoped<DataLayer.ManageProdottoData>();
 builder.Services.AddScoped<DataLayer.ManageOrdineData>();
@@ -28,7 +26,6 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add repositories
 builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-builder.Services.AddScoped(typeof(IRepositoryWithDtoAsync<,>), typeof(RepositoryWithDtoAsync<,>));
 builder.Services.AddScoped(typeof(IRepositoryOrdine), typeof(RepositoryOrdine));
 builder.Services.AddScoped(typeof(IRepositoryUtente), typeof(RepositoryUtente));
 
