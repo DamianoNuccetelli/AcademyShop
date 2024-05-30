@@ -141,6 +141,36 @@ namespace DataLayer.Repository
         {
             return await _context.Utentes.AnyAsync(u => u.Id == userId && u.Password == password);
         }
-    }
+        //Renato
+        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+        {
+            try
+            {
+                var ordini = await _context.Ordines
+                    .Where(o => o.FkIdUtente == userId)
+                    .Select(o => new OrdineDettaglioDTOperGET
+                    {
+                        ProdottoNome = o.DettaglioOrdines.First().FkIdProdottoNavigation.Nome,
+                        DataRegistrazione = o.DataRegistrazione,
+                        DataAggiornamento = o.DataAggiornamento,
+                        StatoOrdineDescrizione = o.FkIdStatoNavigation.Descrizione,
+                        ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
+                        ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
+                        Quantita = o.DettaglioOrdines.First().Quantita
+                    })
+                    .ToListAsync();
 
+                return ordini; // Restituisce la lista degli ordini trovati.
+
+            }
+            catch (Exception ex)
+            {
+                // In caso di eccezione, solleva una nuova eccezione con un messaggio specifico.
+                throw new Exception("Non ci sono ordini per questo utente", ex);
+            }
+        } //Fine renato
+
+
+
+    }
 }

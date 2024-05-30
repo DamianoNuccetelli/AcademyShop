@@ -29,48 +29,7 @@ namespace DataLayer
         //Florea Renato operazione per ottenere i dati degli ordini ricevendo in input l'id utente 
         public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
         {
-            try
-            {
-
-                var ordini = await _context.Ordines
-                    .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdineDettaglioDTOperGET
-                    {
-                        ProdottoNome = o.DettaglioOrdines.First().FkIdProdottoNavigation.Nome,
-                        DataRegistrazione = o.DataRegistrazione,
-                        DataAggiornamento = o.DataAggiornamento,
-                        StatoOrdineDescrizione = o.FkIdStatoNavigation.Descrizione,
-                        ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
-                        ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                        Quantita = o.DettaglioOrdines.First().Quantita
-                    })
-                    .ToListAsync();
-                ////// Esegui una query utilizzando LINQ per ottenere gli ordini per un utente specifico.////////
-                //var ordini = await (from o in _context.Ordines
-                //                    join s in _context.StatoOrdines on o.FkIdStato equals s.Id
-                //                    join d in _context.DettaglioOrdines on o.Id equals d.FkIdOrdine
-                //                    join p in _context.Prodottos on d.FkIdProdotto equals p.Id
-                //                    where o.FkIdUtente == userId
-                //                    // Seleziona i dati necessari per creare un oggetto OrdiniByIdUserDTO.
-                //                    select new OrdiniByIdUserDTO
-                //                    {
-                //                        DataRegistrazione = o.DataRegistrazione,
-                //                        DataAggiornamento = o.DataAggiornamento,
-                //                        DescrizioneStato = s.Descrizione,
-                //                        IDProdotto = p.Id,
-                //                        DescrizioneProdotto = p.Descrizione,
-                //                        Quantita = d.Quantita
-                //                    }).ToListAsync();
-
-                return ordini; // Restituisce la lista degli ordini trovati.
-
-            }
-            catch (Exception ex)
-            {
-                // In caso di eccezione, solleva una nuova eccezione con un messaggio specifico.
-                throw new Exception("Non ci sono ordini per questo utente", ex);
-
-            }
+            return await _repositoryOrdine.GetOrdiniByUserId(userId);
         }
 
         //-----------------DAMIANO-----------------------//
@@ -164,38 +123,6 @@ namespace DataLayer
             }
         }
         //Gabriele
-        //public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
-        //{
-
-        //    var ordineDettaglio = await (from ordine in _context.Ordines
-        //                                 join statoOrdine in _context.StatoOrdines on ordine.FkIdStato equals statoOrdine.Id
-        //                                 join dettaglioOrdine in _context.DettaglioOrdines on ordine.Id equals dettaglioOrdine.FkIdOrdine
-        //                                 join prodotto in _context.Prodottos on dettaglioOrdine.FkIdProdotto equals prodotto.Id
-        //                                 where ordine.FkIdUtente == userId && dettaglioOrdine.Id == dettaglioOrdineId
-        //                                 select new OrdineDettaglioDTOperGET
-        //                                 {
-        //                                     ProdottoId = prodotto.Id,
-        //                                     ProdottoNome = prodotto.Nome,
-        //                                     ProdottoDescrizione = prodotto.Descrizione,
-        //                                     StatoOrdineDescrizione = statoOrdine.Descrizione,
-        //                                     Quantita = dettaglioOrdine.Quantita,
-        //                                     DataRegistrazione = ordine.DataRegistrazione,
-        //                                     DataAggiornamento = ordine.DataAggiornamento
-        //                                 }).FirstOrDefaultAsync();
-
-        //    return ordineDettaglio;
-        //}
-        ////Gabriele
-        //public async Task<string?> GetUserPassword(int userId)
-        //{
-        //    var user = await _context.Utentes.FirstOrDefaultAsync(u => u.Id == userId);
-        //    return user?.Password;
-        //}
-        ////Gabriele
-        //public async Task<bool> VerificaUserAsync(int userId, string password)
-        //{
-        //    return await _context.Utentes.AnyAsync(u => u.Id == userId && u.Password == password);
-        //}
         public async Task<OrdineDettaglioDTOperGET?> GetOrdineDettaglioAsync(int userId, int idDettaglioOrdine)
         {
             return await _repositoryOrdine.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
