@@ -31,6 +31,7 @@ builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>)
 builder.Services.AddScoped(typeof(IPutOrderRepository), typeof(PutOrderRepository));
 builder.Services.AddScoped(typeof(IRepositoryGetOrdini), typeof(RepositoryGetOrdini));
 builder.Services.AddScoped(typeof(IRepositoryWithDtoAsync<,>), typeof(RepositoryWithDtoAsync<,>));
+builder.Services.AddScoped(typeof(IRepositoryOrdine), typeof(RepositoryOrdine));
 
 
 var app = builder.Build();

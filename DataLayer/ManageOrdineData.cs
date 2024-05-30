@@ -14,14 +14,16 @@ namespace DataLayer
 {
     public class ManageOrdineData
     {
-        private readonly IPutOrderRepository _orderPutRepository; //Damiano
+        private readonly IPutOrderRepository _repositoryOrdineAA; //Damiano
         private readonly AcademyShopDBContext _context;
         private readonly IRepositoryAsync<Ordine> repo;
         private readonly IRepositoryGetOrdini _repositoryGetOrdini;
+        private readonly IRepositoryOrdine _repositoryOrdine;
 
-        public ManageOrdineData(IPutOrderRepository orderPutRepository, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo, IRepositoryGetOrdini repositoryGetOrdini)
+        public ManageOrdineData(/*IPutOrderRepository orderPutRepository*/IRepositoryOrdine repositoryOrdine, AcademyShopDBContext _academyShopDBContext, IRepositoryAsync<Ordine> _repo, IRepositoryGetOrdini repositoryGetOrdini)
         {
-            _orderPutRepository = orderPutRepository;
+           // _repositoryOrdine = orderPutRepository;
+           _repositoryOrdine = repositoryOrdine;
             repo = _repo;
             _context = _academyShopDBContext;
             _repositoryGetOrdini = repositoryGetOrdini;
@@ -79,49 +81,49 @@ namespace DataLayer
 
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {
-            return await _orderPutRepository.RecuperaOrdineAsync(idOrdineEsistente);
+            return await _repositoryOrdine.RecuperaOrdineAsync(idOrdineEsistente);
         }
 
         public async Task<DettaglioOrdine?> RecuperaDettaglioOrdineAsync(int idDettaglioOrdine)
         {
-            return await _orderPutRepository.RecuperaDettaglioOrdineAsync(idDettaglioOrdine);
+            return await _repositoryOrdine.RecuperaDettaglioOrdineAsync(idDettaglioOrdine);
         }
 
         public async Task<Prodotto?> RecuperaProdottoAsync(int idProdotto)
         {
-            return await _orderPutRepository.RecuperaProdottoAsync(idProdotto);
+            return await _repositoryOrdine.RecuperaProdottoAsync(idProdotto);
         }
 
 
         public async Task<int?> RecuperaIdOrdineAsync(int idUtente, int idDettaglioOrdine)
         {
-            return await _orderPutRepository.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
+            return await _repositoryOrdine.RecuperaIdOrdineAsync(idUtente, idDettaglioOrdine);
         }
 
         public async Task<int?> RecuperaStatoOrdineAsync(int idOrdineEsistente)
         {
-           return await _orderPutRepository.RecuperaStatoOrdineAsync(idOrdineEsistente);
+           return await _repositoryOrdine.RecuperaStatoOrdineAsync(idOrdineEsistente);
         }
 
         public async Task<int?> RecuperaIdProdottoAsync(int idOrdineEsistente)
         {
-           return await _orderPutRepository.RecuperaIdProdottoAsync(idOrdineEsistente);
+           return await _repositoryOrdine.RecuperaIdProdottoAsync(idOrdineEsistente);
         }
 
         public async Task<int?> RecuperaQuantitaProdottoAsync(int idProdotto)
         {
-            return await _orderPutRepository.RecuperaQuantitaProdottoAsync(idProdotto);
+            return await _repositoryOrdine.RecuperaQuantitaProdottoAsync(idProdotto);
         }
 
 
         public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita)
         {
-           return await _orderPutRepository.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, statoOrdine, quantita);
+           return await _repositoryOrdine.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, statoOrdine, quantita);
         }
 
         public async Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine)
         {
-           return await _orderPutRepository.RecuperaOrdineModificatoAsync(idOrdine);
+           return await _repositoryOrdine.RecuperaOrdineModificatoAsync(idOrdine);
         }
 
         //---------------------------------------------------------------------------------
@@ -200,17 +202,17 @@ namespace DataLayer
         //}
         public async Task<OrdineDettaglioDTOperGET?> GetOrdineDettaglioAsync(int userId, int idDettaglioOrdine)
         {
-            return await _repositoryGetOrdini.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
+            return await _repositoryOrdine.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
         }
 
         public async Task<string?> RecuperaPasswordUtenteAsync(int userId)
         {
-            return await _repositoryGetOrdini.GetUserPassword(userId);
+            return await _repositoryOrdine.GetUserPassword(userId);
         }
 
         public async Task<bool> VerificaUtenteAsync(int userId, string password)
         {
-            return await _repositoryGetOrdini.VerificaUserAsync(userId, password);
+            return await _repositoryOrdine.VerificaUserAsync(userId, password);
         }
         //Fine Gabriele
 
