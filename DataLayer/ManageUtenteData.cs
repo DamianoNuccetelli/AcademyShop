@@ -24,19 +24,29 @@ namespace DataLayer
 
         ////DANIEL CON REPOSITORY
 
+        public async Task<IEnumerable<Utente>> GetUtentesAsync()
+        {
+            return await _utenteRepository.GetUtentesAsync();
+        }
+
+        public async Task<Utente> GetUtenteByIdAsync(int id)
+        {
+            return await _utenteRepository.GetUtenteByIdAsync(id);
+        }
+
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
             return await _utenteRepository.AddUtenteAsync(utente);
         }
 
-        public async Task<ActionResult<Utente>> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
-            return await _utenteRepository.DeleteUtente(id);
+            return await _utenteRepository.DeleteUtenteAsync(id);
         }
 
-        public async Task<bool> CheckUtenteExists(Utente utente)
+        public async Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente)
         {
-            return await _utenteRepository.CheckUtenteExists(utente);
+            return await _utenteRepository.CheckUtenteExistsByEmailOrPassword(utente);
         }
 
         public async Task<bool> CheckUtenteExistsById(int id)
@@ -44,35 +54,7 @@ namespace DataLayer
             return await _utenteRepository.CheckUtenteExistsById(id);
         }
 
-        public async Task<IEnumerable<Utente>> GetUtentes()
-        {
-            return await _utenteRepository.GetUtentes();
-        }
 
-        public async Task<Utente> GetUtente(int id)
-        {
-            return await _utenteRepository.GetUtente(id);
-        }
-
-        public async Task<IEnumerable<Utente>> GetAllAsync()
-        {
-            return await _utenteRepository.GetAllAsync();
-        }
-
-        public async Task<Utente> GetByIdAsync(int id)
-        {
-            return await _utenteRepository.GetByIdAsync(id);
-        }
-
-        public async Task<Utente> AddAsync(Utente utente)
-        {
-            return await _utenteRepository.AddAsync(utente);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            return await _utenteRepository.DeleteAsync(id);
-        }
 
         //public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         //{

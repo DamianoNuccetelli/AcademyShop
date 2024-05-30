@@ -30,17 +30,17 @@ namespace ProgettoAcademyShop.Controller
 
         // GET USERS
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Utente>>> GetUtentes()
+        public async Task<ActionResult<IEnumerable<Utente>>> GetUtentesAsync()
         {
-                var utentes = await _oUBL.GetUtentes();
+                var utentes = await _oUBL.GetUtentesAsync();
                 return Ok(utentes);
         }
 
         // GET USER
-        [HttpGet("{id}", Name = "GetUtente")]
-        public async Task<ActionResult<Utente>> GetUtente(int id)
+        [HttpGet("{id}", Name = "GetUtenteByIdAsync")]
+        public async Task<ActionResult<Utente>> GetUtenteByIdAsync(int id)
         {
-                var utente = await _oUBL.GetUtente(id);
+                var utente = await _oUBL.GetUtenteByIdAsync(id);
                 if (utente == null)
                 {
                     return NotFound();
@@ -78,7 +78,7 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> DeleteUtente(int id)
+        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             var result = await _oUBL.DeleteUtenteAsync(id);
             return result;

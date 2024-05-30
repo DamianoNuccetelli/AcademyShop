@@ -25,14 +25,15 @@ namespace BusinessLayer
             oUDL = _oUDL;
         }
 
-        public async Task<IEnumerable<Utente>> GetAllUtentiAsync()
+        //Daniel -> Aggiunta e rimozione dell'utente dal db
+        public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
-            return await oUDL.GetAllAsync();
+            return await oUDL.GetUtentesAsync();
         }
 
-        public async Task<Utente> GetUtenteDetailsAsync(int id)
+        public async Task<Utente> GetUtenteByIdAsync(int id)
         {
-            return await oUDL.GetByIdAsync(id);
+            return await oUDL.GetUtenteByIdAsync(id);
         }
 
         //DANIEL ADD UTENTE 
@@ -41,7 +42,7 @@ namespace BusinessLayer
             try
             {
                 // Verifico se un utente è gia esistente
-                if (await oUDL.CheckUtenteExists(utente))
+                if (await oUDL.CheckUtenteExistsByEmailOrPassword(utente))
                 {
                     return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.", 409);
                 }
@@ -83,7 +84,7 @@ namespace BusinessLayer
             return await _repo.UpdateAsync(utente);
         }
 
-        public async Task<ActionResult<bool>> DeleteUtenteAsync(int id)
+        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             try
             {
@@ -102,7 +103,7 @@ namespace BusinessLayer
             }
         }
 
-        //DANIEL 
+
         private ContentResult ErrorContentResult(string errorMessage, int statusCode = 400)
         {
             return new ContentResult
@@ -112,7 +113,7 @@ namespace BusinessLayer
                 StatusCode = statusCode
             };
         }
-        //Daniel
+        
         private bool IsValidCodiceFiscale(string codiceFiscale)
         {
             string regexPattern = @"^[A-Z]{6}\d{2}[ABCDEHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$";
@@ -132,16 +133,7 @@ namespace BusinessLayer
             return birthDate >= minDate && birthDate <= maxDate;
         }
 
-        //Daniel -> Aggiunta e rimozione dell'utente dal db
-        public async Task<IEnumerable<Utente>> GetUtentes()
-        {
-            return await oUDL.GetUtentes();
-        }
-
-        public async Task<Utente> GetUtente(int id)
-        {
-            return await oUDL.GetUtente(id);
-        }
+       
         // Leonardo
         public async Task<ActionResult<int>> LoginUser(string email, string password)
         {

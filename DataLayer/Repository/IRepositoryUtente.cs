@@ -11,18 +11,12 @@ namespace DataLayer.Repository
 {
     public interface IRepositoryUtente
     {
-        //Daniel
+        //-------------Daniel---------------//
+        Task<IEnumerable<Utente>> GetUtentesAsync();
+        Task<Utente> GetUtenteByIdAsync(int id);
         Task<ActionResult<Utente>> AddUtenteAsync(Utente utente);
-        Task<ActionResult<Utente>> DeleteUtente(int id);
-        Task<bool> CheckUtenteExists(Utente utente);
+        Task<ActionResult<Utente>> DeleteUtenteAsync(int id);
+        Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente);
         Task<bool> CheckUtenteExistsById(int id);
-        Task<IEnumerable<Utente>> GetUtentes();
-        Task<Utente> GetUtente(int id);
-        Task<IEnumerable<Utente>> GetAllAsync();
-        Task<Utente> GetByIdAsync(int id);
-        Task<Utente> AddAsync(Utente utente);
-        Task<bool> DeleteAsync(int id);
-
-
     }
 }
