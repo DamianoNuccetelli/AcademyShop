@@ -19,12 +19,10 @@ namespace ProgettoAcademyShop.Controller
     [ApiController]
     public class UtenteController : ControllerBase
     {
-        private readonly BusinessLayer.ManageBusiness _oBL;
         private readonly ManageUtenteBusiness _oUBL; //Oggetto Utente Business Layer
 
-        public UtenteController(BusinessLayer.ManageBusiness oBL, ManageUtenteBusiness oUBL)
+        public UtenteController(ManageUtenteBusiness oUBL)
         {
-            _oBL = oBL;
             _oUBL = oUBL;
         }
 

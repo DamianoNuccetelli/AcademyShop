@@ -21,7 +21,11 @@ namespace DataLayer.Repository
         Task<IEnumerable<Utente>> GetAllAsync();
         Task<Utente> GetByIdAsync(int id);
         Task<Utente> AddAsync(Utente utente);
+        Task<Utente> UpdateUtenteAsync(Utente utente);
         Task<bool> DeleteAsync(int id);
+
+        //Leonardo
+        Task<Utente> LoginUser(string email, string password);
 
 
     }

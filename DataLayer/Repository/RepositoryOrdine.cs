@@ -12,14 +12,14 @@ namespace DataLayer.Repository
 {
     public class RepositoryOrdine : IRepositoryOrdine
     {
-        //Damiano
+        
         private readonly AcademyShopDBContext _context;
 
         public RepositoryOrdine(AcademyShopDBContext context)
         {
             _context = context;
         }
-
+        //Damiano
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {
             return await _context.Ordines.FindAsync(idOrdineEsistente);
@@ -111,7 +111,7 @@ namespace DataLayer.Repository
                 .FirstOrDefaultAsync(o => o.Id == idOrdine);
         }
 
-        //FRANCESCO METODO DELETE
+        //Fancesco - Delete
         public async Task<bool> DeleteOrdineAsync(int idOrdineEsistente)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -211,8 +211,10 @@ namespace DataLayer.Repository
                 // In caso di eccezione, solleva una nuova eccezione con un messaggio specifico.
                 throw new Exception("Non ci sono ordini per questo utente", ex);
             }
-        } //Fine renato
+        } 
+        
 
+        //Adriano
         public async Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             Ordine ordine = new();
@@ -269,7 +271,6 @@ namespace DataLayer.Repository
                     throw new TransactionException();
                 }
             }
-            //
         }
 
         public async Task<Prodotto> getProdottoAsync(int idProdotto)
@@ -284,6 +285,8 @@ namespace DataLayer.Repository
         {
             return _context.Prodottos.Any(e => e.Id == id);
         }
+        
+
     }
 
 }

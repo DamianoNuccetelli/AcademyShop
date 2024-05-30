@@ -1,6 +1,7 @@
 ﻿using AcademyShopAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,13 @@ namespace DataLayer.Repository
             return utente;
         }
 
+        public async Task<Utente>UpdateUtenteAsync(Utente utente)
+        {
+            _context.Utentes.Update(utente);
+            await _context.SaveChangesAsync();
+            return utente;
+        }
+
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -114,7 +122,20 @@ namespace DataLayer.Repository
             return true;
         }
 
+        // Leonardo
+        public async Task<Utente> LoginUser(string email, string password)
+        {
+            try
+            {
+                Utente? utente = await _context.Utentes.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+                return utente;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
 
+        }
 
 
     }

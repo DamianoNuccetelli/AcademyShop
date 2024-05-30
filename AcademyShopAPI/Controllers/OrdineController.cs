@@ -16,7 +16,6 @@ namespace AcademyShopAPI.Controllers
     [ApiController]
     public class OrdineController : ControllerBase
     {
-        private readonly ManageBusiness oBL;
         private readonly ManageOrdineBusiness oOBL;
         private readonly ManageUtenteBusiness oUBL;
 

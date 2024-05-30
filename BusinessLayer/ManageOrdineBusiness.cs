@@ -313,7 +313,6 @@ namespace BusinessLayer
         }
 
         //Gabriele
-
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
             ContentResult result = new ContentResult();
