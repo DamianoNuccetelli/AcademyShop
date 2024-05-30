@@ -23,7 +23,7 @@ namespace AcademyShopAPI.Controllers
             oOBL = _oOBL;
         }
         //Gabriele
-        [HttpGet("GetOrdineByUser&Dettaglio{userId}/{dettaglioOrdineId}")]
+        [HttpGet("GetOrdineByUser&Dettaglio{userId}")]
         public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
         {
             try
