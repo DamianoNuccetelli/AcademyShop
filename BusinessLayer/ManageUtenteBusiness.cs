@@ -63,7 +63,7 @@ namespace BusinessLayer
                 // Controllo tramite regex del codice fiscale
                 if (!IsValidCodiceFiscale(utente.CodiceFiscale))
                 {
-                    return ErrorContentResult("Un utente con lo stesso codice fiscale o email esiste già.");
+                    return ErrorContentResult("Il codice fiscale non è valido.");
                 }
 
                 // Controllo tramite regex dell'email
