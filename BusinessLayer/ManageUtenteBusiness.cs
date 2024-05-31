@@ -3,6 +3,7 @@ using DataLayer;
 using DataLayer.Repository;
 using DtoLayer.Dto;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,16 @@ namespace BusinessLayer
     public class ManageUtenteBusiness
     {
         private readonly ManageUtenteData oUDL;
-          
+        private readonly PasswordHasher<Utente> _passwordHasher;
+
+
         public ManageUtenteBusiness(ManageUtenteData _oUDL)
         {
             oUDL = _oUDL;
         }
 
         //Daniel
+
         public async Task<IEnumerable<Utente>> GetUtentesAsync()
         {
             try
@@ -73,7 +77,6 @@ namespace BusinessLayer
                 {
                     return ErrorContentResult("La data di nascita non è valida.");
                 }
-
 
                 if (utente.CodiceFiscale.Length != 16 || utente.Password.Length != 16 || utente.ProvinciaNascita.Length != 2 || (utente.Sesso != "M" && utente.Sesso != "F"))
                 {
