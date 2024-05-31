@@ -70,7 +70,15 @@ namespace BusinessLayer
 
         public async Task<bool> UpdateProdottoAsync(Prodotto prodotto)
         {
-            return await oPDL.UpdateProdottoAsync(prodotto);
+            try
+            {
+
+                return await oPDL.UpdateProdottoAsync(prodotto);
+
+            } catch (Exception ex)
+            {
+                throw new Exception("Errore: " + ex.Message);
+            }
         }
         public async Task<bool> DeleteProdottoAsync(int id)
         {

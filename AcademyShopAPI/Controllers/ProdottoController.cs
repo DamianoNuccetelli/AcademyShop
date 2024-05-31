@@ -63,18 +63,12 @@ namespace AcademyShopAPI.Controllers
 
         // PUT: api/Prodotto/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProdotto(int id, Prodotto prodotto)
+        public async Task<IActionResult> UpdateProdotto(int id, ProdottoDTO prodottoDto)
         {
-            if (id != prodotto.Id)
-            {
-                return BadRequest();
-            }
 
+            var prodotto = _mapper.Map<Prodotto>(prodottoDto);
+            prodotto.Id = id;
             var updateResult = await _prodottoBusiness.UpdateProdottoAsync(prodotto);
-            if (!updateResult)
-            {
-                return NotFound();
-            }
 
             return NoContent();
         }
