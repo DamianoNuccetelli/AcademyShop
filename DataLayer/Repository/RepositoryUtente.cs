@@ -44,7 +44,7 @@ namespace DataLayer.Repository
 
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
-            var utente = await _context.Utentes.FindAsync(id);
+            var utente = await GetUtenteByIdAsync(id);
 
             _context.Utentes.Remove(utente);
             await _context.SaveChangesAsync();
@@ -62,6 +62,8 @@ namespace DataLayer.Repository
         {
             return await _context.Utentes.AnyAsync(u => u.Id == id);
         }
+
+
         // Leonardo
         public async Task<Utente> LoginUser(string email, string password)
         {
