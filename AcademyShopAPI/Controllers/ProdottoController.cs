@@ -67,8 +67,7 @@ namespace AcademyShopAPI.Controllers
         {
 
             var prodotto = _mapper.Map<Prodotto>(prodottoDto);
-            prodotto.Id = id;
-            //prodotto.Quantità = _mapper.Map<int>(prodottoDto.Quantità); 
+            prodotto.Id = id; 
             var updateResult = await _prodottoBusiness.UpdateProdottoAsync(prodotto);
 
             return NoContent();
