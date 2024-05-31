@@ -47,15 +47,6 @@ namespace BusinessLayer
         {
             try
             {
-                // Verifica se l'utente esiste
-                bool utenteExists = await oUDL.CheckUtenteExistsById(userId);
-
-                if (!utenteExists)
-                {
-                    // Se l'utente non esiste, restituisci una risposta di errore 400 (Bad Request)
-                    throw new ArgumentException();
-                }
-
                 // Chiama il metodo corrispondente del data layer per recuperare gli ordini dell'utente
                 var ordini = await oODL.GetOrdiniByUserId(userId);
 
@@ -73,10 +64,7 @@ namespace BusinessLayer
                 throw new Exception("Non ci sono ordini per questo utente", o);
 
             }
-            catch (ArgumentException u)
-            {
-                throw new Exception("Utente non trovato", u);
-            }
+           
             catch (Exception ex)
             {
                 // Gestisci eventuali errori qui 
