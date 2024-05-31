@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AcademyShopAPI.Models;
 using BusinessLayer;
+using DtoLayer.Dto;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcademyShopAPI.Controllers
 {
@@ -11,10 +14,12 @@ namespace AcademyShopAPI.Controllers
     public class ProdottoController : ControllerBase
     {
         private readonly ManageProdottoBusiness _prodottoBusiness;
+        private readonly IMapper _mapper;
 
-        public ProdottoController(ManageProdottoBusiness prodottoBusiness)
+        public ProdottoController(ManageProdottoBusiness prodottoBusiness, IMapper mapper)
         {
             _prodottoBusiness = prodottoBusiness;
+            _mapper = mapper;
         }
 
         // GET: api/Prodotto
@@ -40,11 +45,21 @@ namespace AcademyShopAPI.Controllers
 
         // POST: api/Prodotto
         [HttpPost]
-        public async Task<ActionResult<Prodotto>> AddProdotto(Prodotto prodotto)
+        public async Task<ActionResult<Prodotto>> AddProdotto(ProdottoDTO prodottoDto)
         {
-            var newProdotto = await _prodottoBusiness.AddProdottoAsync(prodotto);
-            return CreatedAtAction(nameof(GetProdotto), new { id = newProdotto.Id }, newProdotto);
+            try
+            {
+                var prodotto = _mapper.Map<Prodotto>(prodottoDto);
+                var newProdotto = await _prodottoBusiness.AddProdottoAsync(prodotto);
+
+                return CreatedAtAction(nameof(GetProdotto), new { id = newProdotto.Id }, newProdotto);
+
+            } catch (Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }   
         }
+
 
         // PUT: api/Prodotto/5
         [HttpPut("{id}")]

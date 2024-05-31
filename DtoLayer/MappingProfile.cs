@@ -14,6 +14,7 @@ namespace DtoLayer
         public MappingProfile()
         {
             CreateMap<Utente, UtenteDTO>().ReverseMap();
+            CreateMap<Prodotto, ProdottoDTO>().ReverseMap();
         }
     }
 }
