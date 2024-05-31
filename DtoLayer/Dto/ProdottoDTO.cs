@@ -10,6 +10,6 @@ namespace DtoLayer.Dto
     {
         public string Nome { get; set; }
         public string Descrizione { get; set; }
-        public int Quantita { get; set; }
+        public int Quantità { get; set; }
     }
 }
