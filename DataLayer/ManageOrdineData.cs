@@ -97,9 +97,9 @@ namespace DataLayer
         }
 
 
-        public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita)
+        public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int quantita)
         {
-           return await _repositoryOrdine.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, statoOrdine, quantita);
+           return await _repositoryOrdine.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, quantita);
         }
 
         public async Task<Ordine?> RecuperaOrdineModificatoAsync(int idOrdine)

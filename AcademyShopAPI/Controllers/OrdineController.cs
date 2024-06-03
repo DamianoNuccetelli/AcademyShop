@@ -12,7 +12,7 @@ using Humanizer.Localisation;
 
 namespace AcademyShopAPI.Controllers
 {
-    [Route("api/[controller]")]
+   // [Route("api/[controller]")]
     [ApiController]
     public class OrdineController : ControllerBase
     {
@@ -23,12 +23,12 @@ namespace AcademyShopAPI.Controllers
             oOBL = _oOBL;
         }
         //Gabriele
-        [HttpGet("GetOrdineByUser&Dettaglio{userId}")]
-        public async Task<ActionResult> GetOrdineDettaglio(int userId, int dettaglioOrdineId)
+        [HttpGet("orders/{idOrderDetail}")]
+        public async Task<ActionResult> GetOrdineDettaglio(int userId, int idOrderDetail)
         {
             try
             {
-                var result = await oOBL.GetOrdineDettaglioAsync(userId, dettaglioOrdineId);
+                var result = await oOBL.GetOrdineDettaglioAsync(userId, idOrderDetail);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace AcademyShopAPI.Controllers
 
         }
         //Florea Renato 
-        [HttpGet("GetAllOrdiniByUserId/{userId}")]
+        [HttpGet("orders")]
         public async Task<IActionResult> GetOrdiniByUserId(int userId)
         {
             try
@@ -54,24 +54,24 @@ namespace AcademyShopAPI.Controllers
             }
         }
         //Damiano
-        [HttpPut("{idUtente}/{idDettaglioOrdine}/{quantita}")]
-        public async Task<IActionResult> PutOrdine(int idUtente, int idDettaglioOrdine, int quantita)
+        [HttpPut("orders/{idOrderDetail}")]
+        public async Task<IActionResult> PutOrdine(int idUtente, int idOrderDetail, int quantita)
         {
-            var (success, message, statusCode, ordineModificato) = await oOBL.ModificaOrdineCompletaAsync(idUtente, idDettaglioOrdine, quantita);
+            var (success, message, statusCode, ordineModificato) = await oOBL.ModificaOrdineCompletaAsync(idUtente, idOrderDetail, quantita);
             return success ? StatusCode(200, ordineModificato) : StatusCode(statusCode, message);
         }
         //Adriano
-        [HttpPost("Add-Ordine")]
+        [HttpPost("orders")]
         public async Task<ActionResult<int>> addOrdineAsync(int idUtente, int idProdotto, int quantità)
         {
             var result = await  oOBL.addOrdine(idUtente, idProdotto, quantità);
             return result.Value >0 ? StatusCode(201, new { id = result.Value }) : result;
         }
         //Francesco
-        [HttpDelete("Delete-Ordine")]
-        public async Task<IActionResult> DeleteOrdine(int idUtente, int idDettaglioOrdine)
+        [HttpDelete("orders/{idOrderDetail}")]
+        public async Task<IActionResult> DeleteOrdine(int idUtente, int idOrderDetail)
         {
-            var deleteOrder = await oOBL.DeleteOrdineAsync(idUtente, idDettaglioOrdine);
+            var deleteOrder = await oOBL.DeleteOrdineAsync(idUtente, idOrderDetail);
             return deleteOrder;
         }
     }

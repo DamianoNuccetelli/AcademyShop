@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AcademyShopAPI.Controllers
 {
-    [Route("api/[controller]")]
+   // [Route("api/[controller]")]
     [ApiController]
     public class ProdottoController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace AcademyShopAPI.Controllers
         }
 
         // GET: api/Prodotto
-        [HttpGet]
+        [HttpGet("products")]
         public async Task<ActionResult<IEnumerable<Prodotto>>> GetProdottos()
         {
             var prodottos = await _prodottoBusiness.GetProdottosAsync();
@@ -31,7 +31,7 @@ namespace AcademyShopAPI.Controllers
         }
 
         // GET: api/Prodotto/5
-        [HttpGet("{id}")]
+        [HttpGet("products/{id}")]
         public async Task<ActionResult<Prodotto>> GetProdotto(int id)
         {
             var prodotto = await _prodottoBusiness.GetProdottoAsync(id);
@@ -44,7 +44,7 @@ namespace AcademyShopAPI.Controllers
         }
 
         // POST: api/Prodotto
-        [HttpPost]
+        [HttpPost("products")]
         public async Task<ActionResult<Prodotto>> AddProdotto(ProdottoDTO prodottoDto)
         {
             try
@@ -62,7 +62,7 @@ namespace AcademyShopAPI.Controllers
 
 
         // PUT: api/Prodotto/5
-        [HttpPut("{id}")]
+        [HttpPut("products/{id}")]
         public async Task<IActionResult> UpdateProdotto(int id, ProdottoDTO prodottoDto)
         {
 
@@ -74,7 +74,7 @@ namespace AcademyShopAPI.Controllers
         }
 
         // DELETE: api/Prodotto/5
-        [HttpDelete("{id}")]
+        [HttpDelete("products/{id}")]
         public async Task<IActionResult> DeleteProdotto(int id)
         {
             var deleteResult = await _prodottoBusiness.DeleteProdottoAsync(id);
@@ -87,7 +87,7 @@ namespace AcademyShopAPI.Controllers
         }
 
         // Extra: Check if a product exists
-        [HttpGet("exists/{id}")]
+        [HttpGet("managed-products/{id}")]
         public async Task<ActionResult<bool>> ProdottoExists(int id)
         {
             var exists = await _prodottoBusiness.ProdottoExistsAsync(id);

@@ -14,7 +14,7 @@ using BusinessLayer;
 namespace ProgettoAcademyShop.Controller
 {
     //Daniel
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class UtenteController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace ProgettoAcademyShop.Controller
         }
 
         // GET USERS
-        [HttpGet]
+        [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<Utente>>> GetUtentesAsync()
         {
                 var utentes = await _oUBL.GetUtentesAsync();
@@ -34,7 +34,7 @@ namespace ProgettoAcademyShop.Controller
         }
 
         // GET USER
-        [HttpGet("{id}", Name = "GetUtenteByIdAsync")]
+        [HttpGet("users/{id}")]
         public async Task<ActionResult<Utente>> GetUtenteByIdAsync(int id)
         {
                 var utente = await _oUBL.GetUtenteByIdAsync(id);
@@ -46,7 +46,7 @@ namespace ProgettoAcademyShop.Controller
         }
 
         // ADD USER
-        [HttpPost]
+        [HttpPost("users")]
         public async Task<ActionResult<Utente>> AddUtenteAsync(UtenteDTOperPOST utenteDTO)
         {
                 // Esegue la mappatura dei dati da UtenteDto a Utente
@@ -74,7 +74,7 @@ namespace ProgettoAcademyShop.Controller
         }
 
         // DELETE USER
-        [HttpDelete("{id}")]
+        [HttpDelete("users/{id}")]
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             var result = await _oUBL.DeleteUtenteAsync(id);
@@ -83,7 +83,7 @@ namespace ProgettoAcademyShop.Controller
 
 
         // Leonardo
-        [HttpPost("Login")]
+        [HttpPost("managed-users")]
         public async Task<ActionResult<int>> Login(string email, string password)
         {
             var result = await _oUBL.LoginUser(email, password);
