@@ -16,12 +16,13 @@ namespace DataLayer.Repository
         Task<Utente> GetUtenteByIdAsync(int id);
         Task<ActionResult<Utente>> AddUtenteAsync(Utente utente);
         Task<ActionResult<Utente>> DeleteUtenteAsync(int id);
+        Task<ActionResult<Utente>> DeleteUtenteEOrdineAsync(int id);
         Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente);
         Task<bool> CheckUtenteExistsById(int id);
 
         //Leonardo
         Task<Utente> LoginUser(string email, string password);
 
-
+        
     }
 }

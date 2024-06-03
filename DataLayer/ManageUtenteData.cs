@@ -39,6 +39,10 @@ namespace DataLayer
         {
             return await _utenteRepository.DeleteUtenteAsync(id);
         }
+        public async Task<ActionResult<Utente>> DeleteUtenteEOrdineAsync(int id)
+        {
+            return await _utenteRepository.DeleteUtenteEOrdineAsync(id);
+        }
 
         public async Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente)
         {
