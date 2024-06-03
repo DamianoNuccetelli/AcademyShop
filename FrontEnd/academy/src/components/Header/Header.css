@@ -1,4 +1,38 @@
 .header{
-    width: 85%;
-    background-color: white;
+    width: 86%;
+}
+
+.title_container{
+    display: flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    padding: 0 4%;
+    color: #361d6f;
+}
+
+.title_container h1{
+    margin-right: 4%;
+}
+
+.add_container{
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 4%;
+    flex-direction: column;
+}
+
+.plus-icon{
+    width: 3%;
+    height: 3%;
+    background-color: #361d6f;
+    border: 2em solid #361d6f;
+    color: white;
+    border-radius: 15%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.plus-icon:hover {
+    transform: scale(1.1); 
 }
