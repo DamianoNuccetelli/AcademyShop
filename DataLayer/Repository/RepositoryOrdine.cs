@@ -137,14 +137,14 @@ namespace DataLayer.Repository
             return prodotto?.Quantità;
         }
 
-        public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int statoOrdine, int quantita)
+        public async Task<bool> ModificaOrdineTransazioneAsync(Ordine ordine, DettaglioOrdine dettaglioOrdine, Prodotto prodotto, int quantita)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     ordine.DataAggiornamento = DateTime.Now;
-                    ordine.FkIdStato = statoOrdine;
+                    ordine.FkIdStato = 2;
                     dettaglioOrdine.Quantita += quantita;
                     prodotto.Quantità -= quantita;
 

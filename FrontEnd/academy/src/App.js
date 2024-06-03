@@ -1,23 +1,18 @@
-// App.js
-import React, { useState } from 'react';
-import SignIn from './components/SignIn/SignIn';
-import SignUp from './components/SignUp/SignUp';
-import TogglePanel from './components/TogglePanel/TogglePanel';
+import React from 'react';
 import './App.css';
+import Navbar from './components/Navbar/Navbar';
+import Header from './components/Header/Header';
+
 
 const App = () => {
-    const [active, setActive] = useState(false);
-
-    const handleToggle = () => {
-        setActive(!active);
-    };
-
     return (
-        <div className={`container ${active ? 'active' : ''}`} id="container">
-            {active ? <SignUp /> : <SignIn />}
-            <TogglePanel onClick={handleToggle} />
+        <div className='container1'>
+           <Navbar />
+           <Header />
         </div>
     );
 };
 
 export default App;
+
+
