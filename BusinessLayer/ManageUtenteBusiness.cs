@@ -17,11 +17,12 @@ namespace BusinessLayer
     {
         private readonly ManageUtenteData oUDL;
         private readonly PasswordHasher<Utente> _passwordHasher;
+        ManageOrdineBusiness mOB ;
 
-
-        public ManageUtenteBusiness(ManageUtenteData _oUDL)
+        public ManageUtenteBusiness(ManageUtenteData _oUDL, ManageOrdineBusiness mOB)
         {
             oUDL = _oUDL;
+            this.mOB = mOB;
         }
 
         //Daniel
@@ -100,9 +101,11 @@ namespace BusinessLayer
                 {
                     return ErrorContentResult("Errore: Utente non trovato.", 404);
                 }
-
+        
+                var ordiniList = mOB.GetOrdiniByUserId(utente.Id);
                 // Effettua l'eliminazione dell'utente
-                var result = await oUDL.DeleteUtenteAsync(id);
+                var result= ordiniList != null ? await oUDL.DeleteUtenteEOrdineAsync(id) : await oUDL.DeleteUtenteAsync(id);
+                //var result = await oUDL.DeleteUtenteAsync(id);
                 if (result != null)
                 {
                     return new OkObjectResult("Utente eliminato con successo.");
