@@ -1,21 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
-
 import logo from '../../img/Proconsul-Services.png';
 
-
 const SignIn = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSignIn = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`https://localhost:7031/managed-users?email=${email}&password=${password}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data = await response.json();
+            // Assuming the response contains an id or user data
+            console.log(data);
+
+            // Navigate to another page on successful login
+            navigate('/dashboard');
+
+        } catch (error) {
+            console.error('Error:', error);
+            setError('Login failed. Please check your email and password.');
+        }
+    };
+
     return (
         <div className="form-container sign-in">
-            <form>
-            <img src={logo} alt="Logo" />
+            <form onSubmit={handleSignIn}>
+                <img src={logo} alt="Logo" />
                 <h1>Accedi</h1>
-                
                 <span>o usa la tua email e password</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input 
+                    type="email" 
+                    placeholder="Email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required 
+                />
+                <input 
+                    type="password" 
+                    placeholder="Password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required 
+                />
+                {error && <p className="error">{error}</p>}
                 <a href="#">Hai dimenticato la password?</a>
-                <button>Accedi</button>
+                <button type="submit">Accedi</button>
             </form>
         </div>
     );
