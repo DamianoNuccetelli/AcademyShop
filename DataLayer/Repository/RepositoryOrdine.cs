@@ -177,8 +177,8 @@ namespace DataLayer.Repository
         //Adriano
         public async Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
-            Ordine ordine = new();
-            DettaglioOrdine dettaglioOrdine = new();
+            Ordine ordine;
+            DettaglioOrdine dettaglioOrdine;
 
             // Creazione ordine 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
@@ -186,10 +186,8 @@ namespace DataLayer.Repository
 
                 try
                 {
-                    ordine.FkIdUtente = idUtente;
-                    ordine.FkIdStato = 1;
-                    ordine.DataRegistrazione = DateTime.Now;
-
+                    ordine = new Ordine(idUtente, 1, DateTime.Now);
+                    
                     _context.Ordines.Add(ordine);
                     await _context.SaveChangesAsync();
 
@@ -209,9 +207,7 @@ namespace DataLayer.Repository
 
                 try
                 {
-                    dettaglioOrdine.FkIdOrdine = ordine.Id;
-                    dettaglioOrdine.FkIdProdotto = prodotto.Id;
-                    dettaglioOrdine.Quantita = quantità;
+                    dettaglioOrdine = new DettaglioOrdine(ordine.Id, prodotto.Id, quantità);
 
                     _context.Entry(prodotto).State = EntityState.Modified;
                     _context.DettaglioOrdines.Add(dettaglioOrdine);

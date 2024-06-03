@@ -37,4 +37,12 @@ public partial class Ordine
     [ForeignKey("FkIdUtente")]
     [InverseProperty("Ordines")]
     public virtual Utente FkIdUtenteNavigation { get; set; }
+
+    //costruttori
+    public Ordine() { }
+    public Ordine(int FkIdUtente, int FkIdStato, DateTime DataRegistrazione) {
+        this.FkIdUtente = FkIdUtente;
+        this.FkIdStato= FkIdStato;
+        this.DataRegistrazione = DataRegistrazione;
+    }
 }
