@@ -14,11 +14,11 @@ const Login = () => {
     };
 
     return (
+        <div className='flex_container'>
         <div className={`container ${active ? 'active' : ''}`} id="container">
-            <div className='prova'>
                 {active ? <SignUp /> : <SignIn />}
                 <TogglePanel onClick={handleToggle} />
-            </div>
+        </div>
         </div>
     );
 };
