@@ -9,7 +9,6 @@ const Dashboard = () => {
         <div className='dashboard'>
             <Navbar/>
             <Header />
-            <p>dzsff</p>
         </div>
     );
 };

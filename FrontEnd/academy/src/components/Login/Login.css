@@ -7,14 +7,15 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.prova {
-    background-color: #b7c7ff;
-    background: linear-gradient(to right, #e2e2e2, #b7c7ff);
+html, body {
+    height: 100%; 
+}
+
+.flex_container {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    height: 100vh;
+    height: 100vh; 
 }
 
 .container {
@@ -26,9 +27,8 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
-    width: 115vh; 
-    max-width: 100%; 
-    min-height: 65vh; 
+    width: 65%; 
+    height: 70vh;
     transition: width 0.6s ease-in-out; 
 }
 

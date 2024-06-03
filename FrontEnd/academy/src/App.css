@@ -1,3 +1,8 @@
+body{
+    background-color: #001692;
+    background: linear-gradient(to right, #ffffff, #adb9ff);
+}
+
 .container1 {
     width: 100%;
     display: flex;
