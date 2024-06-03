@@ -45,4 +45,12 @@ public partial class Ordine
         this.FkIdStato= FkIdStato;
         this.DataRegistrazione = DataRegistrazione;
     }
+    public Ordine(int Id, int FkIdUtente, int FkIdStato, DateTime DataRegistrazione, DateTime? DataAggiornamento)
+    {
+        this.Id = Id;
+        this.FkIdUtente = FkIdUtente;
+        this.FkIdStato = FkIdStato;
+        this.DataRegistrazione = DataRegistrazione;
+        this.DataAggiornamento = DataAggiornamento;
+    }
 }
