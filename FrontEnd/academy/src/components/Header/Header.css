@@ -16,15 +16,17 @@
 
 .add_container{
     width: 100%;
-    display: flex;
-    box-sizing: border-box;
-    padding: 4%;
     flex-direction: column;
+    color: #361d6f;
+}
+
+.add_container h2{
+    margin-bottom: 2%;
 }
 
 .plus-icon{
-    width: 3%;
-    height: 3%;
+    width: 30px;;
+    height: 30px;;
     background-color: #361d6f;
     border: 2em solid #361d6f;
     color: white;
@@ -35,4 +37,28 @@
 
 .plus-icon:hover {
     transform: scale(1.1); 
+}
+
+.welcome_container{
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 4%;
+}
+
+.products_container{
+    box-sizing: border-box;
+    padding: 0 0 0 4%;
+    color: #361d6f;
+}
+
+.products{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3.5%;
+}
+
+.products_container h2{
+    margin-bottom: 4%;
 }

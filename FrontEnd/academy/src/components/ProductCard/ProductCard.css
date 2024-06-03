@@ -1,0 +1,9 @@
+.card_container{
+    width: 30%;
+    height: 20%;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 5%;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
