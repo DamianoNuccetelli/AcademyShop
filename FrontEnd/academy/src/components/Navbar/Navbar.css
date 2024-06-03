@@ -1,8 +1,9 @@
 .navbar{
-    width: 15%;
+    width: 14%;
     background-color: #512da8;
     background: linear-gradient(to right, #361d6f, #512da8);
-    height: 100vh;;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar_container{
@@ -11,15 +12,16 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    flex-wrap: wrap;
 }
 
-.navbar_container h3 {
+.navbar_container h4{
     color: #fff;
     margin-left: 5px;
     position: relative; 
 }
 
-.navbar_container h3::after {
+.navbar_container h4::after {
     content: '';
     display: block;
     width: 100%;
@@ -32,19 +34,39 @@
     transition: transform 0.3s ease; 
 }
 
-.navbar_container h3:hover::after {
+.navbar_container h4:hover::after {
     transform: scaleX(1); /* Estende la sottolineatura */
     transition: transform 0.3s ease;
 }
 
-.user-icon {
-    border-radius: 50%;       
-    background-color: #fff; 
-    padding: 3px;             
-    color: #512da8;              
-    font-size: 35px;          
+.user-icon {  
+    border-radius: 50%;
+    padding: 7px;             
+    color: #fff;              
+    font-size: 20px;          
+    margin-right: 10px;   
+    transition: transform 0.3s ease;
+}
+
+.user-icon:hover{
+    transform: scale(1.1);
+}
+
+.navbar_container:first-child .user-icon {  
+    border-radius: 50%;
+    padding: 10px;             /* Aumento del padding per rendere l'icona più grande */
+    color: #fff;              
+    font-size: 25px;           /* Dimensione dell'icona leggermente più grande */
     margin-right: 10px;       
 }
+
+.navbar-icon {
+    padding: 2px;             
+    color: #fff;              
+    font-size: 25px;          
+    margin-right: 20px;  
+}
+
 
 .separator {
     width: 70%;
@@ -57,3 +79,7 @@
     align-items: center;
     justify-content: center;
 }
+
+ .mb-20{
+    margin-bottom: 20px;
+} 

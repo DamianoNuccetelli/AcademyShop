@@ -1,5 +1,9 @@
 .dashboard{
-    width: 100%;
+    width: calc(100% - 60px); /* Larghezza della finestra visualizzata meno 40px (20px di padding da entrambi i lati) */
+    padding: 30px; /* Padding di 20px su tutti i lati */
     display: flex;
     background-color: #fff;
+    height: 100vh;
+    background-color: #001692;
+    background: linear-gradient(to right, #ffffff, #adb9ff);
 }
