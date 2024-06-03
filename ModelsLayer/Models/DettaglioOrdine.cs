@@ -30,4 +30,12 @@ public partial class DettaglioOrdine
     [ForeignKey("FkIdProdotto")]
     [InverseProperty("DettaglioOrdines")]
     public virtual Prodotto FkIdProdottoNavigation { get; set; }
+
+    //costruttori
+    public DettaglioOrdine() { }
+    public DettaglioOrdine(int FkIdOrdine, int FkIdProdotto, int Quantita) {
+        this.FkIdOrdine = FkIdOrdine;
+        this.FkIdProdotto = FkIdProdotto;
+        this.Quantita = Quantita;
+    }
 }
