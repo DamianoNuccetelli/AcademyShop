@@ -2,6 +2,9 @@ using AcademyShopAPI.Models;
 using DataLayer.Repository;
 using DtoLayer;
 
+// Add CORS
+var ReactSpecificOrigins = "enablecorsAcademyShop";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,6 +33,18 @@ builder.Services.AddScoped(typeof(IRepositoryOrdine), typeof(RepositoryOrdine));
 builder.Services.AddScoped(typeof(IRepositoryUtente), typeof(RepositoryUtente));
 builder.Services.AddScoped(typeof(IRepositoryProdotto<Prodotto>), typeof(RepositoryProdotto));
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: ReactSpecificOrigins,
+                           builder =>
+                           {
+                               builder.WithOrigins("http://localhost:3000")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+                           });
+});
+
 
 var app = builder.Build();
 
@@ -41,6 +56,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//app.UseStaticFiles(); //Da usare in futuro -Gabriele
+//app.UseRouting();
+
+// CORS
+app.UseCors(ReactSpecificOrigins);
 
 app.UseAuthorization();
 
