@@ -52,6 +52,5 @@ public partial class Ordine
         this.FkIdStato = FkIdStato;
         this.DataRegistrazione = DataRegistrazione;
         this.DataAggiornamento = DataAggiornamento;
-
     }
 }
