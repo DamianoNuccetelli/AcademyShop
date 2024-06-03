@@ -5,9 +5,13 @@ import './Login.css';
 import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import TogglePanel from '../TogglePanel/TogglePanel';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [active, setActive] = useState(false);
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    
 
     const handleToggle = () => {
         setActive(!active);

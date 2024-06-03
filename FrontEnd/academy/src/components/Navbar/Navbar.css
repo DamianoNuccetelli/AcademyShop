@@ -1,8 +1,9 @@
 .navbar{
-    width: 15%;
+    width: 14%;
     background-color: #512da8;
     background: linear-gradient(to right, #361d6f, #512da8);
     border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar_container{
@@ -43,7 +44,12 @@
     padding: 7px;             
     color: #fff;              
     font-size: 20px;          
-    margin-right: 20px;       
+    margin-right: 10px;   
+    transition: transform 0.3s ease;
+}
+
+.user-icon:hover{
+    transform: scale(1.1);
 }
 
 .navbar_container:first-child .user-icon {  
@@ -51,7 +57,7 @@
     padding: 10px;             /* Aumento del padding per rendere l'icona più grande */
     color: #fff;              
     font-size: 25px;           /* Dimensione dell'icona leggermente più grande */
-    margin-right: 20px;       
+    margin-right: 10px;       
 }
 
 .navbar-icon {
