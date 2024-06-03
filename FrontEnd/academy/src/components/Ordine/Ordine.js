@@ -25,7 +25,7 @@ const Ordine = () => {
                     <div className='col-10'>
                         <div className='d-flex justify-content-between my-2'>
                             <div>
-                                <button className='btn btn-primary' >Aggiungi Ordine</button>
+                                <button className='btn btn-primary fw-bold' >+</button>
                             </div>
                             <div>
                                 <button className='btn btn-secondary' >Filtri</button>
