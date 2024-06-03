@@ -140,7 +140,7 @@ namespace BusinessLayer
 
 
             // esecuzione transazione data layer
-            var success = await oODL.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, (int)statoOrdine, quantita);
+            var success = await oODL.ModificaOrdineTransazioneAsync(ordine, dettaglioOrdine, prodotto, quantita);
             if (!success)
             {
                 return (false, "Errore nell'operazione di modifica dell'ordine.", 500, null);
