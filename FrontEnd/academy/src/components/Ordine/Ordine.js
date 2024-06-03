@@ -1,5 +1,8 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Navbar from '../Navbar/Navbar';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import './Ordine.css';
 
 const Ordine = () => {
     return (
@@ -10,10 +13,10 @@ const Ordine = () => {
             <div className='row mt-3 mx-3'>
                 <div className='row'>
                     <div className='col-10' >
-                        <div className='d-flex align-items-center'>
-                        <h3 className='me-3'>Ordini</h3>
-                        <p className='fw-semibold mb-0'>Sezione Ordini</p>
-                        </div>
+                    <div className='title_container'>
+                        <h1>Ordini</h1>
+                        <h2>Sezione Ordini</h2>
+                    </div>
                     </div>
                     <div className='col-2'>
                         <div className='d-flex justify-content-end'>
@@ -21,17 +24,18 @@ const Ordine = () => {
                         </div>
                     </div>
                 </div>
-                <div className='row '>
+                <div className='row'>
                     <div className='col-10'>
                         <div className='d-flex justify-content-between my-2'>
-                            <div>
-                                <button className='btn btn-primary fw-bold' >+</button>
+                            <div className='add_container'>
+                                <h2>Aggiungi Ordine</h2>
+                                <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                             </div>
-                            <div>
-                                <button className='btn btn-secondary' >Filtri</button>
+                            <div className='d-flex align-items-end'>
+                                <button className='btn purple-color' >Filtri</button>
                             </div>
                         </div>
-                    <table class="table table-bordered border-primary table-striped">
+                    <table class="table table-bordered border-primary table-striped shadow">
                         <thead>
                             <tr>
                             <th scope="col">Prodotto</th>

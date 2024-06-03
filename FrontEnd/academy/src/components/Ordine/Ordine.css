@@ -1,0 +1,19 @@
+
+
+.title_container{
+    display: flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    padding: 0;
+    color: #361d6f;
+}
+
+.purple-color{
+    background-color: #361d6f;
+    color: white;
+}
+
+.purple-color:hover{
+    background-color: #402383;
+    color: white;
+}
