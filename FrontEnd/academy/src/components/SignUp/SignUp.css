@@ -1,0 +1,118 @@
+.form-container {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.sign-up {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.active .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+.sign-up .input-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.sign-up .input-row input {
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 48%;
+    outline: none;
+}
+
+.sign-up .input-single-row input {
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.sign-up .input-row input {
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: calc(50% - 10px); 
+    outline: none;
+    margin: 0 5px; 
+    color: gray;
+}
+
+.sign-up .input-row input:focus {
+    border: 1px solid #512da8; 
+}
+
+.sign-up h1{
+    color: #1a0057;
+}
+
+.sign-up button {
+    background-color: #512da8;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sign-up button:hover{
+    background-color: #5c33bc;
+}
+
+.sign-up select {
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 48%;
+    outline: none;
+    color: gray;
+}
+
+.sign-up select:focus {
+    border: 1px solid #512da8; 
+}
+
+.sign-up option {
+    background-color: #eee;
+    font-size: 13px;
+    border-radius: 20px;
+    outline: none;
+}
+
+.sign-up .input-row input,
+.sign-up .input-row select {
+    margin: 0;
+}
