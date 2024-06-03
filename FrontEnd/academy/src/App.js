@@ -2,13 +2,21 @@ import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import Header from './components/Header/Header';
+import Dashboard from './components/Dashboard/Dashboard';
+import { Routes, Route } from 'react-router-dom';
+import Login from './components/Login/Login';
+import Ordine from './components/Ordine/Ordine';
 
 
 const App = () => {
     return (
-        <div className=''>
-           
-        </div>
+        <>
+        <Routes>
+            <Route path="/Dashboard" element={<Dashboard />}/>
+            <Route path="/login" element={<Login />} />
+            <Route path="/ordine" element={<Ordine />} />
+        </Routes>
+        </>
     );
 };
 
