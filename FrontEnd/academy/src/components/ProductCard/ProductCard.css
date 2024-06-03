@@ -1,9 +1,16 @@
-.card_container{
-    width: 30%;
-    height: 20%;
+.card_container {
+    display: flex;
+    align-items: center;
+    width: 23%;
+    height: 75px; /* Modifica l'altezza desiderata */
     background-color: #fff;
     box-sizing: border-box;
-    padding: 5%;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 10px; /* Aggiungi il padding */
+}
+
+.product_icon {
+    margin: 0 20px; /* Aggiungi spazio tra l'icona e le informazioni del prodotto */
+    font-size: 40px; /* Aumenta le dimensioni dell'icona */
 }

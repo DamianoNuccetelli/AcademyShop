@@ -6,13 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
 import { BrowserRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <App />
+    <Dashboard />
     </BrowserRouter>
   </React.StrictMode>
 );
