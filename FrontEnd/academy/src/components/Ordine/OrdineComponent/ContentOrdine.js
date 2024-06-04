@@ -39,15 +39,15 @@ const userId = localStorage.getItem('userId');
                 <h2>Ordini di Mario</h2>
             </div>
             <div className='welcome_container_ordine'>
-                <div className='add_container'>
+                <div className='add_container_ordine'>
                     {/* <h2>Nuovo ordine</h2> */}
-                    <FontAwesomeIcon icon={faPlus} className="plus-icon" />
+                    <FontAwesomeIcon icon={faPlus} className="plus-icon_ordine" />
                 </div>
                 <div className='banner_container'>
                     <img src={banner} alt="Logo" />
                 </div>
             </div>
-            <div className='products_container'>
+            <div className='products_container_ordine'>
             <h2>Tutti i prodotti</h2>
                 <table>
                     <thead>

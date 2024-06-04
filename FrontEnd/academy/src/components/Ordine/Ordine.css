@@ -10,7 +10,7 @@
     height: 100%;
 }
 
-.title_container{
+.title_container_ordine{
     display: flex;
     align-items: baseline;
     box-sizing: border-box;
@@ -22,18 +22,19 @@
     margin-right: 2%;
 }
 
-.add_container{
+.add_container_ordine{
     display: inline-block;
     flex-direction: column;
     color: #361d6f;
     margin-right: 3%;
 }
 
-.add_container h2{
+.add_container_ordine h2{
     margin-bottom: 2%;
 }
 
-.plus-icon {
+.plus-icon_ordine {
+    margin-top: 25px;
     width: 25px;
     height: 25px;
     background-color: #361d6f;
@@ -49,7 +50,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiungi un'ombra per dare profondità */
 }
 
-.plus-icon:hover {
+.plus-icon_ordine:hover {
     transform: scale(1.1); 
 }
 
@@ -80,7 +81,7 @@
     background: linear-gradient(to right, #ffffff, #adb9ff);
 }
 
-.products_container{
+.products_container_ordine{
     box-sizing: border-box;
     padding: 0 0 0 2%;
     color: #361d6f;
