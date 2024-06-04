@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import logo from '../../img/Proconsul-Services.png';
 
 const SignUp = () => {
     // Stato per ogni campo di input
+    const navigate = useNavigate();
     const [nome, setNome] = useState('');
     const [cognome, setCognome] = useState('');
     const [cittaNascita, setCittaDiNascita] = useState('');
@@ -52,6 +54,7 @@ const SignUp = () => {
 
             const data = await response.json();
             console.log("Risposta del server:", data); // Debugging
+            navigate('/SignIn');
 
             // Altre operazioni con la risposta se necessario
         } catch (error) {
