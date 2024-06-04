@@ -30,8 +30,11 @@ const SignIn = () => {
             // Assuming the response contains an id or user data
             console.log(data);
 
+            const userId = data.id;
+            localStorage.setItem('userId', userId);
+
             // Navigate to another page on successful login
-            navigate('/dashboard');
+            navigate('/Ordine');
 
         } catch (error) {
             console.error('Error:', error);

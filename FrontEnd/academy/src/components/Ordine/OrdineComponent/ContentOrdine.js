@@ -1,19 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
-
 import banner from '../../../img/banner.png';
 
-const ContentOrdine = () => {
 
-    const productsData = [
-        { id: 1, name: 'Product 1', price: 10 },
-        { id: 2, name: 'Product 2', price: 20 },
-        { id: 3, name: 'Product 3', price: 30 },
-        { id: 4, name: 'Product 4', price: 40 },
-    ];
-    
+
+const ContentOrdine = () => {
+    const [orders, setOrders] = useState([]);
+const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+
+      const API_URL = `https://localhost:7031/orders?userId=${userId}`;
+      try {
+
+        const response = await fetch(API_URL);
+        if (response.ok) {
+          const data = await response.json();
+          setOrders(data);
+        } else {
+          console.error('Error fetching orders:', response.status);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+ 
     return (
         <div className="header">
             <div className='title_container'>
@@ -31,67 +48,38 @@ const ContentOrdine = () => {
             </div>
             <div className='products_container'>
                 <table>
-                    <tr>
-                        <th>Company</th>
-                        <th>Contact</th>
-                        <th>Country</th>
-                        <th>Company</th>
-                        <th>Contact</th>
-                        <th>Country</th>
-                        <th>Country</th>
-                    </tr>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Germany</td>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Germany</td>
-                        <td>Germany</td>
-                    </tr>
-                    <tr>
-                        <td>Centro comercial Moctezuma</td>
-                        <td>Francisco Chang</td>
-                        <td>Mexico</td>
-                        <td>Centro comercial Moctezuma</td>
-                        <td>Francisco Chang</td>
-                        <td>Mexico</td>
-                        <td>Mexico</td>
-                    </tr>
-                    <tr>
-                        <td>Ernst Handel</td>
-                        <td>Roland Mendel</td>
-                        <td>Austria</td>
-                        <td>Ernst Handel</td>
-                        <td>Roland Mendel</td>
-                        <td>Austria</td>
-                        <td>Austria</td>
-                    </tr>
-                    <tr>
-                        <td>Island Trading</td>
-                        <td>Helen Bennett</td>
-                        <td>UK</td>
-                        <td>Island Trading</td>
-                        <td>Helen Bennett</td>
-                        <td>UK</td>
-                        <td>UK</td>
-                    </tr>
-                    <tr>
-                        <td>Laughing Bacchus Winecellars</td>
-                        <td>Yoshi Tannamuri</td>
-                        <td>Canada</td><td>Laughing Bacchus Winecellars</td>
-                        <td>Yoshi Tannamuri</td>
-                        <td>Canada</td>
-                        <td>Canada</td>
-                    </tr>
-                    <tr>
-                        <td>Magazzini Alimentari Riuniti</td>
-                        <td>Giovanni Rovelli</td>
-                        <td>Italy</td> <td>Magazzini Alimentari Riuniti</td>
-                        <td>Giovanni Rovelli</td>
-                        <td>Italy</td>
-                        <td>Italy</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Nome Prodotto</th>
+                            <th>Descrizione Prodotto</th>
+                            <th>Stato Ordine</th>
+                            <th>Quantità</th>
+                            <th>Id Prodotto</th>
+                            <th>Data Registrazione</th>
+                            <th>Data Aggiornamento</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            {orders.map((order, index) => (
+              <tr key={index}>
+                <td>{order.prodottoNome}</td>
+                <td>{order.prodottoDescrizione}</td>
+                <td>{order.statoOrdineDescrizione}</td>
+                <td>{order.quantita}</td>
+                <td>{order.prodottoId}</td>
+                <td>{new Date(order.dataRegistrazione).toLocaleDateString()}</td>
+                <td>{new Date(order.dataAggiornamento).toLocaleDateString()}</td>
+                <td>
+                    <button>Delete</button>
+                    <button>Show</button>
+                    <button>Edite</button>
+                    </td>
+              </tr>
+            ))}
+          </tbody>
+                    
+                    
                 </table>
             </div>
         </div>
