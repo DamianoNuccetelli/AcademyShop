@@ -11,14 +11,22 @@ const ContentOrdine = () => {
   const [quantità, setQuantità] = useState(1);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen2, setModalIsOpen2] = useState(false);
 
     const openModal = () => {
         setModalIsOpen(true);
+    };
+    const openModal2 = () => {
+        setModalIsOpen2(true);
     };
         
     const closeModal = () => {
         setModalIsOpen(false);
     };
+    const closeModal2 = () => {
+        setModalIsOpen2(false);
+    };
+
     const addOrdine = async(idUtente, idProdotto, quantitàProdotto)=>{
       closeModal();
       console.log("addOrdine: ",idUtente, idProdotto, quantitàProdotto)
@@ -128,6 +136,7 @@ const handleQuantityChange = (event) => {
 
             <Modal
                 isOpen={modalIsOpen}
+                ariaHideApp={false}
                 onRequestClose={closeModal}
                 className="modal"
                 overlayClassName="overlay"
@@ -196,7 +205,32 @@ const handleQuantityChange = (event) => {
                 </td>
                 <td>
                   <button>Delete</button>
-                  <button>View</button>
+                  <button onClick={openModal2}>Show</button>
+                  <Modal
+                    isOpen={modalIsOpen2}
+                    ariaHideApp={false}
+                    onRequestClose={closeModal2}
+                    overlayClassName="overlay"
+                    className="modal"
+                  >
+                    <div className="popup-content">
+                      <h2>Dettagli Ordine</h2>
+                      <p>Nome Prodotto: {order.prodottoNome}</p>
+                      <p>Descrizione Prodotto: {order.prodottoDescrizione}</p>
+                      <p>Stato Ordine: {order.statoOrdineDescrizione}</p>
+                      <p>Quantità: {order.quantita}</p>
+                      <p>Id Prodotto: {order.prodottoId}</p>
+                      <p>
+                        Data Registrazione:{" "}
+                        {new Date(order.dataRegistrazione).toLocaleDateString()}
+                      </p>
+                      <p>
+                        Data Aggiornamento:{" "}
+                        {new Date(order.dataAggiornamento).toLocaleDateString()}
+                      </p>
+                      <button onClick={closeModal2}>Close</button>
+                    </div>
+                  </Modal>
                   <button>Edit</button>
                 </td>
               </tr>
