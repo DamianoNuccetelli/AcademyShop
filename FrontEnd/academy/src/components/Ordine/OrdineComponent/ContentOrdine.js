@@ -35,8 +35,10 @@ const userId = localStorage.getItem('userId');
     return (
         <div className="header">
             <div className='title_container_ordine'>
+              <div className='title_text'>
                 <h1>Ordini</h1>
                 <h2>Ordini di Mario</h2>
+              </div>
             </div>
             <div className='welcome_container_ordine'>
                 <div className='add_container_ordine'>
