@@ -34,7 +34,7 @@ const SignIn = () => {
             localStorage.setItem('userId', userId);
 
             // Navigate to another page on successful login
-            navigate('/Ordine');
+            navigate('/Dashboard');
 
         } catch (error) {
             console.error('Error:', error);
