@@ -14,7 +14,7 @@
     display: flex;
     align-items: baseline;
     box-sizing: border-box;
-    margin: 0 2%;
+    margin: 0 4%;
     color: #361d6f;
 }
 
@@ -58,7 +58,8 @@
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    padding: 4% 4%;
+    padding: 0% 4% 2% 4%;
+    align-items: baseline;
 }
 
 
