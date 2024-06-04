@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox } from '@fortawesome/free-solid-svg-icons'; // Esempio di un'icona casuale, puoi sostituirla con l'icona che desideri
+import { faBox, faPenToSquare, faMultiply } from '@fortawesome/free-solid-svg-icons'; // Esempio di un'icona casuale, puoi sostituirla con l'icona che desideri
 import './ProductCard.css';
 
 const ProductCard = ({ name, price }) => {
@@ -15,8 +15,8 @@ const ProductCard = ({ name, price }) => {
                 <div className='crud_button'>
                     <p><strong>Quantità</strong>: 2</p>
                     <div className='buttons'>
-                        <FontAwesomeIcon icon={faBox}/>
-                        <FontAwesomeIcon icon={faBox}/>
+                        <FontAwesomeIcon icon={faPenToSquare} className='icon'/>
+                        <FontAwesomeIcon icon={faMultiply} className='icon icon-red'/>
                     </div>
                 </div>
             </div>
