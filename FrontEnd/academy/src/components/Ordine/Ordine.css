@@ -53,11 +53,11 @@
     transform: scale(1.1); 
 }
 
-.welcome_container{
+.welcome_container_ordine{
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    padding: 2% 2%;
+    padding: 4% 4%;
 }
 
 

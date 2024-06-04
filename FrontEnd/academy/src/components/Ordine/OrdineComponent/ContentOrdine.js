@@ -38,7 +38,7 @@ const userId = localStorage.getItem('userId');
                 <h1>Ordini</h1>
                 <h2>Ordini di Mario</h2>
             </div>
-            <div className='welcome_container'>
+            <div className='welcome_container_ordine'>
                 <div className='add_container'>
                     {/* <h2>Nuovo ordine</h2> */}
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
