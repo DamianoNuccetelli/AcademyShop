@@ -121,17 +121,15 @@ const handleQuantityChange = (event) => {
             <div className='welcome_container_ordine'>
                 <div className='add_container_ordine'>
                     {/* <h2>Nuovo ordine</h2> */}
-<<<<<<< HEAD
+
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={() => getProducts(userId)} />
-=======
-                    <FontAwesomeIcon icon={faPlus} className="plus-icon_ordine" />
->>>>>>> cb4f7c0952589b69a5f1e497813f9d029a3a29f3
+
                 </div>
                 <div className='banner_container'>
                     <img src={banner} alt="Logo" />
                 </div>
             </div>
-<<<<<<< HEAD
+
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -169,10 +167,9 @@ const handleQuantityChange = (event) => {
         <button onClick={closeModal} className="close-button">Close</button> <button onClick={() => addOrdine(userId, selectedProduct, quantità)} className="close-button">Submit</button>
                 </div>
             </Modal>
-            <div className='products_container'>
-=======
+
             <div className='products_container_ordine'>
->>>>>>> cb4f7c0952589b69a5f1e497813f9d029a3a29f3
+
             <h2>Tutti i prodotti</h2>
                 <table>
                     <thead>
