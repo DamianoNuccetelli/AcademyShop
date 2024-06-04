@@ -16,14 +16,6 @@
     color: #361d6f;
 }
 
-.title_container h1 {
-    margin: 2% 2% 0 0;
-}
-
-.title_container img {
-    width: 30%;
-}
-
 .add_container {
     display: inline-block;
     flex-direction: column;
