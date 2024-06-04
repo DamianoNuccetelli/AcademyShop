@@ -44,12 +44,11 @@ const userId = localStorage.getItem('userId');
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                 </div>
                 <div className='banner_container'>
-                    {/* <img src={banner} alt="Logo" /> */}
+                    <img src={banner} alt="Logo" />
                 </div>
             </div>
             <div className='products_container'>
             <h2>Tutti i prodotti</h2>
-
                 <table>
                     <thead>
                         <tr>
