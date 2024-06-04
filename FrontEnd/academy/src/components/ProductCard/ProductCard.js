@@ -12,7 +12,13 @@ const ProductCard = ({ name, price }) => {
             </div>
             <div className='description'>
                 <p className='mb20'><strong>Descrizione:</strong> Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa.</p>
-                <p><strong>Quantità</strong>: 2</p>
+                <div className='crud_button'>
+                    <p><strong>Quantità</strong>: 2</p>
+                    <div className='buttons'>
+                        <FontAwesomeIcon icon={faBox}/>
+                        <FontAwesomeIcon icon={faBox}/>
+                    </div>
+                </div>
             </div>
 
         </div>

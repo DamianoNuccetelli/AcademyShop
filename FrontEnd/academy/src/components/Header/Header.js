@@ -9,7 +9,7 @@ import './Header.css';
 import banner from '../../img/banner.png';
 
 const Header = () => {
-    
+
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {
@@ -37,6 +37,21 @@ const Header = () => {
             <div className='welcome_container'>
                 <div className='add_container'>
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModal} />
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                className="modal"
+                overlayClassName="overlay"
+                ariaHideApp={false}
+            >
+                <div className="popup-content">
+                    <h2>Welcome to our Popup</h2>
+                    <p>This is a modern popup design example.</p>
+                    <button onClick={closeModal} className="close-button">Close</button>
+                </div>
+            </Modal>
+
                 </div>
                 <div className='banner_container'>
                     <img src={banner} alt="Banner" />
@@ -70,18 +85,7 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                className="modal"
-                overlayClassName="overlay"
-            >
-                <div className="popup-content">
-                    <h2>Welcome to our Popup</h2>
-                    <p>This is a modern popup design example.</p>
-                    <button onClick={closeModal} className="close-button">Close</button>
-                </div>
-            </Modal>
+            
         </div>
     );
 };
