@@ -6,13 +6,15 @@ import './ProductCard.css';
 const ProductCard = ({ name, price }) => {
     return (
         <div className='card_container'>
-            <div className="product_icon">
-                <FontAwesomeIcon icon={faBox} />
+            <div className="product_icon_box">
+                <FontAwesomeIcon icon={faBox} className='product_icon'/>
+                <h3>{name}</h3>
             </div>
-            <div className="product_info">
-                <p>{name}</p>
-                <p>Price: ${price}</p>
+            <div className='description'>
+                <p className='mb20'><strong>Descrizione:</strong> Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa.</p>
+                <p><strong>Quantità</strong>: 2</p>
             </div>
+
         </div>
     );
 };

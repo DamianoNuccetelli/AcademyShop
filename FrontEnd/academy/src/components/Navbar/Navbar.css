@@ -1,8 +1,8 @@
 .navbar{
     width: 14%;
-    background-color: #512da8;
-    background: linear-gradient(to right, #361d6f, #512da8);
-    border-radius: 25px;
+    background-color: #361d6f;
+    /* background: linear-gradient(to right, #361d6f, #512da8); */
+    /* border-radius: 25px; */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -10,9 +10,15 @@
     box-sizing: border-box;
     padding: 15%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     cursor: pointer;
-    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.profilo, .prodotti, .ordini{
+    display: flex;
+    align-items: center;
+    justify-content: start;
 }
 
 .navbar_container h4{

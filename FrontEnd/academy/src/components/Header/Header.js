@@ -13,7 +13,6 @@ const Header = () => {
         { id: 1, name: 'Product 1', price: 10 },
         { id: 2, name: 'Product 2', price: 20 },
         { id: 3, name: 'Product 3', price: 30 },
-        { id: 4, name: 'Product 4', price: 40 },
     ];
     
     return (
@@ -24,24 +23,15 @@ const Header = () => {
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
-                    <h2>Nuovo prodotto</h2>
+                    {/* <h2>Nuovo prodotto</h2> */}
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                 </div>
                 <div className='banner_container'>
-                    <img src={banner} alt="Logo" />
+                    {/* <img src={banner} alt="Logo" /> */}
                 </div>
             </div>
             <div className='products_container'>
-                <h2>All product</h2>
-                <div className='products'>
-                {productsData.map(product => (
-            <ProductCard
-                key={product.id}
-                name={product.name}
-                price={product.price}
-            />
-            ))}
-                </div>
+                <h2>Tutti i prodotti</h2>
                 <div className='products'>
                 {productsData.map(product => (
             <ProductCard

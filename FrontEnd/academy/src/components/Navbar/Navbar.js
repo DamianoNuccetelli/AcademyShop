@@ -21,8 +21,8 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <div className="navbar_container">
-                <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
-                <h4>Profilo</h4>
+                {/* <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
+                <h4>Profilo</h4> */}
            </div>
            <div className='center'>
                 <hr className="separator" />

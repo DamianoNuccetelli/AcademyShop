@@ -1,6 +1,6 @@
 .header{
     width: 86%;
-    margin-left: 2%;
+    margin: 2% 0 0 2%;
 }
 
 .header img{
@@ -12,7 +12,7 @@
     display: flex;
     align-items: baseline;
     box-sizing: border-box;
-    padding: 0 2%;
+    margin: 0 2%;
     color: #361d6f;
 }
 
@@ -32,8 +32,8 @@
 }
 
 .plus-icon {
-    width: 100px;
-    height: 100px;
+    width: 25px;
+    height: 25px;
     background-color: #361d6f;
     border: 1em solid #361d6f; /* Diminuisci la dimensione del bordo */
     color: white;
@@ -60,7 +60,7 @@
 
 .products_container{
     box-sizing: border-box;
-    padding: 0 0 0 2%;
+    padding: 0 4% 0 2%;
     color: #361d6f;
 }
 
