@@ -52,6 +52,8 @@ const SignUp = () => {
 
             const data = await response.json();
             console.log("Risposta del server:", data); // Debugging
+            //// Ricarica la pagina
+            window.location.reload();
 
             // Altre operazioni con la risposta se necessario
         } catch (error) {
