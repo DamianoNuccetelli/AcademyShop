@@ -10,14 +10,14 @@ import banner from '../../img/banner.png';
 
 const Header = () => {
 
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
 
-    const openModal = () => {
-        setModalIsOpen(true);
+    const openModalAddProduct = () => {
+        setModalIsOpenAddProduct(true);
     };
         
-    const closeModal = () => {
-        setModalIsOpen(false);
+    const closeModalAddProduct = () => {
+        setModalIsOpenAddProduct(false);
     };
     
     const productsData = [
@@ -36,11 +36,11 @@ const Header = () => {
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
-                    <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModal} />
+                    <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModalAddProduct} />
 
             <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
+                isOpen={modalIsOpenAddProduct}
+                onRequestClose={closeModalAddProduct}
                 className="modal"
                 overlayClassName="overlay"
                 ariaHideApp={false}
@@ -48,7 +48,7 @@ const Header = () => {
                 <div className="popup-content">
                     <h2>Welcome to our Popup</h2>
                     <p>This is a modern popup design example.</p>
-                    <button onClick={closeModal} className="close-button">Close</button>
+                    <button onClick={closeModalAddProduct} className="close-button">Close</button>
                 </div>
             </Modal>
 
