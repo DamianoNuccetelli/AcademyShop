@@ -1,14 +1,14 @@
 .card_container {
     display: flex;
     align-items: start;
-    width: 31%;
+    width: 32%;
     height: 200px; /* Modifica l'altezza desiderata */
     background-color: #fff;
     box-sizing: border-box;
     border-radius: 10px;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
-    padding: 10px; /* Aggiungi il padding */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
     flex-direction: column;
+    margin-bottom: 2%;
 }
 
 .product_icon_box {

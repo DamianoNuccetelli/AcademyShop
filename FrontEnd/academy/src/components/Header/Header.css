@@ -1,6 +1,6 @@
 .header{
     width: 86%;
-    margin: 2% 3.5% 0 2%;
+    margin: 2% 4% 2 2%;
 }
 
 .header img{
@@ -17,7 +17,11 @@
 }
 
 .title_container h1{
-    margin-right: 2%;
+    margin: 2% 2% 0 0;
+}
+
+.title_container img{
+    width: 30%;
 }
 
 .add_container{
@@ -55,20 +59,20 @@
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    padding: 2% 2%;
+    padding: 0% 2% 0 2%;
+    align-items: baseline;
 }
 
 .products_container{
-    box-sizing: border-box;
-    padding: 0 4% 0 2%;
+    margin: 2%;
     color: #361d6f;
+    padding: 0 !important;
 }
 
 .products{
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 3.5%;
 }
 
 .products_container h2{
