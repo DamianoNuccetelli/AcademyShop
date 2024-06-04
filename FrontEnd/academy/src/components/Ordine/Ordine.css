@@ -89,6 +89,9 @@
 }
 
 .all_products_div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2%;
 }
 
