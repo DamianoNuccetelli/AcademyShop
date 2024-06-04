@@ -19,12 +19,12 @@ const Header = () => {
     return (
         <div className="header">
             <div className='title_container'>
-                <div>
+                <div className='title_text'>
                     <h1>Dashboard</h1>
                     <h2>Benvenuto, Mario</h2>
                 </div>
-                <div>
-                    {/* <img src={logo} alt="Logo" /> */}
+                <div className='logo_container'>
+                    <img src={logo} alt="Logo" />
                 </div>
             </div>
             <div className='welcome_container'>
@@ -33,28 +33,34 @@ const Header = () => {
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                 </div>
                 <div className='banner_container'>
-                    <img src={banner} alt="Logo" />
+                    <img src={banner} alt="Banner" />
                 </div>
             </div>
             <div className='products_container'>
-                <h2>Tutti i prodotti</h2>
-                <div className='products'>
-                {productsData.map(product => (
-            <ProductCard
-                key={product.id}
-                name={product.name}
-                price={product.price}
-            />
-            ))}
+                <div className='products_header'>
+                    <h2>Tutti i prodotti</h2>
+                    <div className='buttons'>
+                        <button className='button'>1/5</button>
+                        <button className='button'>Filtri</button>
+                    </div>
                 </div>
                 <div className='products'>
-                {productsData.map(product => (
-            <ProductCard
-                key={product.id}
-                name={product.name}
-                price={product.price}
-            />
-            ))}
+                    {productsData.map(product => (
+                        <ProductCard
+                            key={product.id}
+                            name={product.name}
+                            price={product.price}
+                        />
+                    ))}
+                </div>
+                <div className='products'>
+                    {productsData.map(product => (
+                        <ProductCard
+                            key={product.id}
+                            name={product.name}
+                            price={product.price}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
@@ -62,5 +68,3 @@ const Header = () => {
 };
 
 export default Header;
-
-

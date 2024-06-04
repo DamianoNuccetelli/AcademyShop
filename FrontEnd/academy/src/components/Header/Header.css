@@ -1,37 +1,57 @@
-.header{
+.header {
     width: 86%;
     margin: 2% 4% 2 2%;
 }
 
-.header img{
+.header img {
     width: 100%;
     height: 100%;
 }
 
-.title_container{
+.title_container {
+    position: relative; /* Enable positioning for children */
     display: flex;
-    align-items: baseline;
+    justify-content: space-between; /* Align items to the left and right */
+    align-items: center; /* Center items vertically */
     box-sizing: border-box;
     margin: 2% 4% 0 4%;
     color: #361d6f;
 }
 
-.title_container h1{
-    margin: 2% 2% 0 0;
+.title_text {
+    display: flex;
+    flex-direction: column;
 }
 
-.title_container img{
-    width: 30%;
+.title_container h1 {
+    margin: 0;
 }
 
-.add_container{
+.title_container h2 {
+    margin: 0;
+}
+
+.logo_container {
+    position: absolute; /* Absolute positioning */
+    bottom: 0; /* Align to the bottom */
+    right: 0; /* Align to the right */
+    width: 25%; /* Adjust as needed */
+    height: 100%; /* Adjust as needed */
+}
+
+.logo_container img {
+    width: 100%; /* Ensure the image fills the container */
+    height: 100%; /* Ensure the image fills the container */
+}
+
+.add_container {
     display: inline-block;
     flex-direction: column;
     color: #361d6f;
     margin-right: 3%;
 }
 
-.add_container h2{
+.add_container h2 {
     margin-bottom: 2%;
 }
 
@@ -55,7 +75,7 @@
     transform: scale(1.1); 
 }
 
-.welcome_container{
+.welcome_container {
     width: 100%;
     display: flex;
     box-sizing: border-box;
@@ -63,18 +83,45 @@
     align-items: baseline;
 }
 
-.products_container{
+.products_container {
     margin: 2% 4%;
     color: #361d6f;
     padding: 0 !important;
 }
 
-.products{
+.products_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2%;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    background-color: #361d6f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+    background-color: #2b155a;
+    transform: scale(1.05);
+}
+
+.products {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.products_container h2{
-    margin-bottom: 2%;
+.products_container h2 {
+    margin: 0; 
 }
