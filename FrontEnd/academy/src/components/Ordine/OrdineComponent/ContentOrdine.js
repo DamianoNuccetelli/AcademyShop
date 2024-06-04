@@ -6,6 +6,7 @@ import banner from '../../../img/banner.png';
 
 
 
+
 const ContentOrdine = () => {
     const [orders, setOrders] = useState([]);
 const userId = localStorage.getItem('userId');
@@ -39,7 +40,7 @@ const userId = localStorage.getItem('userId');
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
-                    <h2>Nuovo ordine</h2>
+                    {/* <h2>Nuovo ordine</h2> */}
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                 </div>
                 <div className='banner_container'>
@@ -47,6 +48,7 @@ const userId = localStorage.getItem('userId');
                 </div>
             </div>
             <div className='products_container'>
+            <h2>Tutti i prodotti</h2>
                 <table>
                     <thead>
                         <tr>

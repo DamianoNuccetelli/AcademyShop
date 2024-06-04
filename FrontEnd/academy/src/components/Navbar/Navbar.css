@@ -21,11 +21,13 @@
     justify-content: start;
 }
 
+
 .navbar_container h4{
     color: #fff;
     margin-left: 5px;
     position: relative; 
 }
+
 
 .navbar_container h4::after {
     content: '';
@@ -33,6 +35,7 @@
     width: 100%;
     height: 2px; 
     background-color: #fff; 
+    color: #fff;
     position: absolute;
     left: 0;
     bottom: -5px; 
@@ -50,7 +53,8 @@
     padding: 7px;             
     color: #fff;              
     font-size: 20px;          
-    margin-right: 10px;   
+    margin-right: 10px;
+    margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
@@ -92,4 +96,25 @@
 
 .logoAS{
     color: white;
+}
+
+.selected{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background-color: white;
+    border-radius: 5px;
+}
+.user-icon-selected{
+    border-radius: 50%;
+    padding: 7px;             
+    color: #361d6f;              
+    font-size: 20px;          
+    margin-right: 10px;   
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.selected h4{
+    color : #361d6f;
 }

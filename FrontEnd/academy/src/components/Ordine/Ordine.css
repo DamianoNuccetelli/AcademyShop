@@ -1,12 +1,65 @@
 
 
+.header{
+    width: 86%;
+    margin: 2% 2% 0 0%;
+}
+
+.header img{
+    width: 100%;
+    height: 100%;
+}
+
 .title_container{
     display: flex;
     align-items: baseline;
     box-sizing: border-box;
-    padding: 0;
+    margin: 0 2%;
     color: #361d6f;
 }
+
+.title_container h1{
+    margin-right: 2%;
+}
+
+.add_container{
+    display: inline-block;
+    flex-direction: column;
+    color: #361d6f;
+    margin-right: 3%;
+}
+
+.add_container h2{
+    margin-bottom: 2%;
+}
+
+.plus-icon {
+    width: 25px;
+    height: 25px;
+    background-color: #361d6f;
+    border: 1em solid #361d6f; /* Diminuisci la dimensione del bordo */
+    color: white;
+    border-radius: 20%; /* Rendi il bottone circolare */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiungi un'ombra per dare profondità */
+}
+
+.plus-icon:hover {
+    transform: scale(1.1); 
+}
+
+.welcome_container{
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 2% 2%;
+}
+
 
 .purple-color{
     background-color: #361d6f;
@@ -19,8 +72,7 @@
 }
 
 .ordine{
-    width: calc(100% - 60px); /* Larghezza della finestra visualizzata meno 40px (20px di padding da entrambi i lati) */
-    padding: 30px; /* Padding di 20px su tutti i lati */
+    width: calc(100%); /* Larghezza della finestra visualizzata meno 40px (20px di padding da entrambi i lati) */
     display: flex;
     background-color: #fff;
     height: 100vh;
