@@ -34,7 +34,7 @@ const userId = localStorage.getItem('userId');
  
     return (
         <div className="header">
-            <div className='title_container'>
+            <div className='title_container_ordine'>
                 <h1>Ordini</h1>
                 <h2>Ordini di Mario</h2>
             </div>

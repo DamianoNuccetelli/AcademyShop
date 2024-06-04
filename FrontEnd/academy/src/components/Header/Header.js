@@ -9,6 +9,7 @@ import './Header.css';
 import banner from '../../img/banner.png';
 
 const Header = () => {
+    
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {

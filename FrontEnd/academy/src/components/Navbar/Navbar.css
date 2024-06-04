@@ -16,9 +16,11 @@
 }
 
 .profilo, .prodotti, .ordini{
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: start;
+    margin-bottom: 20px;
 }
 
 
@@ -54,7 +56,6 @@
     color: #fff;              
     font-size: 20px;          
     margin-right: 10px;
-    margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
@@ -90,29 +91,27 @@
     justify-content: center;
 }
 
- .mb-20{
-    margin-bottom: 20px;
-} 
-
 .logoAS{
     color: white;
 }
 
-.prodotti{
+.selected{
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: start;
-    background-color: white;
+    justify-content: flex-start;
+    background-color: #fff;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 .user-icon-selected{
     border-radius: 50%;
-    padding: 7px;             
+    box-sizing: border-box;
+    padding: 15px;             
     color: #361d6f;              
     font-size: 20px;          
     margin-right: 10px;   
     transition: transform 0.3s ease;
-    margin-bottom: 20px;
 }
 
 .prodotti h4{
