@@ -5,6 +5,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import ProductCard from '../ProductCard/ProductCard';
 import './Header.css';
 
+import logo from '../../img/Proconsul-Services.png';
 import banner from '../../img/banner.png';
 
 const Header = () => {
@@ -18,8 +19,13 @@ const Header = () => {
     return (
         <div className="header">
             <div className='title_container'>
-                <h1>Dashboard</h1>
-                <h2>Benvenuto, Mario</h2>
+                <div>
+                    <h1>Dashboard</h1>
+                    <h2>Benvenuto, Mario</h2>
+                </div>
+                <div>
+                    {/* <img src={logo} alt="Logo" /> */}
+                </div>
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
@@ -27,7 +33,7 @@ const Header = () => {
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" />
                 </div>
                 <div className='banner_container'>
-                    {/* <img src={banner} alt="Logo" /> */}
+                    <img src={banner} alt="Logo" />
                 </div>
             </div>
             <div className='products_container'>
