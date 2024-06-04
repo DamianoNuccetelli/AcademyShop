@@ -37,6 +37,19 @@ namespace AcademyShopAPI.Controllers
             }
 
         }
+        [HttpGet("{idDettaglioOrdine}")]
+        public async Task<ActionResult<DettaglioOrdine>> GetDettaglioOrdine(int idDettaglioOrdine)
+        {
+            var dettaglioOrdine = await oOBL.getOrdineDetails(idDettaglioOrdine);
+
+            if (dettaglioOrdine == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dettaglioOrdine);
+        }
+
         //Florea Renato 
         [HttpGet("orders")]
         public async Task<IActionResult> GetOrdiniByUserId(int userId)
