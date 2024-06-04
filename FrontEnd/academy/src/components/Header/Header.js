@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Modal from 'react-modal';
 
 import ProductCard from '../ProductCard/ProductCard';
 import './Header.css';
 
-import logo from '../../img/Proconsul-Services.png';
 import banner from '../../img/banner.png';
 
 const Header = () => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+        
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+    
     const productsData = [
         { id: 1, name: 'Product 1', price: 10 },
         { id: 2, name: 'Product 2', price: 20 },
@@ -23,14 +32,10 @@ const Header = () => {
                     <h1>Dashboard</h1>
                     <h2>Benvenuto, Mario</h2>
                 </div>
-                {/* <div className='logo_container'>
-                    <img src={logo} alt="Logo" />
-                </div> */}
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
-                    {/* <h2>Nuovo prodotto</h2> */}
-                    <FontAwesomeIcon icon={faPlus} className="plus-icon" />
+                    <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModal} />
                 </div>
                 <div className='banner_container'>
                     <img src={banner} alt="Banner" />
@@ -63,6 +68,19 @@ const Header = () => {
                     ))}
                 </div>
             </div>
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <div className="popup-content">
+                    <h2>Welcome to our Popup</h2>
+                    <p>This is a modern popup design example.</p>
+                    <button onClick={closeModal} className="close-button">Close</button>
+                </div>
+            </Modal>
         </div>
     );
 };
