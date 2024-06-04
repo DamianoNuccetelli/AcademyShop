@@ -4,7 +4,7 @@ import { faUserCircle, faShoppingCart , faBoxOpen  } from '@fortawesome/free-sol
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 
-
+import logoAS from '../../img/LOGOacademyshop.png';
 
 const Navbar = () => {
 
@@ -21,17 +21,24 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <div className="navbar_container">
-                {/* <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
-                <h4>Profilo</h4> */}
-           </div>
-           <div className='center'>
+                <img src={logoAS} alt="LogoAS" className='logoAS' />
+            </div>
+            <div className='center'>
                 <hr className="separator" />
-           </div>
-           <div className="navbar_container">
-                <FontAwesomeIcon icon={faShoppingCart} className="user-icon mb-20" />
-                <h4 className='mb-20'onClick={NavigateProdotti}>Prodotti</h4>
-                <FontAwesomeIcon icon={faBoxOpen } className="user-icon mb-20" />
-                <h4 className='mb-20'onClick={NavigateOrdini}>Ordini</h4>
+            </div>
+            <div className="navbar_container">
+            <div className='profilo'>
+                    <FontAwesomeIcon icon={faUserCircle} className="user-icon mb-20" />
+                    <h4 className='mb-20'>Profilo</h4>
+                </div>
+                <div className='prodotti'>
+                    <FontAwesomeIcon icon={faShoppingCart} className="user-icon mb-20" />
+                    <h4 className='mb-20'>Prodotti</h4>
+                </div>
+                <div className='ordini'>
+                    <FontAwesomeIcon icon={faBoxOpen } className="user-icon mb-20" />
+                    <h4 className='mb-20'>Ordini</h4>
+                </div>
             </div>
             <div className="navbar_container">
                 
