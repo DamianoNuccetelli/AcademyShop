@@ -54,7 +54,7 @@ const SignUp = () => {
 
             const data = await response.json();
             console.log("Risposta del server:", data); // Debugging
-            navigate('/SignIn');
+            navigate('/Login');
 
             // Altre operazioni con la risposta se necessario
         } catch (error) {
