@@ -88,6 +88,10 @@
     color: #361d6f;
 }
 
+.all_products_div {
+    margin-bottom: 2%;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;

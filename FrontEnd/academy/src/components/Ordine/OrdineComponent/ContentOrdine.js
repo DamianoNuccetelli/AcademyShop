@@ -174,8 +174,9 @@ const handleQuantityChange = (event) => {
             </Modal>
 
             <div className='products_container_ordine'>
-
-            <h2>Tutti i prodotti</h2>
+            <div className='all_products_div'>
+              <h2>Tutti i prodotti</h2>
+            </div>
                 <table>
                     <thead>
                         <tr>
