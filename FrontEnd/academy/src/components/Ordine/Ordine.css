@@ -17,3 +17,33 @@
     background-color: #402383;
     color: white;
 }
+
+.ordine{
+    width: calc(100% - 60px); /* Larghezza della finestra visualizzata meno 40px (20px di padding da entrambi i lati) */
+    padding: 30px; /* Padding di 20px su tutti i lati */
+    display: flex;
+    background-color: #fff;
+    height: 100vh;
+    background-color: #001692;
+    background: linear-gradient(to right, #ffffff, #adb9ff);
+}
+
+.products_container{
+    box-sizing: border-box;
+    padding: 0 0 0 2%;
+    color: #361d6f;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0px 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5);
+  }
+  
+  td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+  }
+  
