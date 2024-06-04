@@ -16,9 +16,11 @@
 }
 
 .profilo, .prodotti, .ordini{
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: start;
+    margin-bottom: 20px;
 }
 
 
@@ -44,7 +46,7 @@
 }
 
 .navbar_container h4:hover::after {
-    transform: scaleX(1); /* Estende la sottolineatura */
+    transform: scaleX(1); 
     transition: transform 0.3s ease;
 }
 
@@ -54,7 +56,6 @@
     color: #fff;              
     font-size: 20px;          
     margin-right: 10px;
-    margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
@@ -64,9 +65,9 @@
 
 .navbar_container:first-child .user-icon {  
     border-radius: 50%;
-    padding: 10px;             /* Aumento del padding per rendere l'icona più grande */
+    padding: 10px;             
     color: #fff;              
-    font-size: 25px;           /* Dimensione dell'icona leggermente più grande */
+    font-size: 25px;           
     margin-right: 10px;       
 }
 
@@ -90,29 +91,29 @@
     justify-content: center;
 }
 
- .mb-20{
-    margin-bottom: 20px;
-} 
+
 
 .logoAS{
     color: white;
 }
 
 .selected{
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: start;
-    background-color: white;
+    justify-content: flex-start;
+    background-color: #fff;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 .user-icon-selected{
     border-radius: 50%;
-    padding: 7px;             
+    box-sizing: border-box;
+    padding: 15px;             
     color: #361d6f;              
     font-size: 20px;          
     margin-right: 10px;   
     transition: transform 0.3s ease;
-    margin-bottom: 20px;
 }
 
 .selected h4{
