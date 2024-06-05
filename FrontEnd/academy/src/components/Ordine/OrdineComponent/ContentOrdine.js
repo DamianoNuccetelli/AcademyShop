@@ -241,6 +241,7 @@ const handlePrevPage = () => {
       const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
+        setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
         openModal(); // Call openModal after fetching products
@@ -338,60 +339,61 @@ const handlePrevPage = () => {
           <img src={banner} alt="Logo" />
         </div>
       </div>
-
+     {/* Modal Create */}
       <Modal
-        isOpen={modalIsOpen}
-        ariaHideApp={false}
-        onRequestClose={closeModal}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <div className="popup-content">
-          <h2>Welcome to our Popup</h2>
-          <div>
-            <div className="search-bar-dropdown">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Search..."
-              />
-               {showDropdown && filteredProducts.length > 0 && (
-                <ul className="dropdown-list">
-                  {filteredProducts.map((product, index) => (
-                    <li
-                      key={index}
-                      className={index === activeIndex ? "active" : ""}
-                      onClick={() => handleClick(product)}
-                    >
-                      {product.nome}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div>
-              <input
-                type="number"
-                min="1"
-                placeholder="Quantità"
-                value={quantità}
-                onChange={handleQuantityChange}
-              />
-            </div>
+      isOpen={modalIsOpen}
+      ariaHideApp={false}
+      onRequestClose={closeModal}
+      className="modal"
+      overlayClassName="overlay"
+    >
+      <div className="popup-content">
+        <h2>Welcome to our Popup</h2>
+        <div>
+          <div className="search-bar-dropdown">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Search..."
+            />
+            {showDropdown && filteredProducts.length > 0 && (
+              <ul className="dropdown-list">
+                {filteredProducts.map((product, index) => (
+                  <li
+                    key={index}
+                    className={index === activeIndex ? 'active' : ''}
+                    onClick={() => handleClick(product)}
+                  >
+                    {product.nome}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <button onClick={closeModal} className="close-button">
-            Close
-          </button>
-          <button
-            onClick={() => addOrdine(userId, selectedProduct, quantità)}
-            className="close-button"
-          >
-            Submit
-          </button>
+          <div>
+            <input
+              type="number"
+              min="1"
+              placeholder="Quantità"
+              value={quantità}
+              onChange={handleQuantityChange}
+            />
+          </div>
         </div>
-      </Modal>
+        <button onClick={closeModal} className="close-button">
+          Close
+        </button>
+        <button
+          onClick={() => addOrdine(userId, selectedProduct, quantità)}
+          className="close-button"
+          disabled={!selectedProduct || !quantità}
+        >
+          Submit
+        </button>
+      </div>
+    </Modal>
 
       {/* Modal Delete */}
       <Modal
@@ -484,12 +486,11 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th>Descrizione Prodotto</th>
-              <th>Stato Ordine</th>
-              <th>Quantità</th>
-              <th>Id Prodotto</th>
-              <th>Data Registrazione</th>
-              <th>Data Aggiornamento</th>
+              <th style={{ width: '30%' }}>Descrizione Prodotto</th>
+              <th style={{ width: '10%' }}>Stato Ordine</th>
+              <th style={{ width: '10%' }}>Quantità</th>
+              <th style={{ width: '10%' }}>Data Registrazione</th>
+              <th style={{ width: '10%' }}>Data Aggiornamento</th>
               <th>Azioni</th>
             </tr>
           </thead>
@@ -500,21 +501,28 @@ const handlePrevPage = () => {
                 <td>{order.prodottoDescrizione}</td>
                 <td>{order.statoOrdineDescrizione}</td>
                 <td>{order.quantita}</td>
-                <td>{order.prodottoId}</td>
                 <td>
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
-                <td>
-                  {new Date(order.dataAggiornamento).toLocaleDateString()}
+                <td>{order.dataAggiornamento == null ? (
+                    <p>Non aggiornato</p>
+                    ) : (
+                     <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
+                     )}
+                
                 </td>
                 <td>
-                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  <div className='icons-container'>
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <button className='edit-button' onClick={() => openModalEdit(order)}><FontAwesomeIcon icon={faEdit}/></button>
+                  <button className='edit-button' onClick={() => openModalEdit(order)}>
+                    <FontAwesomeIcon icon={faEdit}/>
+                    </button>
+                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  </div>
                 </td>
               </tr>
             ))}
