@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import NavbarProfile from '../NavbarProfile/NavbarProfile';
+
 
 import './HomeProfile.css';
 
@@ -15,6 +17,7 @@ const HomeProfile = () => {
                     <h2>Mario Rossi</h2>
                 </div>
             </div>
+            <NavbarProfile />
         </div>
     );
 };
