@@ -6,7 +6,10 @@ import Modal from 'react-modal';
 import ProductCard from '../ProductCard/ProductCard';
 import './Header.css';
 
+
 import banner from '../../img/banner.png';
+
+const userId = localStorage.getItem('userId');
 
 const Header = () => {
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
@@ -65,7 +68,7 @@ const Header = () => {
             <div className='title_container'>
                 <div className='title_text'>
                     <h1>Dashboard</h1>
-                    <h2>Benvenuto, Mario</h2>
+                    <h2>Benvenuto, Mario {userId}</h2>
                 </div>
             </div>
             <div className='welcome_container'>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import logo from '../../img/Proconsul-Services.png';
+import SignIn from '../SignIn/SignIn';
 
 const SignUp = () => {
     // Stato per ogni campo di input
@@ -14,13 +16,17 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [codiceFiscale, setCodiceFiscale] = useState('');
 
+    const [registrationMessage, setRegistrationMessage] = useState('');
+
+    
+    const navigate = useNavigate();
     const UrlApiRoot='https://localhost:7031/users';
 
   
     // Funzione per gestire l'invio del form
     const handleSubmit = async (event) => {
         
-        event.preventDefault(); // Previene il comportamento di default del form
+        event.preventDefault(); 
         try {
             const userData = {
                 nome, 
@@ -51,13 +57,16 @@ const SignUp = () => {
             }
 
             const data = await response.json();
-            console.log("Risposta del server:", data); // Debugging
-            //// Ricarica la pagina
+            console.log("Risposta del server:", data); 
+            
+            // Se la registrazione è andata a buon fine, reindirizza l'utente alla pagina di login
             window.location.reload();
+            setRegistrationMessage('Registrazione avvenuta con successo. Effettua il login per accedere.');
 
-            // Altre operazioni con la risposta se necessario
+            
         } catch (error) {
             console.error('Si è verificato un errore durante la registrazione:', error);
+            setRegistrationMessage('Errore durante la registrazione. Riprova più tardi.');
         }
     };
 
@@ -92,7 +101,7 @@ const SignUp = () => {
                     <input type="text" placeholder="Codice fiscale" value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} />
                 </div>
                 <button type="submit" onClick={handleSubmit}>Registrati</button>
-                
+                {registrationMessage && <p style={{ color: 'red' }} className="registration-message">{registrationMessage}</p>}
             </form>
         </div>
     );
