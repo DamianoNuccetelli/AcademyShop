@@ -46,6 +46,9 @@
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
 }
+.toggle-panel p {
+    color: #fff;
+}
 
 .toggle-left {
     transform: translateX(-200%);
