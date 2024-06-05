@@ -46,8 +46,8 @@ const Header = () => {
                 ariaHideApp={false}
             >
                 <div className="popup-content">
-                    <h2>Welcome to our Popup</h2>
-                    <p>This is a modern popup design example.</p>
+                    <h2>Popup per AGGIUNGERE un prodotto</h2>
+                    <p>Qui va inserito il form</p>
                     <button onClick={closeModalAddProduct} className="close-button">Close</button>
                 </div>
             </Modal>

@@ -27,6 +27,10 @@
     margin-bottom: 2%;
 }
 
+.title_text h2{
+    color: #361d6f;
+}
+
 .plus-icon {
     width: 25px;
     height: 25px;
