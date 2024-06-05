@@ -5,33 +5,32 @@ import Modal from 'react-modal';
 
 import ProductCard from '../ProductCard/ProductCard';
 import './Header.css';
-
-
 import banner from '../../img/banner.png';
-
-const userId = localStorage.getItem('userId');
 
 const Header = () => {
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
     const [productsData, setProductsData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 6;
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
-        fetch('https://localhost:7031/products')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Errore nel recupero dei dati dei prodotti');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setProductsData(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        fetchProducts();
     }, []);
+
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch('https://localhost:7031/products');
+            if (response.ok) {
+                const data = await response.json();
+                setProductsData(data);
+            } else {
+                throw new Error('Errore nel recupero dei dati dei prodotti');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const openModalAddProduct = () => {
         setModalIsOpenAddProduct(true);
@@ -41,10 +40,42 @@ const Header = () => {
         setModalIsOpenAddProduct(false);
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const nomeProdotto = e.target.elements.nomeProdotto.value;
+        const descrizioneProdotto = e.target.elements.descrizioneProdotto.value;
+        const quantitàProdotto = e.target.elements.quantitaProdotto.value;
+
+        const data = {
+            nome: nomeProdotto,
+            descrizione: descrizioneProdotto,
+            quantità: quantitàProdotto
+        };
+
+        try {
+            const response = await fetch('https://localhost:7031/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                fetchProducts();
+                closeModalAddProduct();
+            } else {
+                console.error('Errore durante l\'aggiunta del prodotto:', response.status);
+            }
+        } catch (error) {
+            console.error('Errore:', error);
+        }
+    };
+
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = productsData.slice(indexOfFirstProduct, indexOfLastProduct);
-
     const totalPages = Math.ceil(productsData.length / productsPerPage);
 
     const handleNextPage = () => {
@@ -69,7 +100,6 @@ const Header = () => {
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
-
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModalAddProduct} />
                     <Modal
                         isOpen={modalIsOpenAddProduct}
@@ -79,9 +109,34 @@ const Header = () => {
                         ariaHideApp={false}
                     >
                         <div className="popup-content">
-                            <h2>Popup per AGGIUNGERE un prodotto</h2>
-                            <p>Qui va inserito il form</p>
-                            <button onClick={closeModalAddProduct} className="close-button">Close</button>
+                            <h2>Aggiungi Prodotto</h2>
+                            <form onSubmit={handleSubmit}>
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="nomeProdotto"
+                                        placeholder="Nome Prodotto"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <textarea
+                                        name="descrizioneProdotto"
+                                        placeholder="Descrizione Prodotto"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="number"
+                                        name="quantitaProdotto"
+                                        placeholder="Quantità Prodotto"
+                                        required
+                                    />
+                                </div>
+                                <button type="submit">Aggiungi</button>
+                            </form>
+                            <button onClick={closeModalAddProduct} className="close-button">Chiudi</button>
                         </div>
                     </Modal>
                 </div>
