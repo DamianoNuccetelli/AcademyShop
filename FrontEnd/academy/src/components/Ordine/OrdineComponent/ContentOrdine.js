@@ -480,17 +480,24 @@ const handlePrevPage = () => {
                         Data Aggiornamento:{" "}
                         {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
                       </p>
+                      <div>     
+                     <button onClick={closeModal2} className="close-button">Close</button>
+                     </div>
                     </div>
-                    <button onClick={closeModal2} className="close-button">TEST</button>
+                   
+        
                   </Modal>
                   <button className='edit-button' onClick={() => openModalEdit(order)}><FontAwesomeIcon icon={faEdit}/></button>
                   {modalEdit && (
                   <Modal
                     isOpen={modalEdit}
-                    ariaHideApp={false}
+                    ariaHideApp={true}
                     onRequestClose={closeModalEdit}
                     contentLabel="Edit Order"
+                    overlayClassName="overlay"
+                    className="modal"
                   >
+                    <div className="popup-content">
                     <h2>Edit Order</h2>
                     <label>
                       Quantità:
@@ -500,8 +507,9 @@ const handlePrevPage = () => {
                         onChange={(e) => setNewQuantity(Number(e.target.value))}
                       />
                     </label>
-                    <button onClick={handleUpdateOrder}>Save</button>
-                    <button onClick={closeModalEdit}>Cancel</button>
+                    <button onClick={handleUpdateOrder}  className="close-button">Save</button>
+                    <button onClick={closeModalEdit}  className="close-button">Cancel</button>
+                    </div>
                   </Modal>
                 )}
                 </td>
