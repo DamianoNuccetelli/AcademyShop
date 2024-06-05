@@ -87,17 +87,22 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
 
     return (
         <div className='card_container'>
+            <div className='box_card_container'>
             <div className="product_icon_box">
                 <FontAwesomeIcon icon={faBox} className='product_icon' />
                 <h3>{nome}</h3>
             </div>
             <div className='description'>
                 <p className='mb20'><strong>Descrizione:</strong> {descrizione} </p>
+            </div>
+            <div className='quantity'>
                 <div className='crud_button'>
                     <p><strong>Quantità:</strong> {quantità}</p>
-                    <FontAwesomeIcon icon={faPenToSquare} onClick={openModalEditProduct} className='edit-icon' />
-                    <FontAwesomeIcon icon={faMultiply} onClick={openModalDeleteProduct} className='delete-icon' />
-                </div>
+                    <div className='ml_20'>
+                        <FontAwesomeIcon icon={faPenToSquare} onClick={openModalEditProduct} className='edit-icon icon' />
+                        <FontAwesomeIcon icon={faMultiply} onClick={openModalDeleteProduct} className='delete-icon icon-red icon' />
+                    </div>
+            </div>
             </div>
 
             <Modal
@@ -153,6 +158,7 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
                     <button onClick={closeModalDeleteProduct} className="close-button">Annulla</button>
                 </div>
             </Modal>
+            </div>
         </div>
     );
 };

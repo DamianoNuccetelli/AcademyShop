@@ -48,20 +48,22 @@ const SignIn = () => {
                 <img src={logo} alt="Logo" />
                 <h1>Accedi</h1>
                 <span>o usa la tua email e password</span>
-                <input 
-                    type="email" 
-                    placeholder="Email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="password" 
-                    placeholder="Password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                />
+                <div>
+                    <input 
+                        type="email" 
+                        placeholder="Email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        required 
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="Password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                    />
+                </div>
                 {error && <p className="error">{error}</p>}
                 <a href="#">Hai dimenticato la password?</a>
                 <button type="submit">Accedi</button>

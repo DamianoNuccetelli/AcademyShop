@@ -1,25 +1,11 @@
-.box_navbar_profile{
+/* NavbarProfile.css */
+.box_navbar_profile {
     width: 15%;
     height: 81.3vh;
     border-right: 2px solid rgb(17, 0, 58);
     background-color: #fff;
     box-sizing: border-box;
     padding: 2%;
-}
-
-.row_container{
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    color: #361d6f;
-}
-
-.mr20{
-    margin-right: 20px;
-}
-
-.box_navbar_profile {
     display: flex;
     flex-direction: column;
 }
@@ -27,41 +13,26 @@
 .row_container {
     display: flex;
     align-items: center;
-    cursor: pointer; 
-    margin-bottom: 20px; 
+    padding: 10px;
+    cursor: pointer;
+    color: #361d6f;
+    transition: background-color 0.3s ease;
 }
 
-.mr20 {
+.row_container:hover {
+    background-color: #f0f0f0;
+}
+
+.selected {
+    background-color: #361d6f;
+    color: white;
+}
+
+.icon {
     margin-right: 20px;
 }
 
 h4 {
-    color: #361d6f;
     margin: 0;
-}
-
-.box_navbar_profile {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
-
-.row_container {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.row_container.selected {
-    background-color: #361d6f; 
-    color: white;
-}
-
-.mr20 {
-    margin-right: 20px;
-}
-
-.row_container h4 {
-    margin: 0;
+    font-size: 16px;
 }

@@ -94,18 +94,22 @@
     color: white;
 }
 
-.selected{
+.selected {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     background: linear-gradient(to left, transparent 50%, #fff 50%);
-    background-size: 200% 100%; /* Estendere il gradiente su tutta la larghezza */
+    background-size: 200% 100%;
     border-radius: 5px;
     margin-bottom: 20px;
-    transition: all 0.8s ease;
-    animation: openFromLeft 0.8s ease forwards;
 }
+
+/* Rimuovi la transizione durante il caricamento iniziale della pagina */
+body:not(.loaded) .selected {
+    animation: none;
+}
+
 @keyframes openFromLeft {
     0% {
         background-position: 100% 0;

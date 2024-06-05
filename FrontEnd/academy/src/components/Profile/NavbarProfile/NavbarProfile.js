@@ -1,3 +1,4 @@
+// NavbarProfile.js
 import React from 'react';
 import './NavbarProfile.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,14 +11,14 @@ const NavbarProfile = ({ setActiveComponent, activeComponent }) => {
                 className={`row_container ${activeComponent === 'Dettagli' ? 'selected' : ''}`}
                 onClick={() => setActiveComponent('Dettagli')}
             >
-                <FontAwesomeIcon icon={faChevronRight} className='mr20' />
+                <FontAwesomeIcon icon={faChevronRight} className='icon' />
                 <h4>Dettagli</h4>
             </div>
             <div
                 className={`row_container ${activeComponent === 'Elimina' ? 'selected' : ''}`}
                 onClick={() => setActiveComponent('Elimina')}
             >
-                <FontAwesomeIcon icon={faChevronRight} className='mr20' />
+                <FontAwesomeIcon icon={faChevronRight} className='icon' />
                 <h4>Elimina</h4>
             </div>
         </div>

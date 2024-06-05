@@ -8,9 +8,8 @@ import './Navbar.css';
 import logoAS from '../../img/LOGOacademyshop.png';
 
 const Navbar = () => {
-  
   let navigate = useNavigate();
-
+  
   const NavigateOrdini = () => {
     let path = `/Ordine`;
     navigate(path);

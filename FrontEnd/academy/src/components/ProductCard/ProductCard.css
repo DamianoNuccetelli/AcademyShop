@@ -11,6 +11,10 @@
     margin-bottom: 2%;
 }
 
+.box_card_container{
+    width: 100%;
+}
+
 .product_icon_box {
     display: flex;
     margin: 20px; 
@@ -37,6 +41,14 @@
     margin: 0 20px 20px 20px; 
     flex-direction: column;
     justify-content: space-between;
+    height: 20%;
+}
+
+.quantity{
+    display: flex;
+    margin: 0 20px 20px 20px; 
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .mb20{
@@ -45,10 +57,12 @@
 
 .crud_button{
     display: flex;
+    width: 100%;
     justify-content: space-between;
+    cursor: pointer;
 }
 
-.icon{
+.crud_button .icon{
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
