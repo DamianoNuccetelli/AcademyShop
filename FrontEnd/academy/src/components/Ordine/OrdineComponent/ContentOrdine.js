@@ -107,6 +107,7 @@ const handlePrevPage = () => {
 
       if (response.ok) {
         fetchOrders();
+        setCurrentPage(totalPages);
        
         console.log('Ordine aggiunto con successo', response.status);
       } else {
