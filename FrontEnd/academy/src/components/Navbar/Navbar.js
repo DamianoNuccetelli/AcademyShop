@@ -17,6 +17,11 @@ const Navbar = () => {
     let path = `/Dashboard`
     navigate(path)
   }
+
+  const NavigateProfile = () => {
+    let path = `/Profile`
+    navigate(path)
+  }
   const [classeProdotti, setClasseProdotti] = useState('prodotti');
   const [classeOrdini, setClasseOrdini] = useState('ordini');
   const [blueIconOrdini, setBlueIconOrdini] = useState('user-icon');
