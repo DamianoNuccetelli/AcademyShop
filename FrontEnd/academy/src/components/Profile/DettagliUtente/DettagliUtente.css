@@ -1,0 +1,22 @@
+.container_dettagliUtente{
+    width: 71%;
+    background-color: red;
+}
+
+.form_container{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: #361d6f;
+    flex-direction: column;
+}
+
+.form_container img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    box-sizing: border-box;
+    padding: 5px;
+}

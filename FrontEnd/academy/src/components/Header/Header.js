@@ -70,6 +70,7 @@ const Header = () => {
             </div>
             <div className='welcome_container'>
                 <div className='add_container'>
+
                     <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={openModalAddProduct} />
                     <Modal
                         isOpen={modalIsOpenAddProduct}

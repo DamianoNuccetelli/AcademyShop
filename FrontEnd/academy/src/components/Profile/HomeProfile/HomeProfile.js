@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import Modal from 'react-modal';
 import NavbarProfile from '../NavbarProfile/NavbarProfile';
-
-
+import DettagliUtente from '../DettagliUtente/DettagliUtente';
+import EliminaUtente from '../EliminaUtente/EliminaUtente';
 import './HomeProfile.css';
 
-
-
 const HomeProfile = () => {
-    
+    const [activeComponent, setActiveComponent] = useState('Dettagli');
+
+    const renderComponent = () => {
+        switch (activeComponent) {
+            case 'Dettagli':
+                return <DettagliUtente />;
+            case 'Elimina':
+                return <EliminaUtente />;
+            default:
+                return <DettagliUtente />;
+        }
+    };
+
     return (
         <div className="header">
             <div className='title_container_user'>
@@ -17,7 +26,10 @@ const HomeProfile = () => {
                     <h2>Mario Rossi</h2>
                 </div>
             </div>
-            <NavbarProfile />
+            <div className='flex_utente'>
+                <NavbarProfile setActiveComponent={setActiveComponent} activeComponent={activeComponent} />
+                {renderComponent()}
+            </div>
         </div>
     );
 };
