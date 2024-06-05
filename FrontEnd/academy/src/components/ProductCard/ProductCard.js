@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faPenToSquare, faMultiply } from '@fortawesome/free-solid-svg-icons'; // Esempio di un'icona casuale, puoi sostituirla con l'icona che desideri
+import { faBox, faPenToSquare, faMultiply } from '@fortawesome/free-solid-svg-icons';
 import './ProductCard.css';
 import Modal from 'react-modal';
 
-const ProductCard = ({ name, price }) => {
-
+const ProductCard = ({ id, name, Descrizione,Quantità , onDelete, onEdit }) => {
     const [modalIsOpenEditProduct, setModalIsOpenEditProduct] = useState(false);
     const [modalIsOpenDeleteProduct, setModalIsOpenDeleteProduct] = useState(false);
+    const [newName, setNewName] = useState(name);
+    const [newDescrizione, setNewDescrizione] = useState(Descrizione);
+    const [newQuantità, setNewQuantità] = useState(Quantità);
 
     const openModalEditProduct = () => {
+        setNewName(name);
+        setNewDescrizione(Descrizione);
+        setNewQuantità(Quantità);
         setModalIsOpenEditProduct(true);
     };
 
@@ -23,6 +28,42 @@ const ProductCard = ({ name, price }) => {
 
     const closeModalDeleteProduct = () => {
         setModalIsOpenDeleteProduct(false);
+    };
+
+    const handleDeleteProduct = async () => {
+        try {
+            const response = await fetch(`https://localhost:7031/products/${id}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                onDelete(id);
+                closeModalDeleteProduct();
+            } else {
+                console.error('Errore durante l\'eliminazione del prodotto:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleEditProduct = async () => {
+        try {
+            const response = await fetch(`https://localhost:7031/products/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: newName, Descrizione: newDescrizione, Quantita: newQuantità }),
+            });
+            if (response.ok) {
+                onEdit(id, newName, newDescrizione, newQuantità);
+                closeModalEditProduct();
+            } else {
+                console.error('Errore duante la modifica del prodotto:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -48,9 +89,38 @@ const ProductCard = ({ name, price }) => {
                         ariaHideApp={false}
                     >
                         <div className="popup-content">
-                            <h2>Popup per MODIFICARE il prodotto</h2>
-                            <p>Qui va inserito il form.</p>
-                            <button onClick={closeModalEditProduct} className="close-button">Close</button>
+                            <h2>Modifica Prodotto</h2>
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                handleEditProduct();
+                            }}>
+                                <div>
+                                    <label>Nome:</label>
+                                    <input
+                                        type="text"
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Descizione:</label>
+                                    <input
+                                        type="text"
+                                        value={newDescrizione}
+                                        onChange={(e) => setNewDescrizione(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Quantità:</label>
+                                    <input
+                                        type="number"
+                                        value={newQuantità}
+                                        onChange={(e) => setNewQuantità(e.target.value)}
+                                    />
+                                </div>
+                                <button type="submit">Salva</button>
+                                <button onClick={closeModalEditProduct} type="button">Annulla</button>
+                            </form>
                         </div>
                     </Modal>
 
@@ -62,16 +132,14 @@ const ProductCard = ({ name, price }) => {
                         ariaHideApp={false}
                     >
                         <div className="popup-content">
-                            <h2>Popup per ELIMINARE il prodotto</h2>
-                            <p>Qui va ELIMINATO il form.</p>
-                            <button onClick={closeModalDeleteProduct} className="close-button">Close</button>
+                            <h2>Conferma Eliminazione</h2>
+                            <p>Sei sicuro di voler eliminare questo prodotto?</p>
+                            <button onClick={handleDeleteProduct} className="delete-button">Elimina</button>
+                            <button onClick={closeModalDeleteProduct} className="close-button">Annulla</button>
                         </div>
                     </Modal>
-
-
                 </div>
             </div>
-
         </div>
     );
 };
