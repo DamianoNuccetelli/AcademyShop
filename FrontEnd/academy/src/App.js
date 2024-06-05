@@ -9,6 +9,7 @@ import SignUp from './components/SignUp/SignUp';
 import SignIn from './components/SignIn/SignIn';
 import Ordine from './components/Ordine/Ordine';
 import Profile from './components/Profile/Profile';
+import User from './components/User/User';
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
             <Route path="/ordine" element={<Ordine />} />
             <Route path="/ordine" element={<Ordine />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/user" element={<User />} />
         </Routes>
         </>
     );

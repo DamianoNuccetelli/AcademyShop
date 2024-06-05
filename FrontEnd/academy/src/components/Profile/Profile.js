@@ -4,12 +4,14 @@ import { faBox, faPenToSquare, faMultiply } from '@fortawesome/free-solid-svg-ic
 import './Profile.css';
 import Modal from 'react-modal';
 import Navbar from '../Navbar/Navbar';
+import User from '../User/User';
 
 const Profile = () => {
 
         return (
-            <div className='profile_container'>
+            <div className='dashboard'>
                 <Navbar/>
+                <User/>
             </div>
         );
 };

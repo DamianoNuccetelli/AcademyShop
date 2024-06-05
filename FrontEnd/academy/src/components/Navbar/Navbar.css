@@ -1,8 +1,7 @@
-.navbar{
-    width: 14%;
+.navbar {
+    width: 14% !important;
+    height: 100vh;
     background-color: #361d6f;
-    /* background: linear-gradient(to right, #361d6f, #512da8); */
-    /* border-radius: 25px; */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -16,7 +15,7 @@
 }
 
 .profilo, .prodotti, .ordini{
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     align-items: center;
     justify-content: start;
