@@ -44,7 +44,7 @@
         background-color: transparent;
         color: rgb(255, 0, 0);
         border: none;
-        padding: 10px 10px;
+
         font-size: 16px;
         cursor: pointer;
         display: inline-flex;
@@ -52,7 +52,6 @@
         border-radius: 5px;
         transition: background-color 0.3s ease;
         transition: all 0.4s ease;
-        margin-bottom: 10px;
       }
 
       .trash-button:hover {
@@ -63,7 +62,6 @@
         background-color: transparent;
         color: #361d6f;              
         border: none;
-        padding: 8px 8px;
         font-size: 16px;
         cursor: pointer;
         display: inline-flex;
@@ -71,7 +69,6 @@
         border-radius: 5px;
         transition: background-color 0.3s ease;
         transition: all 0.4s ease;
-        margin-bottom: 10px;
       }
 
       .show-button:hover {
@@ -82,7 +79,6 @@
         background-color: transparent;
         color: #361d6f;    
         border: none;
-        padding: 8px 8px;
         font-size: 16px;
         cursor: pointer;
         display: inline-flex;
@@ -95,3 +91,38 @@
       .edit-button:hover {
         transform: scale(1.1); 
     }
+
+    .icons-container{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+
+    .search-bar-dropdown {
+        position: relative;
+      }
+      
+      .dropdown-list {
+        position: absolute;
+        width: 100%;
+        border: 1px solid #ccc;
+        background: white;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1000;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .dropdown-list li {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      
+      .dropdown-list li.active {
+        background-color: #007bff;
+        color: white;
+      }
+      

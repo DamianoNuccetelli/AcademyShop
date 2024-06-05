@@ -30,6 +30,9 @@ const ContentOrdine = () => {
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [newQuantity, setNewQuantity] = useState(1);
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
         setCurrentPage(currentPage + 1);
@@ -46,6 +49,7 @@ const handlePrevPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -69,6 +73,17 @@ const handlePrevPage = () => {
 
   const closeModalDelete= () => {
     setModalDelete(false);
+  };
+
+  const openModalEdit = (order) => {
+    setSelectedOrder(order);
+    setNewQuantity(order.quantita);
+    setModalEdit(true);
+  };
+
+  const closeModalEdit = () => {
+    setModalEdit(false);
+    setSelectedOrder(null);
   };
 
   const fetchOrders = async () => {
@@ -98,6 +113,8 @@ const handlePrevPage = () => {
   useEffect(() => {
     fetchOrders(); 
   }, [userId]);
+
+ 
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
@@ -131,7 +148,35 @@ const handlePrevPage = () => {
   };
 
 
+  const handleUpdateOrder = async () => {
+    
+    if (!selectedOrder) return;
 
+    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
+    try {
+      const response = await fetch(API_URL, {
+        method: 'PUT',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const updatedOrder = await response.json();
+        setOrders(orders.map(order => 
+          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
+          ? { ...order, ...updatedOrder }
+          : order
+        ));
+        closeModalEdit();
+        fetchOrders();
+      } else {
+        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+    }
+  };
  
    // Fetch detailed order for a specific idDettaglioOrdine
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
@@ -196,6 +241,7 @@ const handlePrevPage = () => {
       const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
+        setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
         openModal(); // Call openModal after fetching products
@@ -263,6 +309,7 @@ const handlePrevPage = () => {
         }
         setdeleteId(0);
         fetchOrders();
+        setCurrentPage(1);
       } else {
         console.error('Error deleting order:', response.status);
       }
@@ -292,61 +339,63 @@ const handlePrevPage = () => {
           <img src={banner} alt="Logo" />
         </div>
       </div>
-
+     {/* Modal Create */}
       <Modal
-        isOpen={modalIsOpen}
-        ariaHideApp={false}
-        onRequestClose={closeModal}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <div className="popup-content">
-          <h2>Welcome to our Popup</h2>
-          <div>
-            <div className="search-bar-dropdown">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Search..."
-              />
-               {showDropdown && filteredProducts.length > 0 && (
-                <ul className="dropdown-list">
-                  {filteredProducts.map((product, index) => (
-                    <li
-                      key={index}
-                      className={index === activeIndex ? "active" : ""}
-                      onClick={() => handleClick(product)}
-                    >
-                      {product.nome}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div>
-              <input
-                type="number"
-                min="1"
-                placeholder="Quantità"
-                value={quantità}
-                onChange={handleQuantityChange}
-              />
-            </div>
+      isOpen={modalIsOpen}
+      ariaHideApp={false}
+      onRequestClose={closeModal}
+      className="modal"
+      overlayClassName="overlay"
+    >
+      <div className="popup-content">
+        <h2>Welcome to our Popup</h2>
+        <div>
+          <div className="search-bar-dropdown">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Search..."
+            />
+            {showDropdown && filteredProducts.length > 0 && (
+              <ul className="dropdown-list">
+                {filteredProducts.map((product, index) => (
+                  <li
+                    key={index}
+                    className={index === activeIndex ? 'active' : ''}
+                    onClick={() => handleClick(product)}
+                  >
+                    {product.nome}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <button onClick={closeModal} className="close-button">
-            Close
-          </button>
-          <button
-            onClick={() => addOrdine(userId, selectedProduct, quantità)}
-            className="close-button"
-          >
-            Submit
-          </button>
+          <div>
+            <input
+              type="number"
+              min="1"
+              placeholder="Quantità"
+              value={quantità}
+              onChange={handleQuantityChange}
+            />
+          </div>
         </div>
-      </Modal>
-      
+        <button onClick={closeModal} className="close-button">
+          Close
+        </button>
+        <button
+          onClick={() => addOrdine(userId, selectedProduct, quantità)}
+          className="close-button"
+          disabled={!selectedProduct || !quantità}
+        >
+          Submit
+        </button>
+      </div>
+    </Modal>
+
+      {/* Modal Delete */}
       <Modal
         isOpen={modalDelete}
         ariaHideApp={false}
@@ -359,11 +408,66 @@ const handlePrevPage = () => {
           <button onClick={closeModalDelete} className="close-button">
             Close
           </button>
-          <button onClick={() => deleteOrdine()} className="delete-button">
+          <button onClick={() => deleteOrdine()} className="close-button">
             Delete
           </button>
         </div>
       </Modal>
+
+      {/* Modal Detail */}
+        <Modal
+            isOpen={modalIsOpen2}
+            ariaHideApp={false}
+            onRequestClose={closeModal2}
+            overlayClassName="overlay"
+            className="modal"
+          >
+            <div className="popup-content">
+              <h2>Dettagli Ordine</h2>
+              <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
+              <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
+              <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
+              <p>Quantità: {detailedOrders.quantita}</p>
+              <p>Id Prodotto: {detailedOrders.prodottoId}</p>
+              <p>
+                Data Registrazione:{" "}
+                {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
+              </p>
+              <p>
+                Data Aggiornamento:{" "}
+                {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
+              </p>
+              <div>     
+              <button onClick={closeModal2} className="close-button">Close</button>
+              </div>
+            </div>
+          </Modal>
+
+            {/* Modal Edit */}
+            {modalEdit && (
+            <Modal
+              isOpen={modalEdit}
+              ariaHideApp={true}
+              onRequestClose={closeModalEdit}
+              contentLabel="Edit Order"
+              overlayClassName="overlay"
+              className="modal"
+            >
+              <div className="popup-content">
+              <h2>Edit Order</h2>
+              <label>
+                Quantità:
+                <input
+                  type="number"
+                  value={newQuantity}
+                  onChange={(e) => setNewQuantity(Number(e.target.value))}
+                />
+              </label>
+              <button onClick={handleUpdateOrder}  className="close-button">Save</button>
+              <button onClick={closeModalEdit}  className="close-button">Cancel</button>
+              </div>
+            </Modal>
+          )}
 
       <div className="products_container_ordine">
         <div className="all_products_div">
@@ -382,12 +486,11 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th>Descrizione Prodotto</th>
-              <th>Stato Ordine</th>
-              <th>Quantità</th>
-              <th>Id Prodotto</th>
-              <th>Data Registrazione</th>
-              <th>Data Aggiornamento</th>
+              <th style={{ width: '30%' }}>Descrizione Prodotto</th>
+              <th style={{ width: '10%' }}>Stato Ordine</th>
+              <th style={{ width: '10%' }}>Quantità</th>
+              <th style={{ width: '10%' }}>Data Registrazione</th>
+              <th style={{ width: '10%' }}>Data Aggiornamento</th>
               <th>Azioni</th>
             </tr>
           </thead>
@@ -398,46 +501,28 @@ const handlePrevPage = () => {
                 <td>{order.prodottoDescrizione}</td>
                 <td>{order.statoOrdineDescrizione}</td>
                 <td>{order.quantita}</td>
-                <td>{order.prodottoId}</td>
                 <td>
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
-                <td>
-                  {new Date(order.dataAggiornamento).toLocaleDateString()}
+                <td>{order.dataAggiornamento == null ? (
+                    <p>Non aggiornato</p>
+                    ) : (
+                     <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
+                     )}
+                
                 </td>
                 <td>
-                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  <div className='icons-container'>
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <Modal
-                    isOpen={modalIsOpen2}
-                    ariaHideApp={false}
-                    onRequestClose={closeModal2}
-                    overlayClassName="overlay"
-                    className="modal"
-                  >
-                    <div className="popup-content">
-                      <h2>Dettagli Ordine</h2>
-                      <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
-                      <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
-                      <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
-                      <p>Quantità: {detailedOrders.quantita}</p>
-                      <p>Id Prodotto: {detailedOrders.prodottoId}</p>
-                      <p>
-                        Data Registrazione:{" "}
-                        {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
-                      </p>
-                      <p>
-                        Data Aggiornamento:{" "}
-                        {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <button onClick={closeModal2} className="close-button">TEST</button>
-                  </Modal>
-                  <button className='edit-button'><FontAwesomeIcon icon={faEdit}/></button>
+                  <button className='edit-button' onClick={() => openModalEdit(order)}>
+                    <FontAwesomeIcon icon={faEdit}/>
+                    </button>
+                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  </div>
                 </td>
               </tr>
             ))}
