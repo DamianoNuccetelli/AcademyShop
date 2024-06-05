@@ -114,34 +114,7 @@ const handlePrevPage = () => {
     fetchOrders(); 
   }, [userId]);
 
-  const handleUpdateOrder = async () => {
-    
-    if (!selectedOrder) return;
-
-    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
-    try {
-      const response = await fetch(API_URL, {
-        method: 'PUT',
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        const updatedOrder = await response.json();
-        setOrders(orders.map(order => 
-          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
-          ? { ...order, ...updatedOrder }
-          : order
-        ));
-        closeModalEdit();
-      } else {
-        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
-      }
-    } catch (error) {
-      console.error("Errore:", error);
-    }
-  };
+ 
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
@@ -175,7 +148,35 @@ const handlePrevPage = () => {
   };
 
 
+  const handleUpdateOrder = async () => {
+    
+    if (!selectedOrder) return;
 
+    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
+    try {
+      const response = await fetch(API_URL, {
+        method: 'PUT',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const updatedOrder = await response.json();
+        setOrders(orders.map(order => 
+          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
+          ? { ...order, ...updatedOrder }
+          : order
+        ));
+        closeModalEdit();
+        fetchOrders();
+      } else {
+        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+    }
+  };
  
    // Fetch detailed order for a specific idDettaglioOrdine
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
@@ -307,6 +308,7 @@ const handlePrevPage = () => {
         }
         setdeleteId(0);
         fetchOrders();
+        setCurrentPage(1);
       } else {
         console.error('Error deleting order:', response.status);
       }
