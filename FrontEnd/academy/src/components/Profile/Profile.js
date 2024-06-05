@@ -8,7 +8,7 @@ import Navbar from '../Navbar/Navbar';
 const Profile = () => {
 
         return (
-            <div className='dashboard'>
+            <div className='profile_container'>
                 <Navbar/>
             </div>
         );
