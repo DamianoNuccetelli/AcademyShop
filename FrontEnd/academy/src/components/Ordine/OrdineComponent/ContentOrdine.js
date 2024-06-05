@@ -1,13 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 
 const ContentOrdine = () => {
+
+  const userId = localStorage.getItem('userId');
+  const [orders, setOrders] = useState([]);
+  
+  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
+  const [detailedOrders, setDetailedOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
-  const [quantità, setQuantità] = useState(1);
+  const [quantità, setQuantità] = useState(0);
+
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5; 
+  const indexOfLastProduct = currentPage * ordersPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
+  const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+    }
+};
+
+const handlePrevPage = () => {
+    if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+    }
+};
+
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
@@ -28,6 +60,34 @@ const ContentOrdine = () => {
     setModalIsOpen2(false);
   };
 
+  const fetchOrders = async () => {
+    const API_URL = `https://localhost:7031/orders?userId=${userId}`;
+    try {
+      const response = await fetch(API_URL);
+      if (response.ok) {
+        const data = await response.json();
+        setOrders(data);
+        console.log("Ordini: ", data);
+        const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
+        setOrdineDettaglioArray(OrdineDettaglioArray);
+        
+        console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
+      } else {
+        console.error("Error fetching orders:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders(); 
+  }, []);
+
+  useEffect(() => {
+    fetchOrders(); 
+  }, [userId]);
+
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
     console.log("addOrdine: ", idUtente, idProdotto, quantitàProdotto);
@@ -46,8 +106,12 @@ const ContentOrdine = () => {
       });
 
       if (response.ok) {
+        fetchOrders();
+        setCurrentPage(totalPages);
+       
         console.log('Ordine aggiunto con successo', response.status);
       } else {
+        setSearchTerm('');
         console.error('Errore durante l\'aggiunta dell\'ordine:', response.status);
       }
     } catch (error) {
@@ -55,44 +119,9 @@ const ContentOrdine = () => {
     }
   };
 
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId');
-  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
-  const [detailedOrders, setDetailedOrders] = useState([]);
-  
+
 
  
-  
-//
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const API_URL = `https://localhost:7031/orders?userId=${userId}`;
-      try {
-        const response = await fetch(API_URL);
-        if (response.ok) {
-          const data = await response.json();
-          setOrders(data);
-          console.log("Ordini: ", data);
-          const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
-          setOrdineDettaglioArray(OrdineDettaglioArray);
-          
-          console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
-        } else {
-          console.error("Error fetching orders:", response.status);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchOrders();
-  }, [userId]);
-
    // Fetch detailed order for a specific idDettaglioOrdine
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
     const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
@@ -113,7 +142,6 @@ const ContentOrdine = () => {
   };
   
 
-  // const OrderDetailComponent = () => {
     const [orderDetail, setOrderDetail] = useState(null);
   
     useEffect(() => {
@@ -157,6 +185,7 @@ const ContentOrdine = () => {
       const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
+        setSearchTerm('');
         setProdotti(data);
         openModal(); // Call openModal after fetching products
       } else {
@@ -165,10 +194,6 @@ const ContentOrdine = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const handleProductChange = (event) => {
-    setSelectedProduct(event.target.value);
   };
 
   const handleSearchChange = (event) => {
@@ -203,6 +228,8 @@ const ContentOrdine = () => {
     setSelectedProduct(product.id);
     setShowDropdown(false);
   };
+
+ 
 
   return (
     <div className="header">
@@ -282,6 +309,15 @@ const ContentOrdine = () => {
       <div className="products_container_ordine">
         <div className="all_products_div">
           <h2>Tutti i prodotti</h2>
+          <div className='pagination'>
+                  <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                      <FontAwesomeIcon icon={faChevronLeft} />
+                  </button>
+                  <span className='pagination_number'>{currentPage}/{totalPages}</span>
+                  <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                      <FontAwesomeIcon icon={faChevronRight} />
+                  </button>
+            </div>
         </div>
         <table>
           <thead>
@@ -297,7 +333,7 @@ const ContentOrdine = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, index) => (
+            {order.map((order, index) => (
               <tr key={index}>
                 <td>{order.prodottoNome}</td>
                 <td>{order.prodottoDescrizione}</td>

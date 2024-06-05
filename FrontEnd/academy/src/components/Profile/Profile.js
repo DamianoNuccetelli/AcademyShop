@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faPenToSquare, faMultiply } from '@fortawesome/free-solid-svg-icons'; 
+import React from 'react';
 import './Profile.css';
-import Modal from 'react-modal';
 import Navbar from '../Navbar/Navbar';
-import User from '../User/User';
+import HomeProfile from './HomeProfile/HomeProfile';
+
 
 const Profile = () => {
-
-        return (
-            <div className='dashboard'>
-                <Navbar/>
-                <User/>
-            </div>
-        );
+    return (
+        <div className='dashboard'>
+            <Navbar />
+            <HomeProfile />
+        </div>
+    );
 };
 
 export default Profile;
+
