@@ -11,7 +11,7 @@ namespace DataLayer.Repository
     public interface IRepositoryOrdine
     {
         //Renato
-        Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId);
+        Task<List<OrdineDettaglioDTOperGetALL>> GetOrdiniByUserId(int userId);
         //Gabriele
         Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId);
         Task<string?> GetUserPassword(int userId);

@@ -43,7 +43,7 @@ namespace BusinessLayer
                 throw new Exception("errore durante recupero id utente nel business layer", ex);
             }
         }
-        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+        public async Task<List<OrdineDettaglioDTOperGetALL>> GetOrdiniByUserId(int userId)
         {
             try
             {

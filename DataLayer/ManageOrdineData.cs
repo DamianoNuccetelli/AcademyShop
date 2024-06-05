@@ -24,7 +24,7 @@ namespace DataLayer
         }
 
         //Florea Renato 
-        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+        public async Task<List<OrdineDettaglioDTOperGetALL>> GetOrdiniByUserId(int userId)
         {
             return await _repositoryOrdine.GetOrdiniByUserId(userId);
         }
