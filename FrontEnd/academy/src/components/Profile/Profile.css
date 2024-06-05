@@ -1,4 +1,8 @@
-.profile_container{
-    width: 86%;
-    margin: 2% 4% 2 2%;
+.dashboard{
+    width: 100%; 
+    display: flex;
+    background-color: #fff;
+    height: 100vh;
+    background-color: #001692;
+    background: linear-gradient(to right, #ffffff, #adb9ff);
 }
