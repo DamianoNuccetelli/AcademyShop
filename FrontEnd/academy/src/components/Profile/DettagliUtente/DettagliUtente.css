@@ -1,22 +1,83 @@
-.container_dettagliUtente{
+.container_dettagliUtente {
     width: 71%;
-    background-color: red;
 }
 
-.form_container{
+.form_container {
     display: flex;
-    width: 100%;
+    width: 50%;
     align-items: center;
     justify-content: center;
     color: #361d6f;
     flex-direction: column;
 }
 
-.form_container img{
-    width: 100px;
-    height: 100px;
+.form_container img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 3px solid #000;
     box-sizing: border-box;
     padding: 5px;
+    background-color: #fff;
+    margin: 2% 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flex_row {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+}
+
+.flex_row_single {
+    display: block;
+    margin: 1% 0;
+}
+
+.flex_row_button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+select {
+    margin: 1% 0;
+    width: 250px;
+    height: 40px;
+    padding: 10px;
+    font-size: 14px;
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    transition: border-color 0.3s ease;
+    margin: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #361d6f;
+}
+
+input[type="button"] {
+    background-color: #361d6f;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 250px;
+    margin: 5px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+input[type="button"]:hover {
+    background-color: green;
 }
