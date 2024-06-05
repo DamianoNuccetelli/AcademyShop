@@ -14,6 +14,7 @@ const ContentOrdine = () => {
   const [detailedOrders, setDetailedOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
   const [quantità, setQuantità] = useState(0);
+  const [deleteId, setdeleteId] = useState(0);
 
   const [selectedProduct, setSelectedProduct] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,11 +44,16 @@ const handlePrevPage = () => {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
+  const openModalDelete = () => {
+    setModalDelete(true);
+  };
+  
   const openModal2 = () => {
     setModalIsOpen2(true);
   };
@@ -58,6 +64,10 @@ const handlePrevPage = () => {
 
   const closeModal2 = () => {
     setModalIsOpen2(false);
+  };
+
+  const closeModalDelete= () => {
+    setModalDelete(false);
   };
 
   const fetchOrders = async () => {
@@ -229,7 +239,37 @@ const handlePrevPage = () => {
     setShowDropdown(false);
   };
 
- 
+  const deletePopUp = async (idDettaglioOrdine) => {
+    setdeleteId(idDettaglioOrdine);
+    openModalDelete();
+  }
+  const deleteOrdine = async () => {
+    closeModalDelete();
+    const API_URL = `https://localhost:7031/orders/${deleteId}?idUtente=${userId}`;
+    try {
+      const response = await fetch(API_URL, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        const text = await response.text();
+  
+        if (text) {
+          const data = JSON.parse(text);
+          console.log(data);
+        } else {
+          console.log('Empty response');
+        }
+        setdeleteId(0);
+        fetchOrders();
+      } else {
+        console.error('Error deleting order:', response.status);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
 
   return (
     <div className="header">
@@ -270,7 +310,7 @@ const handlePrevPage = () => {
                 onKeyDown={handleKeyDown}
                 placeholder="Search..."
               />
-              {showDropdown && filteredProducts.length > 0 && (
+               {showDropdown && filteredProducts.length > 0 && (
                 <ul className="dropdown-list">
                   {filteredProducts.map((product, index) => (
                     <li
@@ -302,6 +342,24 @@ const handlePrevPage = () => {
             className="close-button"
           >
             Submit
+          </button>
+        </div>
+      </Modal>
+      
+      <Modal
+        isOpen={modalDelete}
+        ariaHideApp={false}
+        onRequestClose={closeModalDelete}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <div className="popup-content">
+          <h2>Vuoi Eliminare?</h2>
+          <button onClick={closeModalDelete} className="close-button">
+            Close
+          </button>
+          <button onClick={() => deleteOrdine()} className="delete-button">
+            Delete
           </button>
         </div>
       </Modal>
@@ -347,7 +405,7 @@ const handlePrevPage = () => {
                   {new Date(order.dataAggiornamento).toLocaleDateString()}
                 </td>
                 <td>
-                  <button>Delete</button>
+                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)}> Delete</button>
                   <button
                     onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}
                   >
