@@ -101,11 +101,7 @@ namespace BusinessLayer
                 throw new Exception("Errore nell'esecuzione del programma: ----> " + ex.Message);
             }
         }
-        public async Task<DettaglioOrdine> getOrdineDetails(int idDettaglioOrdine)
-        {
-            var dettaglioOrdine = await oODL.RecuperaDettaglioOrdineAsync(idDettaglioOrdine);
-            return dettaglioOrdine;
-        }
+        
         
         //DAMIANO
         public async Task<(bool success, string message, int statusCode, OrdineModificatoDTO? ordineModificato)> ModificaOrdineCompletaAsync(int idUtente, int idDettaglioOrdine, int quantita)
