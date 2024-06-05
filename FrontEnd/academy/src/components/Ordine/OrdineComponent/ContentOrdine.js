@@ -5,6 +5,7 @@ import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 import './ContentOrdine.css'
+// import SfondoModalAcademyShop from '../../../img/SfondoModalAcademyShop.png';
 
 const ContentOrdine = () => {
 
@@ -186,8 +187,7 @@ const handlePrevPage = () => {
       if (response.ok) {
         const data = await response.json();
         setDetailedOrders(data);
-        console.log("Detailed OrderAAAAAAAAAA: ", data);
-        console.log("AAHAHAHAHAH");
+        console.log("Detailed Order: ", data);
         openModal2();
       } else {
         console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, response.status);
@@ -414,21 +414,21 @@ const handlePrevPage = () => {
         </div>
       </Modal>
 
-      {/* Modal Detail */}
+      {/* Modal Detail Gabriele */}
         <Modal
             isOpen={modalIsOpen2}
             ariaHideApp={false}
             onRequestClose={closeModal2}
-            overlayClassName="overlay"
-            className="modal"
+            overlayClassName="modal-overlay"
+            className="modal-detailsOrder text-bold-black"
           >
             <div className="popup-content">
               <h2>Dettagli Ordine</h2>
-              <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
-              <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
+              <p>Prodotto: {detailedOrders.prodottoNome}</p>
+              <p>Descrizione: {detailedOrders.prodottoDescrizione}</p>
               <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
               <p>Quantità: {detailedOrders.quantita}</p>
-              <p>Id Prodotto: {detailedOrders.prodottoId}</p>
+              {/* <p>Id Prodotto: {detailedOrders.prodottoId}</p> */}
               <p>
                 Data Registrazione:{" "}
                 {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
@@ -438,7 +438,7 @@ const handlePrevPage = () => {
                 {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
               </p>
               <div>     
-              <button onClick={closeModal2} className="close-button">Close</button>
+              <button onClick={closeModal2} className="close-button">Chiudi</button>
               </div>
             </div>
           </Modal>

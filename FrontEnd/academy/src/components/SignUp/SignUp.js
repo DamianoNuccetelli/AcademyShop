@@ -106,7 +106,7 @@ const SignUp = () => {
                 onRequestClose={closeModal}
                 contentLabel="Registrazione Completata"
                 ariaHideApp={false}
-                className="modal-login" // Assicurati di definire gli stili CSS per il modal
+                className="modal-login text-bold-black" // Assicurati di definire gli stili CSS per il modal
                 overlayClassName="modal-overlay" // Assicurati di definire gli stili CSS per l'overlay del modal
 
             >
