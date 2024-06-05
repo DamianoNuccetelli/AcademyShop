@@ -36,7 +36,8 @@ namespace DataLayer.Repository
                         ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
                         ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
                         Quantita = o.DettaglioOrdines.First().Quantita,
-                        IdDettaglioOrdine = o.Id
+                        IdDettaglioOrdine = o.DettaglioOrdines.First().Id,
+                        IdOrdine = o.Id
                     })
                     .ToListAsync();
 

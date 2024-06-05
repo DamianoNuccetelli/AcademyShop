@@ -16,6 +16,7 @@ namespace DtoLayer.Dto
         public DateTime DataRegistrazione { get; set; }
         public DateTime? DataAggiornamento { get; set; }
         public int IdDettaglioOrdine { get; set; }
+        public int IdOrdine { get; set; }
 
     }
 }
