@@ -13,24 +13,47 @@ const EliminaUtente = () => {
 
     const navigate = useNavigate();
     
-    const handleDelete = () => {
-        fetch(`https://localhost:7031/users/${userId}`, {
+    // const handleDelete = () => {
+    //     fetch(`https://localhost:7031/users/${userId}`, {
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok ' + response.statusText);
+    //         }
+    //         console.log('Account eliminato con successo:', response.statusText);
+    //         navigate('/Login');
+    //         window.location.reload();
+
+    //     })
+    //     .catch(error => {
+    //         console.error('Errore durante la cancellazione dell\'account:', error);
+    //     });
+    // };
+    const handleDelete = async () => {
+        try {
+          const response = await fetch(`https://localhost:7031/users/${userId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            console.log('Account eliminato con successo:', response.statusText);
-            navigate('/Login');
-        })
-        .catch(error => {
-            console.error('Errore durante la cancellazione dell\'account:', error);
-        });
-    };
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+      
+          console.log('Account eliminato con successo:', response.statusText);
+          navigate('/Login');
+          window.location.reload();
+        } catch (error) {
+          console.error('Errore durante la cancellazione dell\'account:', error);
+        }
+      };
+      
 
     return (
         <div className='form_container'>
