@@ -116,3 +116,7 @@
 .sign-up .input-row select {
     margin: 0;
 }
+
+.modal-login {
+    z-index: 1000;
+}
