@@ -71,7 +71,7 @@ const SignUp = () => {
 
     return (
         <div className="form-container sign-up">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <img src={logo} alt="Logo" />
                 <h1>Crea un Account</h1>
 
@@ -106,12 +106,12 @@ const SignUp = () => {
                 onRequestClose={closeModal}
                 contentLabel="Registrazione Completata"
                 ariaHideApp={false}
-                className="modal modal-login" // Assicurati di definire gli stili CSS per il modal
+                className="modal-login" // Assicurati di definire gli stili CSS per il modal
                 overlayClassName="modal-overlay" // Assicurati di definire gli stili CSS per l'overlay del modal
 
             >
                 <h2>Grazie per esserti iscritto!</h2>
-                <p>Esegui il login per verificare jchbhjsbhjsdjbdsbhjdsbcbjhcbjcbhjdshubla registrazione.</p>
+                <p>Esegui il login per verificare la registrazione.</p>
                 <button onClick={closeModal}>Chiudi</button>
             </Modal>
 
