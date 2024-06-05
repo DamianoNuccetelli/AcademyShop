@@ -8,6 +8,7 @@ import Login from './components/Login/Login';
 import SignUp from './components/SignUp/SignUp';
 import SignIn from './components/SignIn/SignIn';
 import Ordine from './components/Ordine/Ordine';
+import Profile from './components/Profile/Profile';
 
 
 const App = () => {
@@ -20,6 +21,8 @@ const App = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/ordine" element={<Ordine />} />
+            <Route path="/ordine" element={<Ordine />} />
+            <Route path="/profile" element={<Profile />} />
         </Routes>
         </>
     );
