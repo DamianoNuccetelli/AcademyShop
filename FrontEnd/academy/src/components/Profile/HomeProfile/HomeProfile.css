@@ -13,3 +13,15 @@
 .flex_utente{
     display: flex;
 }
+
+.image_section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.image_section img{
+    width: 90%;
+    height: 80%;
+}
