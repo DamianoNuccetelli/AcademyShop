@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import logo from '../../img/Proconsul-Services.png';
-import SignIn from '../SignIn/SignIn';
+import Modal from 'react-modal'
 
 const SignUp = () => {
     // Stato per ogni campo di input
@@ -16,9 +16,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [codiceFiscale, setCodiceFiscale] = useState('');
 
-    const [registrationMessage, setRegistrationMessage] = useState('');
-
-    
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const UrlApiRoot='https://localhost:7031/users';
 
@@ -58,21 +56,22 @@ const SignUp = () => {
 
             const data = await response.json();
             console.log("Risposta del server:", data); 
-            
-            // Se la registrazione è andata a buon fine, reindirizza l'utente alla pagina di login
-            window.location.reload();
-            setRegistrationMessage('Registrazione avvenuta con successo. Effettua il login per accedere.');
-
+                       
+            setIsModalOpen(true);
             
         } catch (error) {
             console.error('Si è verificato un errore durante la registrazione:', error);
-            setRegistrationMessage('Errore durante la registrazione. Riprova più tardi.');
         }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        window.location.reload();
     };
 
     return (
         <div className="form-container sign-up">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <img src={logo} alt="Logo" />
                 <h1>Crea un Account</h1>
 
@@ -101,8 +100,22 @@ const SignUp = () => {
                     <input type="text" placeholder="Codice fiscale" value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} />
                 </div>
                 <button type="submit" onClick={handleSubmit}>Registrati</button>
-                {registrationMessage && <p style={{ color: 'red' }} className="registration-message">{registrationMessage}</p>}
             </form>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Registrazione Completata"
+                ariaHideApp={false}
+                className="modal-login" // Assicurati di definire gli stili CSS per il modal
+                overlayClassName="modal-overlay" // Assicurati di definire gli stili CSS per l'overlay del modal
+
+            >
+                <h2>Grazie per esserti iscritto!</h2>
+                <p>Esegui il login per verificare la registrazione.</p>
+                <button onClick={closeModal}>Chiudi</button>
+            </Modal>
+
+
         </div>
     );
 };
