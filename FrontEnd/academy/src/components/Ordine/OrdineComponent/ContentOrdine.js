@@ -30,6 +30,9 @@ const ContentOrdine = () => {
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [newQuantity, setNewQuantity] = useState(1);
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
         setCurrentPage(currentPage + 1);
@@ -46,6 +49,7 @@ const handlePrevPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -69,6 +73,17 @@ const handlePrevPage = () => {
 
   const closeModalDelete= () => {
     setModalDelete(false);
+  };
+
+  const openModalEdit = (order) => {
+    setSelectedOrder(order);
+    setNewQuantity(order.quantita);
+    setModalEdit(true);
+  };
+
+  const closeModalEdit = () => {
+    setModalEdit(false);
+    setSelectedOrder(null);
   };
 
   const fetchOrders = async () => {
@@ -98,6 +113,8 @@ const handlePrevPage = () => {
   useEffect(() => {
     fetchOrders(); 
   }, [userId]);
+
+ 
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
@@ -131,7 +148,35 @@ const handlePrevPage = () => {
   };
 
 
+  const handleUpdateOrder = async () => {
+    
+    if (!selectedOrder) return;
 
+    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
+    try {
+      const response = await fetch(API_URL, {
+        method: 'PUT',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const updatedOrder = await response.json();
+        setOrders(orders.map(order => 
+          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
+          ? { ...order, ...updatedOrder }
+          : order
+        ));
+        closeModalEdit();
+        fetchOrders();
+      } else {
+        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+    }
+  };
  
    // Fetch detailed order for a specific idDettaglioOrdine
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
@@ -263,6 +308,7 @@ const handlePrevPage = () => {
         }
         setdeleteId(0);
         fetchOrders();
+        setCurrentPage(1);
       } else {
         console.error('Error deleting order:', response.status);
       }
@@ -359,7 +405,7 @@ const handlePrevPage = () => {
           <button onClick={closeModalDelete} className="close-button">
             Close
           </button>
-          <button onClick={() => deleteOrdine()} className="delete-button">
+          <button onClick={() => deleteOrdine()} className="close-button">
             Delete
           </button>
         </div>
@@ -437,7 +483,27 @@ const handlePrevPage = () => {
                     </div>
                     <button onClick={closeModal2} className="close-button">TEST</button>
                   </Modal>
-                  <button className='edit-button'><FontAwesomeIcon icon={faEdit}/></button>
+                  <button className='edit-button' onClick={() => openModalEdit(order)}><FontAwesomeIcon icon={faEdit}/></button>
+                  {modalEdit && (
+                  <Modal
+                    isOpen={modalEdit}
+                    ariaHideApp={false}
+                    onRequestClose={closeModalEdit}
+                    contentLabel="Edit Order"
+                  >
+                    <h2>Edit Order</h2>
+                    <label>
+                      Quantità:
+                      <input
+                        type="number"
+                        value={newQuantity}
+                        onChange={(e) => setNewQuantity(Number(e.target.value))}
+                      />
+                    </label>
+                    <button onClick={handleUpdateOrder}>Save</button>
+                    <button onClick={closeModalEdit}>Cancel</button>
+                  </Modal>
+                )}
                 </td>
               </tr>
             ))}
