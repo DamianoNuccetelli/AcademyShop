@@ -29,7 +29,7 @@ public partial class AcademyShopDBContext : DbContext
     public virtual DbSet<Utente> Utentes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=" + MachineName + ";Initial Catalog=AcademyShopDB;Integrated Security=True;TrustServerCertificate=true;Encrypt=True");
+        => optionsBuilder.UseSqlServer("Data Source=" + MachineName + ";Initial Catalog=AcademyShopDB;Integrated Security=True;TrustServerCertificate=true;Encrypt=True;MultipleActiveResultSets=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
