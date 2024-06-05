@@ -10,7 +10,6 @@ import SignIn from './components/SignIn/SignIn';
 import Ordine from './components/Ordine/Ordine';
 import Profile from './components/Profile/Profile';
 
-
 const App = () => {
     return (
         <>

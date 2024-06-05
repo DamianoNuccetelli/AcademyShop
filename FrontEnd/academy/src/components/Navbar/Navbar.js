@@ -19,26 +19,43 @@ const Navbar = () => {
   }
 
   const NavigateProfile = () => {
-    let path = `/Profile`
-    navigate(path)
+    let path = `/Profile`;
+    navigate(path);
   }
+
   const [classeProdotti, setClasseProdotti] = useState('prodotti');
+  const [blueIconProdotti, setBlueIconProdotti] = useState('user-icon');
+
   const [classeOrdini, setClasseOrdini] = useState('ordini');
   const [blueIconOrdini, setBlueIconOrdini] = useState('user-icon');
-  const [blueIconProdotti, setBlueIconProdotti] = useState('user-icon');
+
+  const [classeProfile, setClasseProfile] = useState('profile');
+  const [blueIconProfile, setBlueIconProfile] = useState('user-icon');
+
   const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === '/Dashboard') {
       setClasseProdotti('selected');
       setClasseOrdini('ordini');
+      setClasseProfile('profilo');
       setBlueIconProdotti('user-icon-selected');
       setBlueIconOrdini('user-icon');
+      setBlueIconProfile('user-icon');
     } else if (location.pathname === '/Ordine') {
       setClasseProdotti('prodotti');
       setClasseOrdini('selected');
+      setClasseProfile('profilo');
       setBlueIconProdotti('user-icon');
       setBlueIconOrdini('user-icon-selected');
+      setBlueIconProfile('user-icon');
+    } else if (location.pathname === '/Profile') {
+      setClasseProdotti('prodotti');
+      setClasseOrdini('ordini');
+      setClasseProfile('profilo selected');
+      setBlueIconProdotti('user-icon');
+      setBlueIconOrdini('user-icon');
+      setBlueIconProfile('user-icon-selected');
     }
   }, [location]);
 
@@ -51,8 +68,8 @@ const Navbar = () => {
         <hr className="separator" />
       </div>
       <div className="navbar_container">
-        <div className='profilo'>
-          <FontAwesomeIcon icon={faUserCircle} className="user-icon mb-20" />
+        <div className={classeProfile} onClick={NavigateProfile}>
+          <FontAwesomeIcon icon={faUserCircle}  className={blueIconProfile}/>
           <h4 className='mb-20'>Profilo</h4>
         </div>
         <div className={classeProdotti} onClick={NavigateProdotti}>
