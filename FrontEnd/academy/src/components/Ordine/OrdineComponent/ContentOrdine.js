@@ -392,7 +392,8 @@ const handlePrevPage = () => {
           </button>
         </div>
       </Modal>
-      
+
+      {/* Modal Delete */}
       <Modal
         isOpen={modalDelete}
         ariaHideApp={false}
@@ -410,6 +411,61 @@ const handlePrevPage = () => {
           </button>
         </div>
       </Modal>
+
+      {/* Modal Detail */}
+        <Modal
+            isOpen={modalIsOpen2}
+            ariaHideApp={false}
+            onRequestClose={closeModal2}
+            overlayClassName="overlay"
+            className="modal"
+          >
+            <div className="popup-content">
+              <h2>Dettagli Ordine</h2>
+              <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
+              <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
+              <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
+              <p>Quantità: {detailedOrders.quantita}</p>
+              <p>Id Prodotto: {detailedOrders.prodottoId}</p>
+              <p>
+                Data Registrazione:{" "}
+                {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
+              </p>
+              <p>
+                Data Aggiornamento:{" "}
+                {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
+              </p>
+              <div>     
+              <button onClick={closeModal2} className="close-button">Close</button>
+              </div>
+            </div>
+          </Modal>
+
+            {/* Modal Edit */}
+            {modalEdit && (
+            <Modal
+              isOpen={modalEdit}
+              ariaHideApp={true}
+              onRequestClose={closeModalEdit}
+              contentLabel="Edit Order"
+              overlayClassName="overlay"
+              className="modal"
+            >
+              <div className="popup-content">
+              <h2>Edit Order</h2>
+              <label>
+                Quantità:
+                <input
+                  type="number"
+                  value={newQuantity}
+                  onChange={(e) => setNewQuantity(Number(e.target.value))}
+                />
+              </label>
+              <button onClick={handleUpdateOrder}  className="close-button">Save</button>
+              <button onClick={closeModalEdit}  className="close-button">Cancel</button>
+              </div>
+            </Modal>
+          )}
 
       <div className="products_container_ordine">
         <div className="all_products_div">
@@ -458,60 +514,7 @@ const handlePrevPage = () => {
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <Modal
-                    isOpen={modalIsOpen2}
-                    ariaHideApp={false}
-                    onRequestClose={closeModal2}
-                    overlayClassName="overlay"
-                    className="modal"
-                  >
-                    <div className="popup-content">
-                      <h2>Dettagli Ordine</h2>
-                      <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
-                      <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
-                      <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
-                      <p>Quantità: {detailedOrders.quantita}</p>
-                      <p>Id Prodotto: {detailedOrders.prodottoId}</p>
-                      <p>
-                        Data Registrazione:{" "}
-                        {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
-                      </p>
-                      <p>
-                        Data Aggiornamento:{" "}
-                        {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
-                      </p>
-                      <div>     
-                     <button onClick={closeModal2} className="close-button">Close</button>
-                     </div>
-                    </div>
-                   
-        
-                  </Modal>
                   <button className='edit-button' onClick={() => openModalEdit(order)}><FontAwesomeIcon icon={faEdit}/></button>
-                  {modalEdit && (
-                  <Modal
-                    isOpen={modalEdit}
-                    ariaHideApp={true}
-                    onRequestClose={closeModalEdit}
-                    contentLabel="Edit Order"
-                    overlayClassName="overlay"
-                    className="modal"
-                  >
-                    <div className="popup-content">
-                    <h2>Edit Order</h2>
-                    <label>
-                      Quantità:
-                      <input
-                        type="number"
-                        value={newQuantity}
-                        onChange={(e) => setNewQuantity(Number(e.target.value))}
-                      />
-                    </label>
-                    <button onClick={handleUpdateOrder}  className="close-button">Save</button>
-                    <button onClick={closeModalEdit}  className="close-button">Cancel</button>
-                    </div>
-                  </Modal>
-                )}
                 </td>
               </tr>
             ))}
