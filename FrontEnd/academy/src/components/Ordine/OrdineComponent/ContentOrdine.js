@@ -484,11 +484,11 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th style={{ width: '10%' }}>Descrizione Prodotto</th>
-              <th>Stato Ordine</th>
-              <th>Quantità</th>
-              <th>Data Registrazione</th>
-              <th>Data Aggiornamento</th>
+              <th style={{ width: '30%' }}>Descrizione Prodotto</th>
+              <th style={{ width: '10%' }}>Stato Ordine</th>
+              <th style={{ width: '10%' }}>Quantità</th>
+              <th style={{ width: '10%' }}>Data Registrazione</th>
+              <th style={{ width: '10%' }}>Data Aggiornamento</th>
               <th>Azioni</th>
             </tr>
           </thead>
