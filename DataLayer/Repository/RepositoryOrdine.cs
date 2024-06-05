@@ -21,13 +21,13 @@ namespace DataLayer.Repository
         }
 
         //Renato
-        public async Task<List<OrdineDettaglioDTOperGET>> GetOrdiniByUserId(int userId)
+        public async Task<List<OrdineDettaglioDTOperGetALL>> GetOrdiniByUserId(int userId)
         {
             try
             {
                 var ordini = await _context.Ordines
                     .Where(o => o.FkIdUtente == userId)
-                    .Select(o => new OrdineDettaglioDTOperGET
+                    .Select(o => new OrdineDettaglioDTOperGetALL
                     {
                         ProdottoNome = o.DettaglioOrdines.First().FkIdProdottoNavigation.Nome,
                         DataRegistrazione = o.DataRegistrazione,
@@ -35,7 +35,8 @@ namespace DataLayer.Repository
                         StatoOrdineDescrizione = o.FkIdStatoNavigation.Descrizione,
                         ProdottoId = o.DettaglioOrdines.First().FkIdProdottoNavigation.Id,
                         ProdottoDescrizione = o.DettaglioOrdines.First().FkIdProdottoNavigation.Descrizione,
-                        Quantita = o.DettaglioOrdines.First().Quantita
+                        Quantita = o.DettaglioOrdines.First().Quantita,
+                        IdDettaglioOrdine = o.Id
                     })
                     .ToListAsync();
 

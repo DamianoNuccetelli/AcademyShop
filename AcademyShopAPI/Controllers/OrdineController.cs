@@ -17,10 +17,12 @@ namespace AcademyShopAPI.Controllers
     public class OrdineController : ControllerBase
     {
         private readonly ManageOrdineBusiness oOBL;
+        private readonly AcademyShopDBContext _context;
 
-        public OrdineController(ManageOrdineBusiness _oOBL)
+        public OrdineController(ManageOrdineBusiness _oOBL, AcademyShopDBContext context)
         {
             oOBL = _oOBL;
+            _context = context;
         }
         //Gabriele
         [HttpGet("orders/{idOrderDetail}")]
@@ -37,7 +39,6 @@ namespace AcademyShopAPI.Controllers
             }
 
         }
-        
 
         //Florea Renato 
         [HttpGet("orders")]
