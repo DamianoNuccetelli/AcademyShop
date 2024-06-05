@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronLeft, faChevronRight, faEdit, faTrashCan, faEye } from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
+import './ContentOrdine.css'
 
 const ContentOrdine = () => {
 
@@ -405,11 +406,11 @@ const handlePrevPage = () => {
                   {new Date(order.dataAggiornamento).toLocaleDateString()}
                 </td>
                 <td>
-                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)}> Delete</button>
-                  <button
-                    onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}
-                  >
-                    Show
+                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
+                  <FontAwesomeIcon icon={faEye} />
                   </button>
                   <Modal
                     isOpen={modalIsOpen2}
@@ -436,7 +437,7 @@ const handlePrevPage = () => {
                     </div>
                     <button onClick={closeModal2} className="close-button">TEST</button>
                   </Modal>
-                  <button>Edit</button>
+                  <button className='edit-button'><FontAwesomeIcon icon={faEdit}/></button>
                 </td>
               </tr>
             ))}
