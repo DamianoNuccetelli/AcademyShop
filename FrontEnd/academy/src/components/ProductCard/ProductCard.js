@@ -60,6 +60,10 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
 
     const handleEditProduct = async (e) => {
         e.preventDefault();
+        if (newDescrizione.length > 50) {
+            alert("La descrizione non può superare i 50 caratteri.");
+            return;
+        }
         try {
             const response = await fetch(`https://localhost:7031/products/${id}`, {
                 method: 'PUT',
@@ -84,6 +88,7 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
             console.error('Error:', error);
         }
     };
+    
 
     return (
         <div className='card_container'>
