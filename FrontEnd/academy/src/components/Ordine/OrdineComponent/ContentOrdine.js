@@ -241,6 +241,7 @@ const handlePrevPage = () => {
       const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
+        setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
         openModal(); // Call openModal after fetching products
@@ -338,60 +339,61 @@ const handlePrevPage = () => {
           <img src={banner} alt="Logo" />
         </div>
       </div>
-
+     {/* Modal Create */}
       <Modal
-        isOpen={modalIsOpen}
-        ariaHideApp={false}
-        onRequestClose={closeModal}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <div className="popup-content">
-          <h2>Welcome to our Popup</h2>
-          <div>
-            <div className="search-bar-dropdown">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Search..."
-              />
-               {showDropdown && filteredProducts.length > 0 && (
-                <ul className="dropdown-list">
-                  {filteredProducts.map((product, index) => (
-                    <li
-                      key={index}
-                      className={index === activeIndex ? "active" : ""}
-                      onClick={() => handleClick(product)}
-                    >
-                      {product.nome}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div>
-              <input
-                type="number"
-                min="1"
-                placeholder="Quantità"
-                value={quantità}
-                onChange={handleQuantityChange}
-              />
-            </div>
+      isOpen={modalIsOpen}
+      ariaHideApp={false}
+      onRequestClose={closeModal}
+      className="modal"
+      overlayClassName="overlay"
+    >
+      <div className="popup-content">
+        <h2>Welcome to our Popup</h2>
+        <div>
+          <div className="search-bar-dropdown">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Search..."
+            />
+            {showDropdown && filteredProducts.length > 0 && (
+              <ul className="dropdown-list">
+                {filteredProducts.map((product, index) => (
+                  <li
+                    key={index}
+                    className={index === activeIndex ? 'active' : ''}
+                    onClick={() => handleClick(product)}
+                  >
+                    {product.nome}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <button onClick={closeModal} className="close-button">
-            Close
-          </button>
-          <button
-            onClick={() => addOrdine(userId, selectedProduct, quantità)}
-            className="close-button"
-          >
-            Submit
-          </button>
+          <div>
+            <input
+              type="number"
+              min="1"
+              placeholder="Quantità"
+              value={quantità}
+              onChange={handleQuantityChange}
+            />
+          </div>
         </div>
-      </Modal>
+        <button onClick={closeModal} className="close-button">
+          Close
+        </button>
+        <button
+          onClick={() => addOrdine(userId, selectedProduct, quantità)}
+          className="close-button"
+          disabled={!selectedProduct || !quantità}
+        >
+          Submit
+        </button>
+      </div>
+    </Modal>
 
       {/* Modal Delete */}
       <Modal
