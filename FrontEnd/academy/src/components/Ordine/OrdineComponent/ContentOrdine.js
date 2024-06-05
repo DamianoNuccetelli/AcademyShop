@@ -62,7 +62,13 @@ const ContentOrdine = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem('userId');
+  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
+  const [detailedOrders, setDetailedOrders] = useState([]);
+  
 
+ 
+  
+//
   useEffect(() => {
     const fetchOrders = async () => {
       const API_URL = `https://localhost:7031/orders?userId=${userId}`;
@@ -71,6 +77,11 @@ const ContentOrdine = () => {
         if (response.ok) {
           const data = await response.json();
           setOrders(data);
+          console.log("Ordini: ", data);
+          const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
+          setOrdineDettaglioArray(OrdineDettaglioArray);
+          
+          console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
         } else {
           console.error("Error fetching orders:", response.status);
         }
@@ -80,7 +91,53 @@ const ContentOrdine = () => {
     };
 
     fetchOrders();
-  }, [addOrdine]);
+  }, [userId]);
+
+   // Fetch detailed order for a specific idDettaglioOrdine
+  const fetchDetailedOrder = async (idDettaglioOrdine) => {
+    const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
+    try {
+      const response = await fetch(API_URL);
+      if (response.ok) {
+        const data = await response.json();
+        setDetailedOrders(data);
+        console.log("Detailed OrderAAAAAAAAAA: ", data);
+        console.log("AAHAHAHAHAH");
+        openModal2();
+      } else {
+        console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, response.status);
+      }
+    } catch (error) {
+      console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, error);
+    }
+  };
+  
+
+  // const OrderDetailComponent = () => {
+    const [orderDetail, setOrderDetail] = useState(null);
+  
+    useEffect(() => {
+      const fetchOrderDetail = async () => {
+        const API_URL = `https://localhost:7031/orders/${OrdineDettaglioArray}?userId=${userId}`;
+        try {
+          const response = await fetch(API_URL);
+          if (response.ok) {
+            
+            const data = await response.json();
+            setOrderDetail(data);
+            console.log("Order detail: ", data);
+
+          } else {
+            console.error("Error fetching order detail:", response.status);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+  
+      fetchOrderDetail();
+    }, []);
+
 
   useEffect(() => {
     if (searchTerm === '') {
@@ -149,17 +206,21 @@ const ContentOrdine = () => {
 
   return (
     <div className="header">
-      <div className='title_container_ordine'>
-        <div className='title_text'>
+      <div className="title_container_ordine">
+        <div className="title_text">
           <h1>Ordini</h1>
           <h2>Ordini di Mario</h2>
         </div>
       </div>
-      <div className='welcome_container_ordine'>
-        <div className='add_container_ordine'>
-          <FontAwesomeIcon icon={faPlus} className="plus-icon" onClick={() => getProducts(userId)} />
+      <div className="welcome_container_ordine">
+        <div className="add_container_ordine">
+          <FontAwesomeIcon
+            icon={faPlus}
+            className="plus-icon"
+            onClick={() => getProducts(userId)}
+          />
         </div>
-        <div className='banner_container'>
+        <div className="banner_container">
           <img src={banner} alt="Logo" />
         </div>
       </div>
@@ -187,7 +248,7 @@ const ContentOrdine = () => {
                   {filteredProducts.map((product, index) => (
                     <li
                       key={index}
-                      className={index === activeIndex ? 'active' : ''}
+                      className={index === activeIndex ? "active" : ""}
                       onClick={() => handleClick(product)}
                     >
                       {product.nome}
@@ -206,14 +267,20 @@ const ContentOrdine = () => {
               />
             </div>
           </div>
-          <button onClick={closeModal} className="close-button">Close</button>
-          <button onClick={() => addOrdine(userId, selectedProduct, quantità)} className="close-button">Submit</button>
+          <button onClick={closeModal} className="close-button">
+            Close
+          </button>
+          <button
+            onClick={() => addOrdine(userId, selectedProduct, quantità)}
+            className="close-button"
+          >
+            Submit
+          </button>
         </div>
       </Modal>
 
-
-      <div className='products_container_ordine'>
-        <div className='all_products_div'>
+      <div className="products_container_ordine">
+        <div className="all_products_div">
           <h2>Tutti i prodotti</h2>
         </div>
         <table>
@@ -237,11 +304,19 @@ const ContentOrdine = () => {
                 <td>{order.statoOrdineDescrizione}</td>
                 <td>{order.quantita}</td>
                 <td>{order.prodottoId}</td>
-                <td>{new Date(order.dataRegistrazione).toLocaleDateString()}</td>
-                <td>{new Date(order.dataAggiornamento).toLocaleDateString()}</td>
+                <td>
+                  {new Date(order.dataRegistrazione).toLocaleDateString()}
+                </td>
+                <td>
+                  {new Date(order.dataAggiornamento).toLocaleDateString()}
+                </td>
                 <td>
                   <button>Delete</button>
-                  <button onClick={openModal2}>Show</button>
+                  <button
+                    onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}
+                  >
+                    Show
+                  </button>
                   <Modal
                     isOpen={modalIsOpen2}
                     ariaHideApp={false}
@@ -251,15 +326,21 @@ const ContentOrdine = () => {
                   >
                     <div className="popup-content">
                       <h2>Dettagli Ordine</h2>
-                      <p>Nome Prodotto: {order.prodottoNome}</p>
-                      <p>Descrizione Prodotto: {order.prodottoDescrizione}</p>
-                      <p>Stato Ordine: {order.statoOrdineDescrizione}</p>
-                      <p>Quantità: {order.quantita}</p>
-                      <p>Id Prodotto: {order.prodottoId}</p>
-                      <p>Data Registrazione: {new Date(order.dataRegistrazione).toLocaleDateString()}</p>
-                      <p>Data Aggiornamento: {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
-                      <button onClick={closeModal2}>Close</button>
+                      <p>Nome Prodotto: {detailedOrders.prodottoNome}</p>
+                      <p>Descrizione Prodotto: {detailedOrders.prodottoDescrizione}</p>
+                      <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
+                      <p>Quantità: {detailedOrders.quantita}</p>
+                      <p>Id Prodotto: {detailedOrders.prodottoId}</p>
+                      <p>
+                        Data Registrazione:{" "}
+                        {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
+                      </p>
+                      <p>
+                        Data Aggiornamento:{" "}
+                        {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
+                      </p>
                     </div>
+                    <button onClick={closeModal2} className="close-button">TEST</button>
                   </Modal>
                   <button>Edit</button>
                 </td>
