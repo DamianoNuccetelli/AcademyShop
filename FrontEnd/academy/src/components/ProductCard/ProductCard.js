@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 const ProductCard = ({ name, price }) => {
 
     const [modalIsOpenEditProduct, setModalIsOpenEditProduct] = useState(false);
+    const [modalIsOpenDeleteProduct, setModalIsOpenDeleteProduct] = useState(false);
 
     const openModalEditProduct = () => {
         setModalIsOpenEditProduct(true);
@@ -14,6 +15,14 @@ const ProductCard = ({ name, price }) => {
 
     const closeModalEditProduct = () => {
         setModalIsOpenEditProduct(false);
+    };
+
+    const openModalDeleteProduct = () => {
+        setModalIsOpenDeleteProduct(true);
+    };
+
+    const closeModalDeleteProduct = () => {
+        setModalIsOpenDeleteProduct(false);
     };
 
     return (
@@ -28,7 +37,7 @@ const ProductCard = ({ name, price }) => {
                     <p><strong>Quantità</strong>: 2</p>
                     <div className='buttons'>
                         <FontAwesomeIcon icon={faPenToSquare} className='icon' onClick={openModalEditProduct} />
-                        <FontAwesomeIcon icon={faMultiply} className='icon icon-red' />
+                        <FontAwesomeIcon icon={faMultiply} className='icon icon-red' onClick={openModalDeleteProduct} />
                     </div>
 
                     <Modal
@@ -39,11 +48,26 @@ const ProductCard = ({ name, price }) => {
                         ariaHideApp={false}
                     >
                         <div className="popup-content">
-                            <h2>Welcome to our Popup</h2>
-                            <p>This is a modern popup design example.</p>
+                            <h2>Popup per MODIFICARE il prodotto</h2>
+                            <p>Qui va inserito il form.</p>
                             <button onClick={closeModalEditProduct} className="close-button">Close</button>
                         </div>
                     </Modal>
+
+                    <Modal
+                        isOpen={modalIsOpenDeleteProduct}
+                        onRequestClose={closeModalDeleteProduct}
+                        className="modal"
+                        overlayClassName="overlay"
+                        ariaHideApp={false}
+                    >
+                        <div className="popup-content">
+                            <h2>Popup per ELIMINARE il prodotto</h2>
+                            <p>Qui va ELIMINATO il form.</p>
+                            <button onClick={closeModalDeleteProduct} className="close-button">Close</button>
+                        </div>
+                    </Modal>
+
 
                 </div>
             </div>
