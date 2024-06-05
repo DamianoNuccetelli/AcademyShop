@@ -1,6 +1,6 @@
 .header {
     width: 86%;
-    margin: 2% 4% 2 2%;
+    margin: 2% 4% 2% 2%;
 }
 
 .header img {
@@ -27,7 +27,7 @@
     margin-bottom: 2%;
 }
 
-.title_text h2{
+.title_text h2 {
     color: #361d6f;
 }
 
@@ -72,36 +72,38 @@
     margin-bottom: 2%;
 }
 
-.buttons {
+.pagination {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
-.button {
+.pagination button {
     background-color: #361d6f;
-    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.button:hover {
-    background-color: #2b155a;
-    transform: scale(1.05);
+.pagination button:disabled {
+    background-color: #6035c5;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .products {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
-
-
-
-
-
 
 .modal {
     position: absolute;
