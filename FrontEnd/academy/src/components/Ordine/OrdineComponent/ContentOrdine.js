@@ -504,8 +504,12 @@ const handlePrevPage = () => {
                 <td>
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
-                <td>
-                  {new Date(order.dataAggiornamento).toLocaleDateString()}
+                <td>{order.dataAggiornamento == null ? (
+                    <p>Non aggiornato</p>
+                    ) : (
+                     <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
+                     )}
+                
                 </td>
                 <td>
                   <div className='icons-container'>
