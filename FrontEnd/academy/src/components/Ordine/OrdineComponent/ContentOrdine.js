@@ -484,10 +484,9 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th>Descrizione Prodotto</th>
+              <th style={{ width: '10%' }}>Descrizione Prodotto</th>
               <th>Stato Ordine</th>
               <th>Quantità</th>
-              <th>Id Prodotto</th>
               <th>Data Registrazione</th>
               <th>Data Aggiornamento</th>
               <th>Azioni</th>
@@ -500,7 +499,6 @@ const handlePrevPage = () => {
                 <td>{order.prodottoDescrizione}</td>
                 <td>{order.statoOrdineDescrizione}</td>
                 <td>{order.quantita}</td>
-                <td>{order.prodottoId}</td>
                 <td>
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
@@ -508,13 +506,17 @@ const handlePrevPage = () => {
                   {new Date(order.dataAggiornamento).toLocaleDateString()}
                 </td>
                 <td>
-                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  <div className='icons-container'>
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <button className='edit-button' onClick={() => openModalEdit(order)}><FontAwesomeIcon icon={faEdit}/></button>
+                  <button className='edit-button' onClick={() => openModalEdit(order)}>
+                    <FontAwesomeIcon icon={faEdit}/>
+                    </button>
+                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  </div>
                 </td>
               </tr>
             ))}
