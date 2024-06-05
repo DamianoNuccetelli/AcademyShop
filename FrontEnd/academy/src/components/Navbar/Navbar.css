@@ -99,9 +99,20 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background-color: #fff;
+    background: linear-gradient(to left, transparent 50%, #fff 50%);
+    background-size: 200% 100%; /* Estendere il gradiente su tutta la larghezza */
     border-radius: 5px;
     margin-bottom: 20px;
+    transition: all 0.8s ease;
+    animation: openFromLeft 0.8s ease forwards;
+}
+@keyframes openFromLeft {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
 }
 .user-icon-selected{
     border-radius: 50%;
