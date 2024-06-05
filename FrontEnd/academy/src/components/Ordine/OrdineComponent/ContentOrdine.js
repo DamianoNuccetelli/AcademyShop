@@ -1,13 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 
 const ContentOrdine = () => {
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const userId = localStorage.getItem('userId');
+  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
+  const [detailedOrders, setDetailedOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
   const [quantità, setQuantità] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5; 
+
+ 
+  const indexOfLastProduct = currentPage * ordersPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
+  const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
+  
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+    }
+};
+
+const handlePrevPage = () => {
+    if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+    }
+};
+
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
@@ -54,17 +85,6 @@ const ContentOrdine = () => {
       console.error('Errore:', error);
     }
   };
-
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId');
-  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
-  const [detailedOrders, setDetailedOrders] = useState([]);
-  
 
  
   
@@ -204,6 +224,8 @@ const ContentOrdine = () => {
     setShowDropdown(false);
   };
 
+ 
+
   return (
     <div className="header">
       <div className="title_container_ordine">
@@ -282,6 +304,15 @@ const ContentOrdine = () => {
       <div className="products_container_ordine">
         <div className="all_products_div">
           <h2>Tutti i prodotti</h2>
+          <div className='pagination'>
+                  <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                      <FontAwesomeIcon icon={faChevronLeft} />
+                  </button>
+                  <span className='pagination_number'>{currentPage}/{totalPages}</span>
+                  <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                      <FontAwesomeIcon icon={faChevronRight} />
+                  </button>
+            </div>
         </div>
         <table>
           <thead>
@@ -297,7 +328,7 @@ const ContentOrdine = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, index) => (
+            {order.map((order, index) => (
               <tr key={index}>
                 <td>{order.prodottoNome}</td>
                 <td>{order.prodottoDescrizione}</td>
