@@ -6,25 +6,26 @@ import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 
 const ContentOrdine = () => {
+
+  const userId = localStorage.getItem('userId');
+  const [orders, setOrders] = useState([]);
+  
+  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
+  const [detailedOrders, setDetailedOrders] = useState([]);
+  const [prodotti, setProdotti] = useState([]);
+  const [quantità, setQuantità] = useState(0);
+
   const [selectedProduct, setSelectedProduct] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId');
-  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
-  const [detailedOrders, setDetailedOrders] = useState([]);
-  const [prodotti, setProdotti] = useState([]);
-  const [quantità, setQuantità] = useState(1);
+
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5; 
-
- 
   const indexOfLastProduct = currentPage * ordersPerPage;
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
-  
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
   const handleNextPage = () => {
@@ -59,6 +60,34 @@ const handlePrevPage = () => {
     setModalIsOpen2(false);
   };
 
+  const fetchOrders = async () => {
+    const API_URL = `https://localhost:7031/orders?userId=${userId}`;
+    try {
+      const response = await fetch(API_URL);
+      if (response.ok) {
+        const data = await response.json();
+        setOrders(data);
+        console.log("Ordini: ", data);
+        const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
+        setOrdineDettaglioArray(OrdineDettaglioArray);
+        
+        console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
+      } else {
+        console.error("Error fetching orders:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders(); 
+  }, []);
+
+  useEffect(() => {
+    fetchOrders(); 
+  }, [userId]);
+
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
     console.log("addOrdine: ", idUtente, idProdotto, quantitàProdotto);
@@ -77,8 +106,11 @@ const handlePrevPage = () => {
       });
 
       if (response.ok) {
+        fetchOrders();
+       
         console.log('Ordine aggiunto con successo', response.status);
       } else {
+        setSearchTerm('');
         console.error('Errore durante l\'aggiunta dell\'ordine:', response.status);
       }
     } catch (error) {
@@ -86,33 +118,9 @@ const handlePrevPage = () => {
     }
   };
 
+
+
  
-  
-//
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const API_URL = `https://localhost:7031/orders?userId=${userId}`;
-      try {
-        const response = await fetch(API_URL);
-        if (response.ok) {
-          const data = await response.json();
-          setOrders(data);
-          console.log("Ordini: ", data);
-          const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
-          setOrdineDettaglioArray(OrdineDettaglioArray);
-          
-          console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
-        } else {
-          console.error("Error fetching orders:", response.status);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchOrders();
-  }, [userId]);
-
    // Fetch detailed order for a specific idDettaglioOrdine
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
     const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
@@ -133,7 +141,6 @@ const handlePrevPage = () => {
   };
   
 
-  // const OrderDetailComponent = () => {
     const [orderDetail, setOrderDetail] = useState(null);
   
     useEffect(() => {
@@ -177,6 +184,7 @@ const handlePrevPage = () => {
       const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
+        setSearchTerm('');
         setProdotti(data);
         openModal(); // Call openModal after fetching products
       } else {
@@ -185,10 +193,6 @@ const handlePrevPage = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const handleProductChange = (event) => {
-    setSelectedProduct(event.target.value);
   };
 
   const handleSearchChange = (event) => {
