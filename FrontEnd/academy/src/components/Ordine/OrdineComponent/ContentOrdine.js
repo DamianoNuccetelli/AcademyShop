@@ -5,6 +5,7 @@ import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
+import './ContentOrdine.css';
 
 
 // import SfondoModalAcademyShop from '../../../img/SfondoModalAcademyShop.png';
