@@ -4,6 +4,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import './OrdineCreate.css';
 
+import done from '../../../img/SfondoModalAcademyShop.png';
+
 const Ordine = ({onEndCreate}) => {
   const userId = localStorage.getItem('userId');
   const [orders, setOrders] = useState([]);
@@ -160,6 +162,7 @@ const result = (flag) => {
         overlayClassName="overlay"
       >
         <div className="popup-content">
+          <img src={done} alt="Done" className='modal_img'/>
           <h2 className='title_create'>Inserisci un nuovo ordine</h2>
           <div>
             <div className="search-bar-dropdown">

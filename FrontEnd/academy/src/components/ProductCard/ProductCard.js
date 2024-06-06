@@ -19,7 +19,7 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
                 <div className='quantity'>
                     <div className='crud_button'>
                         <p><strong>Quantità:</strong> {quantità}</p>
-                        <div className='ml_20'>
+                        <div className='flex-container'>
                             <EditProduct 
                                 id={id} 
                                 nome={nome} 

@@ -57,9 +57,8 @@
 
 .crud_button{
     display: flex;
-    width: 100%;
+    width: 100%; 
     justify-content: space-between;
-    
 }
 
 .crud_button .icon{
@@ -74,4 +73,8 @@
 .icon-red{
     color: rgb(236, 0, 0);
     margin-left: 10px;
+}
+
+.flex-container{
+    display: flex;
 }
