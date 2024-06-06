@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
-//import 'bootstrap/dist/css/bootstrap.css';
-import './OrdineCreate.css'
-const Ordine = () => {
+// import 'bootstrap/dist/css/bootstrap.css';
+import './OrdineCreate.css';
 
+const Ordine = ({onEndCreate}) => {
   const userId = localStorage.getItem('userId');
   const [orders, setOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
@@ -16,13 +16,13 @@ const Ordine = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 5; 
+  const ordersPerPage = 5;
   const indexOfLastProduct = currentPage * ordersPerPage;
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -39,7 +39,6 @@ const Ordine = () => {
         const data = await response.json();
         setOrders(data);
         console.log("Ordini: ", data);
-                   
       } else {
         console.error("Error fetching orders:", response.status);
       }
@@ -49,11 +48,11 @@ const Ordine = () => {
   };
 
   useEffect(() => {
-    fetchOrders(); 
+    fetchOrders();
   }, []);
 
   useEffect(() => {
-    fetchOrders(); 
+    fetchOrders();
   }, [userId]);
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
@@ -75,9 +74,9 @@ const Ordine = () => {
 
       if (response.ok) {
         fetchOrders();
-        //check this function
-        setCurrentPage(totalPages);
-       
+        // Check this function
+        //setCurrentPage(totalPages);
+        result(true);
         console.log('Ordine aggiunto con successo', response.status);
       } else {
         setSearchTerm('');
@@ -89,6 +88,7 @@ const Ordine = () => {
   };
 
   const getProducts = async () => {
+    console.log(userId);
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -97,6 +97,8 @@ const Ordine = () => {
         setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
+        setFilteredProducts(data); // Initialize filteredProducts with all products
+        console.log(prodotti);
         openModal(); // Call openModal after fetching products
       } else {
         console.error('Error fetching products:', response.status);
@@ -108,6 +110,19 @@ const Ordine = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    const filtered = prodotti.filter((product) =>
+      product.nome.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+    setShowDropdown(true); // Show the dropdown when search term changes
+    setActiveIndex(-1); // Reset active index
+  };
+
+  const handleSearchFocus = () => {
+    if (searchTerm === '') {
+      setFilteredProducts(prodotti); // Show all products if searchTerm is empty
+      setShowDropdown(true); // Show the dropdown when search box is focused and empty
+    }
   };
 
   const handleQuantityChange = (event) => {
@@ -138,92 +153,92 @@ const Ordine = () => {
     setSelectedProduct(product.id);
     setShowDropdown(false);
   };
+//// test
+const result = (flag) => {
+  onEndCreate(flag); // Call the parent function with the flag
+  return flag;
+};
 
-//----- check this functions
+//
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-        setCurrentPage(currentPage + 1);
+      setCurrentPage(currentPage + 1);
     }
-};
+  };
 
-const handlePrevPage = () => {
+  const handlePrevPage = () => {
     if (currentPage > 1) {
-        setCurrentPage(currentPage - 1);
+      setCurrentPage(currentPage - 1);
     }
-};
+  };
 
-
-
-
-    return (
-<>
-        {/* Modal Create */}
+  return (
+    <>
+      {/* Modal Create */}
       <Modal
-      isOpen={modalIsOpen}
-      ariaHideApp={false}
-      onRequestClose={closeModal}
-      className="modal"
-      overlayClassName="overlay"
-    >
-      <div className="popup-content">
-        <h2>Welcome to our Popup</h2>
-        <div>
-          <div className="search-bar-dropdown">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Search..."
-            />
-            {showDropdown && filteredProducts.length > 0 && (
-              <ul className="dropdown-list">
-                {filteredProducts.map((product, index) => (
-                  <li
-                    key={index}
-                    className={index === activeIndex ? 'active' : ''}
-                    onClick={() => handleClick(product)}
-                  >
-                    {product.nome}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        isOpen={modalIsOpen}
+        ariaHideApp={false}
+        onRequestClose={closeModal}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <div className="popup-content">
+          <h2>Welcome to our Popup</h2>
           <div>
-            <input
-              type="number"
-              min="1"
-              placeholder="Quantità"
-              value={quantità}
-              onChange={handleQuantityChange}
-            />
+            <div className="search-bar-dropdown">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onFocus={handleSearchFocus}
+                onKeyDown={handleKeyDown}
+                placeholder="Search..."
+              />
+              {showDropdown && filteredProducts.length > 0 && (
+                <ul className="dropdown-list">
+                  {filteredProducts.map((product, id) => (
+                    <li
+                      key={id}
+                      className={id === activeIndex ? 'active' : ''}
+                      onClick={() => handleClick(product)}
+                    >
+                      {product.nome}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div>
+              <input
+                type="number"
+                min="1"
+                placeholder="Quantità"
+                value={quantità}
+                onChange={handleQuantityChange}
+              />
+            </div>
           </div>
+          <button onClick={closeModal} className="close-button">
+            Close
+          </button>
+          <button
+            onClick={() => addOrdine(userId, selectedProduct, quantità)}
+            className="close-button"
+            disabled={!selectedProduct || !quantità}
+          >
+            Submit
+          </button>
         </div>
-        <button onClick={closeModal} className="close-button">
-          Close
-        </button>
-        <button
-          onClick={() => addOrdine(userId, selectedProduct, quantità)}
-          className="close-button"
-          disabled={!selectedProduct || !quantità}
-        >
-          Submit
-        </button>
-      </div>
-    </Modal>
-        <div className="add_container_ordine">
+      </Modal>
+      <div className="add_container_ordine">
         <FontAwesomeIcon
           icon={faPlus}
           className="plus-icon"
           onClick={() => getProducts(userId)}
         />
       </div>
-</>
-        
-    );
+    </>
+  );
 };
 
 export default Ordine;
-
-

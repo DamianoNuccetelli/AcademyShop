@@ -196,7 +196,7 @@ const handlePrevPage = () => {
     }
   }, [searchTerm, prodotti]);
 
-  const getProducts = async () => {
+ /* const getProducts = async () => {
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -220,8 +220,8 @@ const handlePrevPage = () => {
 
   const handleQuantityChange = (event) => {
     setQuantità(parseInt(event.target.value) || 1); // Ensure quantity is a positive integer
-  };
-
+  };*/
+/*
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       setActiveIndex((prevIndex) =>
@@ -239,14 +239,19 @@ const handlePrevPage = () => {
         setActiveIndex(-1);
       }
     }
-  };
-
+  };*/
+/*
   const handleClick = (product) => {
     setSearchTerm(product.nome);
     setSelectedProduct(product.id);
     setShowDropdown(false);
+  };*/
+  const handleOnEndCreate = (flag) => {
+    if (flag) {
+      fetchOrders();
+      setCurrentPage(totalPages);
+    }
   };
-
   const deletePopUp = async (idDettaglioOrdine) => {
     setdeleteId(idDettaglioOrdine);
     openModalDelete();
@@ -289,7 +294,7 @@ const handlePrevPage = () => {
         </div>
       </div>
       <div className="welcome_container_ordine">
-        <OrdineCreate />
+        <OrdineCreate onEndCreate= {handleOnEndCreate}/>
         <div className="banner_container">
           <img src={banner} alt="Logo" />
         </div>
