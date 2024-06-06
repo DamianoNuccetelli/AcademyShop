@@ -7,7 +7,12 @@ import './Header.css';
 const Header = () => {
     const [productsData, setProductsData] = useState([]);
     const userId = localStorage.getItem('userId');
-
+    const handleOnEndCreate = (flag) => {
+        if (flag) {
+        console.log("flag", flag);
+        window.location.reload()
+        }
+      };
     return (
         <div className="header">
             <div className='title_container'>
@@ -17,7 +22,7 @@ const Header = () => {
                 </div>
             </div>
             <div className='welcome_container'>
-                <AddProduct fetchProducts={() => setProductsData([])} />
+                <AddProduct fetchProducts={() => setProductsData([])} onEndCreate= {handleOnEndCreate}/>
                 <div className='banner_container'>
                     <img src={banner} alt="Banner" />
                 </div>
