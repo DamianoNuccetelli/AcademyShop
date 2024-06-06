@@ -26,6 +26,7 @@ const Navbar = () => {
   }
 
   const Logout = () => {
+    navigate('/Login');
     // Add your logout logic here
   }
 
@@ -42,7 +43,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (location.pathname === '/Dashboard') {
-      setClasseProdotti('selected');
+      setClasseProdotti('prodotti selected');
       setClasseOrdini('ordini');
       setClasseProfile('profilo');
       setBlueIconProdotti('user-icon-selected');
@@ -50,7 +51,7 @@ const Navbar = () => {
       setBlueIconProfile('user-icon');
     } else if (location.pathname === '/Ordine') {
       setClasseProdotti('prodotti');
-      setClasseOrdini('selected');
+      setClasseOrdini('ordini selected');
       setClasseProfile('profilo');
       setBlueIconProdotti('user-icon');
       setBlueIconOrdini('user-icon-selected');

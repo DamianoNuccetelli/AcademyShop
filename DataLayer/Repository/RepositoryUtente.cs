@@ -17,12 +17,11 @@ namespace DataLayer.Repository
     public class RepositoryUtente : IRepositoryUtente
     {
         private readonly AcademyShopDBContext _context;
-       // private readonly IRepositoryOrdine iRepOrdine;
-
-        public RepositoryUtente(AcademyShopDBContext context/*, IRepositoryOrdine iRepOrdine*/)
+        private readonly IRepositoryOrdine repositoryOrdine;
+        public RepositoryUtente(AcademyShopDBContext context,IRepositoryOrdine repositoryOrdine)
         {
             _context = context;
-          //  this.iRepOrdine = iRepOrdine;
+            this.repositoryOrdine = repositoryOrdine;
         }
 
         //DANIEL 
@@ -35,6 +34,10 @@ namespace DataLayer.Repository
         {
             return await _context.Utentes.FindAsync(id);
         }
+        public Utente GetUtenteByIdSync(int id)
+        {
+            return _context.Utentes.Find(id);
+        }
 
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
@@ -46,8 +49,6 @@ namespace DataLayer.Repository
 
             return utente;
         }
-
-
         public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
         {
             var utente = await GetUtenteByIdAsync(id);
@@ -57,19 +58,27 @@ namespace DataLayer.Repository
 
             return utente;
         }
-
-        public async Task<ActionResult<Utente>> DeleteUtenteEOrdineAsync(int id)
+        public ActionResult<Utente> DeleteUtenteSync(int id)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
+            var utente =  GetUtenteByIdSync(id);
+
+            _context.Utentes.Remove(utente);
+            _context.SaveChanges();
+
+            return utente;
+        }
+    
+        public ActionResult<Utente> DeleteUtenteEOrdine(int id)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    var utente = await GetUtenteByIdAsync(id);
-                    // Vengono prelevati gli ordini correlati all'utente
-                    var ordineList = await _context.Ordines.Where(ordine => ordine.FkIdUtente == utente.Id).ToListAsync();
+                    var utente = GetUtenteByIdSync(id);
+                
+                    List<Ordine> ordineList = repositoryOrdine.GetOrdiniByUserIdSync(id);
 
-                    // Vengono prelevati i dettagliOrdine correlati all'ordine
-                    var dettaglioOrdineList = await _context.DettaglioOrdines.Where(dettaglioOrdine => (ordineList.Select(o => o.Id).ToList()).Contains(dettaglioOrdine.FkIdOrdine)).ToListAsync();
+                    List<DettaglioOrdine> dettaglioOrdineList = repositoryOrdine.GetDettaglioOrdineSync(ordineList);
 
                     if (dettaglioOrdineList.Any())
                     {
@@ -82,21 +91,19 @@ namespace DataLayer.Repository
                     }
 
                     _context.Utentes.Remove(utente);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
 
-                    await transaction.CommitAsync();
+                    transaction.Commit();
 
                     return utente;
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync();
+                    transaction.Rollback();
                     throw new TransactionAbortedException();
                 }
             }
         }
-
-
 
         public async Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente)
         {

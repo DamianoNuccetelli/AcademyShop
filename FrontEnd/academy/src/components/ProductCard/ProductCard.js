@@ -120,29 +120,35 @@ const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProduc
                 <div className="popup-content">
                     <h2>Modifica Prodotto</h2>
                     <form onSubmit={handleEditProduct}>
-                        <label>
-                            Nome:
-                            <input
-                                type="text"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                            />
-                        </label>
-                        <label>
-                            Descrizione:
-                            <textarea
-                                value={newDescrizione}
-                                onChange={(e) => setNewDescrizione(e.target.value)}
-                            />
-                        </label>
-                        <label>
-                            Quantità:
-                            <input
-                                type="number"
-                                value={newQuantità}
-                                onChange={(e) => setNewQuantità(e.target.value)}
-                            />
-                        </label>
+                        <div>
+                            <label>
+                                Nome:
+                                <input
+                                    type="text"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Descrizione:
+                                <textarea
+                                    value={newDescrizione}
+                                    onChange={(e) => setNewDescrizione(e.target.value)}
+                                />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Quantità:
+                                <input
+                                    type="number"
+                                    value={newQuantità}
+                                    onChange={(e) => setNewQuantità(e.target.value)}
+                                />
+                            </label>
+                        </div>
                         <button type="submit">Salva</button>
                         <button onClick={closeModalEditProduct} className="close-button">Annulla</button>
                     </form>

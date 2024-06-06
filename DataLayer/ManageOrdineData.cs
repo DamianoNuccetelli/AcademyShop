@@ -28,6 +28,10 @@ namespace DataLayer
         {
             return await _repositoryOrdine.GetOrdiniByUserId(userId);
         }
+        public List<Ordine> GetOrdiniByUserIdSync(int userId)
+        {
+            return _repositoryOrdine.GetOrdiniByUserIdSync(userId);
+        }
         public async Task<int?> UtenteExists(int id)
         {
             var utente = await _context.Utentes.Where(u => u.Id == id).FirstOrDefaultAsync();
@@ -48,17 +52,6 @@ namespace DataLayer
         {
             return await _repositoryOrdine.GetOrdineDettaglioAsync(userId, idDettaglioOrdine);
         }
-
-        public async Task<string?> RecuperaPasswordUtenteAsync(int userId)
-        {
-            return await _repositoryOrdine.GetUserPassword(userId);
-        }
-
-        public async Task<bool> VerificaUtenteAsync(int userId, string password)
-        {
-            return await _repositoryOrdine.VerificaUserAsync(userId, password);
-        }
-
         //DAMIANO
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {

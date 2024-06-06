@@ -19,7 +19,7 @@ const DettagliUtente = () => {
             <div className='flex_row'>
                 <input type="date" className="input_data" />
                 <select name="sesso" className="select_sesso">
-                    <option value="" disabled selected hidden>Sesso</option>  // `defaultValue` o `value` al posto di selected
+                    <option value="" disabled selected hidden>Sesso</option> 
                     <option value="maschio">Maschio</option>
                     <option value="femmina">Femmina</option>
                 </select>
