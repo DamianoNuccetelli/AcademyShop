@@ -4,7 +4,11 @@ import { faPlus, faChevronLeft, faChevronRight, faEdit, faTrashCan, faEye } from
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
-import './ContentOrdine.css'
+import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
+import OrdineCreate from '../OrdineCreate/OrdineCreate';
+import './ContentOrdine.css';
+
+
 // import SfondoModalAcademyShop from '../../../img/SfondoModalAcademyShop.png';
 
 const ContentOrdine = () => {
@@ -30,9 +34,6 @@ const ContentOrdine = () => {
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
-
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [newQuantity, setNewQuantity] = useState(1);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -76,16 +77,6 @@ const handlePrevPage = () => {
     setModalDelete(false);
   };
 
-  const openModalEdit = (order) => {
-    setSelectedOrder(order);
-    setNewQuantity(order.quantita);
-    setModalEdit(true);
-  };
-
-  const closeModalEdit = () => {
-    setModalEdit(false);
-    setSelectedOrder(null);
-  };
 
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
@@ -149,37 +140,7 @@ const handlePrevPage = () => {
   };
 
 
-  const handleUpdateOrder = async () => {
-    
-    if (!selectedOrder) return;
-
-    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
-    try {
-      const response = await fetch(API_URL, {
-        method: 'PUT',
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        const updatedOrder = await response.json();
-        setOrders(orders.map(order => 
-          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
-          ? { ...order, ...updatedOrder }
-          : order
-        ));
-        closeModalEdit();
-        fetchOrders();
-      } else {
-        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
-      }
-    } catch (error) {
-      console.error("Errore:", error);
-    }
-  };
- 
-   // Fetch detailed order for a specific idDettaglioOrdine
+  
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
     const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
     try {
@@ -235,7 +196,7 @@ const handlePrevPage = () => {
     }
   }, [searchTerm, prodotti]);
 
-  const getProducts = async () => {
+ /* const getProducts = async () => {
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -259,8 +220,8 @@ const handlePrevPage = () => {
 
   const handleQuantityChange = (event) => {
     setQuantità(parseInt(event.target.value) || 1); // Ensure quantity is a positive integer
-  };
-
+  };*/
+/*
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       setActiveIndex((prevIndex) =>
@@ -278,14 +239,19 @@ const handlePrevPage = () => {
         setActiveIndex(-1);
       }
     }
-  };
-
+  };*/
+/*
   const handleClick = (product) => {
     setSearchTerm(product.nome);
     setSelectedProduct(product.id);
     setShowDropdown(false);
+  };*/
+  const handleOnEndCreate = (flag) => {
+    if (flag) {
+      fetchOrders();
+      setCurrentPage(totalPages);
+    }
   };
-
   const deletePopUp = async (idDettaglioOrdine) => {
     setdeleteId(idDettaglioOrdine);
     openModalDelete();
@@ -328,73 +294,12 @@ const handlePrevPage = () => {
         </div>
       </div>
       <div className="welcome_container_ordine">
-        <div className="add_container_ordine">
-          <FontAwesomeIcon
-            icon={faPlus}
-            className="plus-icon"
-            onClick={() => getProducts(userId)}
-          />
-        </div>
+        <OrdineCreate onEndCreate= {handleOnEndCreate}/>
         <div className="banner_container">
           <img src={banner} alt="Logo" />
         </div>
       </div>
-     {/* Modal Create */}
-      <Modal
-      isOpen={modalIsOpen}
-      ariaHideApp={false}
-      onRequestClose={closeModal}
-      className="modal"
-      overlayClassName="overlay"
-    >
-      <div className="popup-content">
-        <h2>Welcome to our Popup</h2>
-        <div>
-          <div className="search-bar-dropdown">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Search..."
-            />
-            {showDropdown && filteredProducts.length > 0 && (
-              <ul className="dropdown-list">
-                {filteredProducts.map((product, index) => (
-                  <li
-                    key={index}
-                    className={index === activeIndex ? 'active' : ''}
-                    onClick={() => handleClick(product)}
-                  >
-                    {product.nome}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div>
-            <input
-              type="number"
-              min="1"
-              placeholder="Quantità"
-              value={quantità}
-              onChange={handleQuantityChange}
-            />
-          </div>
-        </div>
-        <button onClick={closeModal} className="close-button">
-          Close
-        </button>
-        <button
-          onClick={() => addOrdine(userId, selectedProduct, quantità)}
-          className="close-button"
-          disabled={!selectedProduct || !quantità}
-        >
-          Submit
-        </button>
-      </div>
-    </Modal>
-
+    
       {/* Modal Delete */}
       <Modal
         isOpen={modalDelete}
@@ -444,30 +349,24 @@ const handlePrevPage = () => {
           </Modal>
 
             {/* Modal Edit */}
-            {modalEdit && (
+            {/* {modalEdit && selectedOrder && (
             <Modal
-              isOpen={modalEdit}
-              ariaHideApp={true}
-              onRequestClose={closeModalEdit}
-              contentLabel="Edit Order"
-              overlayClassName="overlay"
-              className="modal"
+                isOpen={modalEdit}
+                ariaHideApp={true}
+                onRequestClose={closeModalEdit}
+                contentLabel="Edit Order"
+                overlayClassName="overlay"
+                className="modal"
             >
-              <div className="popup-content">
-              <h2>Edit Order</h2>
-              <label>
-                Quantità:
-                <input
-                  type="number"
-                  value={newQuantity}
-                  onChange={(e) => setNewQuantity(Number(e.target.value))}
+                <OrdineUpdate
+                    orders={orders}
+                    setOrders={setOrders}
+                    fetchOrders={fetchOrders}
+                    selectedOrder={selectedOrder}
+                    closeModalEdit={closeModalEdit}
                 />
-              </label>
-              <button onClick={handleUpdateOrder}  className="close-button">Save</button>
-              <button onClick={closeModalEdit}  className="close-button">Cancel</button>
-              </div>
             </Modal>
-          )}
+        )} */}
 
       <div className="products_container_ordine">
         <div className="all_products_div">
@@ -486,11 +385,11 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th style={{ width: '30%' }}>Descrizione Prodotto</th>
-              <th style={{ width: '10%' }}>Stato Ordine</th>
-              <th style={{ width: '10%' }}>Quantità</th>
-              <th style={{ width: '10%' }}>Data Registrazione</th>
-              <th style={{ width: '10%' }}>Data Aggiornamento</th>
+              <th>Descrizione Prodotto</th>
+              <th>Stato Ordine</th>
+              <th>Quantità</th>
+              <th>Data Registrazione</th>
+              <th>Data Aggiornamento</th>
               <th>Azioni</th>
             </tr>
           </thead>
@@ -505,7 +404,7 @@ const handlePrevPage = () => {
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
                 <td>{order.dataAggiornamento == null ? (
-                    <p>Non aggiornato</p>
+                    <span>Non aggiornato</span>
                     ) : (
                      <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
                      )}
@@ -516,9 +415,13 @@ const handlePrevPage = () => {
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <button className='edit-button' onClick={() => openModalEdit(order)}>
-                    <FontAwesomeIcon icon={faEdit}/>
-                    </button>
+                  <OrdineUpdate
+                      setOrders={setOrders}
+                      fetchOrders={fetchOrders}
+                      order={order}
+                      orders={orders}
+                    />
+                    
                   <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>

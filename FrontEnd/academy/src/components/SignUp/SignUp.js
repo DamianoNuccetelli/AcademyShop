@@ -1,121 +1,133 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './SignUp.css';
-import logo from '../../img/Proconsul-Services.png';
-import Modal from 'react-modal'
+import React, { useReducer } from 'react'; // Importa React e useReducer per la gestione dello stato locale
+import './SignUp.css'; // Importa il file CSS per lo stile del componente
+
+import logo from '../../img/Proconsul-Services.png'; // Importa il logo
+
+import ErrorModal from './ErrorModal/ErrorModal'; // Importa il componente per il modal di errore
+import RegisteredModal from './RegisteredModal/RegisteredModal'; // Importa il componente per il modal di registrazione completata
+
+// Stato iniziale del form di registrazione
+const initialState = {
+    nome: '',
+    cognome: '',
+    cittaNascita: '',
+    dataNascita: '',
+    provinciaNascita: '',
+    sesso: '',
+    email: '',
+    password: '',
+    codiceFiscale: '',
+    isModalOpen: false, // Stato per il modal di errore
+    isRegisteredModalOpen: false, // Stato per il modal di registrazione completata
+};
+
+// Funzione per aggiornare lo stato in base all'azione ricevuta
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_FIELD':
+            return { ...state, [action.field]: action.value }; // Aggiorna il campo specificato con il nuovo valore
+        case 'OPEN_MODAL':
+            return { ...state, isModalOpen: true }; // Apre il modal di errore
+        case 'CLOSE_MODAL':
+            return { ...state, isModalOpen: false }; // Chiude il modal di errore
+        case 'OPEN_REGISTERED_MODAL':
+            return { ...state, isRegisteredModalOpen: true }; // Apre il modal di registrazione completata
+        case 'CLOSE_REGISTERED_MODAL':
+            return { ...state, isRegisteredModalOpen: false }; // Chiude il modal di registrazione completata
+        default:
+            return state; // Restituisce lo stato non modificato per azioni non riconosciute
+    }
+};
 
 const SignUp = () => {
-    // Stato per ogni campo di input
-    const [nome, setNome] = useState('');
-    const [cognome, setCognome] = useState('');
-    const [cittaNascita, setCittaDiNascita] = useState('');
-    const [dataNascita, setAnnoNascita] = useState('');
-    const [provinciaNascita, setProvincia] = useState('');
-    const [sesso, setSesso] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [codiceFiscale, setCodiceFiscale] = useState('');
+    const [state, dispatch] = useReducer(reducer, initialState); // Utilizza useReducer per gestire lo stato del componente
+    const UrlApiRoot = 'https://localhost:7031/users'; // URL dell'API per la registrazione
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const navigate = useNavigate();
-    const UrlApiRoot='https://localhost:7031/users';
+    // Funzione per aggiornare i campi del form
+    const handleChange = (field, value) => {
+        dispatch({ type: 'SET_FIELD', field, value }); // Dispatch dell'azione per aggiornare il campo specificato
+    };
 
-  
     // Funzione per gestire l'invio del form
     const handleSubmit = async (event) => {
-        
-        event.preventDefault(); 
-        try {
-            const userData = {
-                nome, 
-                cognome,
-                cittaNascita,
-                dataNascita,
-                provinciaNascita,
-                sesso,
-                email,
-                password,
-                codiceFiscale
- 
-            };
-            
-            console.log("Dati inviati:", userData); // Debugging
+        event.preventDefault(); // Previene il comportamento predefinito del form
 
+        // Validazione dei campi
+        const { nome, cognome, cittaNascita, dataNascita, provinciaNascita, sesso, email, password, codiceFiscale } = state;
+        if (!nome || !cognome || !cittaNascita || !dataNascita || !provinciaNascita || !sesso || !email || !password || !codiceFiscale) {
+            dispatch({ type: 'OPEN_MODAL' }); // Apre il modal di errore se ci sono campi mancanti
+            return;
+        }
+
+        try {
+            const userData = { nome, cognome, cittaNascita, dataNascita, provinciaNascita, sesso, email, password, codiceFiscale };
             const response = await fetch(UrlApiRoot, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userData),
+                body: JSON.stringify(userData), // Invia i dati dell'utente come JSON
             });
-            console.log(response)
 
             if (!response.ok) {
-                throw new Error('Errore di rete');
+                throw new Error('Errore di rete'); // Lancia un errore se la risposta non è OK
             }
 
-            const data = await response.json();
-            console.log("Risposta del server:", data); 
-                       
-            setIsModalOpen(true);
-            
+            dispatch({ type: 'OPEN_REGISTERED_MODAL' }); // Apre il modal di registrazione completata se la richiesta è andata a buon fine
         } catch (error) {
             console.error('Si è verificato un errore durante la registrazione:', error);
+            dispatch({ type: 'OPEN_MODAL' }); // Apre il modal di errore in caso di eccezione
         }
     };
 
+    // Funzione per chiudere il modal di registrazione completata e ricaricare la pagina
     const closeModal = () => {
-        setIsModalOpen(false);
-        window.location.reload();
+        dispatch({ type: 'CLOSE_REGISTERED_MODAL' }); 
+        window.location.reload(); // Ricarica la pagina
+    };
+
+    // Funzione per chiudere il modal di errore
+    const clodeModalError = () => {
+        dispatch({ type: 'CLOSE_MODAL' });
     };
 
     return (
         <div className="form-container sign-up">
             <form onSubmit={handleSubmit}>
-                <img src={logo} alt="Logo" />
+                <img src={logo} alt="Logo" /> {/* Logo */}
                 <h1>Crea un Account</h1>
-
                 <span>o usa la tua email per registrarti</span>
                 <div className="input-row">
-                    <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-                    <input type="text" placeholder="Cognome" value={cognome} onChange={(e) => setCognome(e.target.value)} />
+                    <input type="text" placeholder="Nome" value={state.nome} onChange={(e) => handleChange('nome', e.target.value)} />
+                    <input type="text" placeholder="Cognome" value={state.cognome} onChange={(e) => handleChange('cognome', e.target.value)} />
                 </div>
                 <div className="input-row">
-                    <input type="text" placeholder="Città di nascita" value={cittaNascita} onChange={(e) => setCittaDiNascita(e.target.value)} />
-                    <input type="text" placeholder="Provincia di nascita" value={provinciaNascita} onChange={(e) => setProvincia(e.target.value)} />
+                    <input type="text" placeholder="Città di nascita" value={state.cittaNascita} onChange={(e) => handleChange('cittaNascita', e.target.value)} />
+                    <input type="text" placeholder="Provincia di nascita" value={state.provinciaNascita} onChange={(e) => handleChange('provinciaNascita', e.target.value)} />
                 </div>
                 <div className="input-row">
-                    <input type="date" value={dataNascita} onChange={(e) => setAnnoNascita(e.target.value)} />
-                    <select value={sesso} onChange={(e) => setSesso(e.target.value)}>
+                    <input type="date" value={state.dataNascita} onChange={(e) => handleChange('dataNascita', e.target.value)} />
+                    <select value={state.sesso} onChange={(e) => handleChange('sesso', e.target.value)}>
                         <option value="">Seleziona il sesso</option>
                         <option value="M">Maschio</option>
                         <option value="F">Femmina</option>
                     </select>
                 </div>
                 <div className="input-row">
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type="email" placeholder="Email" value={state.email} onChange={(e) => handleChange('email', e.target.value)} />
+                    <input type="password" placeholder="Password" value={state.password} onChange={(e) => handleChange('password', e.target.value)} />
                 </div>
                 <div className="input-single-row">
-                    <input type="text" placeholder="Codice fiscale" value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} />
+                    <input type="text" placeholder="Codice fiscale" value={state.codiceFiscale} onChange={(e) => handleChange('codiceFiscale', e.target.value)} />
                 </div>
-                <button type="submit" onClick={handleSubmit}>Registrati</button>
+                <button type="submit">Registrati</button>
             </form>
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Registrazione Completata"
-                ariaHideApp={false}
-                className="modal-login text-bold-black" // Assicurati di definire gli stili CSS per il modal
-                overlayClassName="modal-overlay" // Assicurati di definire gli stili CSS per l'overlay del modal
 
-            >
-                <h2>Grazie per esserti iscritto!</h2>
-                <p>Esegui il login per verificare la registrazione.</p>
-                <button onClick={closeModal}>Chiudi</button>
-            </Modal>
+            {/* Modal per segnalare un errore */}
+            <ErrorModal isOpen={state.isModalOpen} onClose={clodeModalError} />
 
-
+            {/* Modal per confermare la registrazione */}
+            <RegisteredModal isOpen={state.isRegisteredModalOpen} onClose={closeModal} />
         </div>
     );
 };
