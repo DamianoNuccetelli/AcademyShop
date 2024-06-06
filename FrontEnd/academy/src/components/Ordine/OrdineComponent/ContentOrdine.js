@@ -399,7 +399,7 @@ const handlePrevPage = () => {
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
                 <td>{order.dataAggiornamento == null ? (
-                    <p>Non aggiornato</p>
+                    <span>Non aggiornato</span>
                     ) : (
                      <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
                      )}
