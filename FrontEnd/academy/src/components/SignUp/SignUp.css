@@ -219,7 +219,7 @@
 
 .modal-login button {
     padding: 10px 20px;
-    background-color: #361d6f;
+    background-color: #361d6f; 
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -232,6 +232,13 @@
     background-color: #fff;
     border: 2px solid 361d6f;
     color: #361d6f;
+}
+
+.model_input{
+    width: 200px;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 25px;
 }
 
 
