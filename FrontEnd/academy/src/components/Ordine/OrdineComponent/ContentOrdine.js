@@ -196,7 +196,7 @@ const handlePrevPage = () => {
     }
   }, [searchTerm, prodotti]);
 
-  const getProducts = async () => {
+ /* const getProducts = async () => {
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -220,8 +220,8 @@ const handlePrevPage = () => {
 
   const handleQuantityChange = (event) => {
     setQuantità(parseInt(event.target.value) || 1); // Ensure quantity is a positive integer
-  };
-
+  };*/
+/*
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       setActiveIndex((prevIndex) =>
@@ -239,14 +239,19 @@ const handlePrevPage = () => {
         setActiveIndex(-1);
       }
     }
-  };
-
+  };*/
+/*
   const handleClick = (product) => {
     setSearchTerm(product.nome);
     setSelectedProduct(product.id);
     setShowDropdown(false);
+  };*/
+  const handleOnEndCreate = (flag) => {
+    if (flag) {
+      fetchOrders();
+      setCurrentPage(totalPages);
+    }
   };
-
   const deletePopUp = async (idDettaglioOrdine) => {
     setdeleteId(idDettaglioOrdine);
     openModalDelete();
@@ -289,7 +294,7 @@ const handlePrevPage = () => {
         </div>
       </div>
       <div className="welcome_container_ordine">
-        <OrdineCreate />
+        <OrdineCreate onEndCreate= {handleOnEndCreate}/>
         <div className="banner_container">
           <img src={banner} alt="Logo" />
         </div>
@@ -380,11 +385,11 @@ const handlePrevPage = () => {
           <thead>
             <tr>
               <th>Nome Prodotto</th>
-              <th style={{ width: '30%' }}>Descrizione Prodotto</th>
-              <th style={{ width: '10%' }}>Stato Ordine</th>
-              <th style={{ width: '10%' }}>Quantità</th>
-              <th style={{ width: '10%' }}>Data Registrazione</th>
-              <th style={{ width: '10%' }}>Data Aggiornamento</th>
+              <th>Descrizione Prodotto</th>
+              <th>Stato Ordine</th>
+              <th>Quantità</th>
+              <th>Data Registrazione</th>
+              <th>Data Aggiornamento</th>
               <th>Azioni</th>
             </tr>
           </thead>
@@ -399,7 +404,7 @@ const handlePrevPage = () => {
                   {new Date(order.dataRegistrazione).toLocaleDateString()}
                 </td>
                 <td>{order.dataAggiornamento == null ? (
-                    <p>Non aggiornato</p>
+                    <span>Non aggiornato</span>
                     ) : (
                      <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
                      )}
