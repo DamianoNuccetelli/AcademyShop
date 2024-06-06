@@ -3,19 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
 import logo from '../../img/Proconsul-Services.png';
 
+
 const SignIn = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+   // let [userId, setUserId] = useState('');
+//   const userSessionId =  sessionStorage.setItem('userIdSession', userSessionId);
+//   const userId = sessionStorage.getItem('userId');
 
     const UrlApiRoot = "https://localhost:7031/";
+
 
     const handleSignIn = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch( UrlApiRoot +`managed-users?email=${email}&password=${password}`, {
+            const response = await fetch(UrlApiRoot + `managed-users?email=${email}&password=${password}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,10 +32,10 @@ const SignIn = () => {
             }
 
             const data = await response.json();
-            // Assuming the response contains an id or user data
-            console.log(data);
-
             const userId = data.id;
+
+            // Save userId in sessionStorage and localStorage
+            sessionStorage.setItem('userId', userId);
             localStorage.setItem('userId', userId);
 
             // Navigate to another page on successful login
