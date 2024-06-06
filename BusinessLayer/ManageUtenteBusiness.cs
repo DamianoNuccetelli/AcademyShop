@@ -16,12 +16,12 @@ namespace BusinessLayer
     public class ManageUtenteBusiness
     {
         private readonly ManageUtenteData oUDL;
-        ManageOrdineBusiness mOB ;
+        private readonly ManageOrdineData mOD ;
 
-        public ManageUtenteBusiness(ManageUtenteData _oUDL, ManageOrdineBusiness mOB)
+        public ManageUtenteBusiness(ManageUtenteData _oUDL, ManageOrdineData mOD)
         {
             oUDL = _oUDL;
-            this.mOB = mOB;
+            this.mOD = mOD;
         }
 
         //Daniel
@@ -90,20 +90,14 @@ namespace BusinessLayer
                 throw new Exception($"Errore durante la creazione dell'utente: {ex.Message}");
             }
         }
-        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
+        public ActionResult<Utente> DeleteUtenteAsync(int id)
         {
             try
             {
-                // Controlla se l'utente esiste prima di tentare l'eliminazione
-                var utente = await oUDL.GetUtenteByIdAsync(id);
-                if (utente == null)
-                {
-                    return ErrorContentResult("Errore: Utente non trovato.", 404);
-                }
                 // controlla se l'utente ha ordini associati
-                var ordiniList = mOB.GetOrdiniByUserId(utente.Id);
-                // nel caso ci siano ordini associati (ordiniList != null) utilizza DeleteUtenteEOrdineAsync() altrimenti utilizza DeleteUtenteAsync()
-                var result = ordiniList != null ? await oUDL.DeleteUtenteEOrdineAsync(id) : await oUDL.DeleteUtenteAsync(id);
+                var ordiniList = mOD.GetOrdiniByUserIdSync(id);
+                // nel caso ci siano ordini associati (ordiniList != null) utilizza DeleteUtenteEOrdine() altrimenti utilizza DeleteUtenteSync()
+                var result = ordiniList != null ?  oUDL.DeleteUtenteEOrdine(id) :  oUDL.DeleteUtenteSync(id);
                 if (result != null)
                 {
                     return new OkObjectResult("Utente eliminato con successo.");

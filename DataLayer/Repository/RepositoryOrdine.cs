@@ -1,5 +1,6 @@
 ﻿using AcademyShopAPI.Models;
 using DtoLayer.Dto;
+using Humanizer.Localisation;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace DataLayer.Repository
 {
     public class RepositoryOrdine : IRepositoryOrdine
     {
-        
+
         private readonly AcademyShopDBContext _context;
 
         public RepositoryOrdine(AcademyShopDBContext context)
@@ -50,7 +51,10 @@ namespace DataLayer.Repository
                 throw new Exception("Non ci sono ordini per questo utente", ex);
             }
         }
-
+        public List<Ordine> GetOrdiniByUserIdSync(int userId)
+        {
+            return _context.Ordines.Where(ordine => ordine.FkIdUtente == userId).ToList();
+        }
         //Gabriele
         public async Task<OrdineDettaglioDTOperGET> GetOrdineDettaglioAsync(int userId, int dettaglioOrdineId)
         {
@@ -72,18 +76,6 @@ namespace DataLayer.Repository
 
             return ordineDettaglio;
         }
-
-        public async Task<string?> GetUserPassword(int userId)
-        {
-            var user = await _context.Utentes.FirstOrDefaultAsync(u => u.Id == userId);
-            return user?.Password;
-        }
-
-        public async Task<bool> VerificaUserAsync(int userId, string password)
-        {
-            return await _context.Utentes.AnyAsync(u => u.Id == userId && u.Password == password);
-        }
-
         //Damiano
         public async Task<Ordine?> RecuperaOrdineAsync(int idOrdineEsistente)
         {
@@ -177,6 +169,10 @@ namespace DataLayer.Repository
         }
 
         //Adriano
+        public List<DettaglioOrdine> GetDettaglioOrdineSync(List<Ordine> ordineList)
+        {
+            return _context.DettaglioOrdines.Where(dettaglioOrdine => ordineList.Select(o => o.Id).Contains(dettaglioOrdine.FkIdOrdine)).ToList();
+            }
         public async Task<int> addOrdine(int idUtente, Prodotto prodotto, int quantità)
         {
             Ordine ordine;

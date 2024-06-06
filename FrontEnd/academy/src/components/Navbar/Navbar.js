@@ -26,6 +26,7 @@ const Navbar = () => {
   }
 
   const Logout = () => {
+    navigate('/Login');
     // Add your logout logic here
   }
 

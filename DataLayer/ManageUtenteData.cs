@@ -29,19 +29,17 @@ namespace DataLayer
         {
             return await _utenteRepository.GetUtenteByIdAsync(id);
         }
-
         public async Task<ActionResult<Utente>> AddUtenteAsync(Utente utente)
         {
             return await _utenteRepository.AddUtenteAsync(utente);
         }
-
-        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
+        public ActionResult<Utente> DeleteUtenteSync(int id)
         {
-            return await _utenteRepository.DeleteUtenteAsync(id);
+            return  _utenteRepository.DeleteUtenteSync(id);
         }
-        public async Task<ActionResult<Utente>> DeleteUtenteEOrdineAsync(int id)
+        public ActionResult<Utente>DeleteUtenteEOrdine(int id)
         {
-            return await _utenteRepository.DeleteUtenteEOrdineAsync(id);
+            return  _utenteRepository.DeleteUtenteEOrdine(id);
         }
 
         public async Task<bool> CheckUtenteExistsByEmailOrPassword(Utente utente)
