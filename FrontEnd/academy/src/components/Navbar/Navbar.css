@@ -107,7 +107,6 @@
     background-size: 200% 100%; /* Estendere il gradiente su tutta la larghezza */
     border-radius: 5px;
     margin-bottom: 20px;
-    transition: all 0.8s ease;
     animation: openFromLeft 0.8s ease forwards;
 }
 @keyframes openFromLeft {
