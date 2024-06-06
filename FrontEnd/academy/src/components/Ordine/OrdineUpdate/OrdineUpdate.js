@@ -63,7 +63,7 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
         className="modal"
       >
         <div className="popup-content">
-          <h2>Edit Order</h2>
+          <h2>Modifica dell'Ordine</h2>
           <label>
             Quantità:
             <input
@@ -73,8 +73,8 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
             />
           </label>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <button onClick={handleUpdateOrder} className="close-button">Save</button>
-          <button onClick={closeModalEdit} className="close-button">Cancel</button>
+          <div className = "margin-button"><button onClick={handleUpdateOrder} className="save-button">Save</button></div>
+          <div className = "margin-button"><button onClick={closeModalEdit} className="cancel-button">Cancel</button></div>
         </div>
       </Modal>
     </>
