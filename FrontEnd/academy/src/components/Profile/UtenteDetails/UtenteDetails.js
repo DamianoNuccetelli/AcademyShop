@@ -36,7 +36,7 @@ const DettagliUtente = () => {
 
     return (
         <div className='form_container'>
-            <h2>Modifica il tuo profilo</h2>
+            <h2>Il tuo profilo</h2>
             <img src={sessoMaschile} alt="Icona maschio" className='imgMaschio' />
             <div className='flex_row'>
                 <input type="text" placeholder="Nome" value={userData.nome} disabled />

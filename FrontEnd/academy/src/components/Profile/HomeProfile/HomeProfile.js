@@ -8,6 +8,9 @@ import "./HomeProfile.css";
 import editUtenteImg from "../../../img/EditUtente.png";
 import deleteUtenteImg from "../../../img/elimina_utente.png";
 
+const nome = sessionStorage.getItem("nome");
+const cognome = sessionStorage.getItem("cognome");
+
 const HomeProfile = () => {
   const [activeComponent, setActiveComponent] = useState("Dettagli");
 
@@ -38,7 +41,7 @@ const HomeProfile = () => {
       <div className="title_container_user">
         <div className="title_text">
           <h1>Il mio profilo:</h1>
-          <h2>Mario Rossi</h2>
+          <h2>{nome} {cognome}</h2>
         </div>
       </div>
       <div className="flex_utente">

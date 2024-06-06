@@ -28,7 +28,9 @@ const ContentOrdine = () => {
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
-
+  const nome = sessionStorage.getItem('nome');
+  const cognome = sessionStorage.getItem('cognome');
+ 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
         setCurrentPage(currentPage + 1);
@@ -123,7 +125,7 @@ const handlePrevPage = () => {
       <div className="title_container_ordine">
         <div className="title_text">
           <h1>Ordini</h1>
-          <h2>Ordini di Mario</h2>
+          <h2>{nome} {cognome}</h2>
         </div>
       </div>
       <div className="welcome_container_ordine">
