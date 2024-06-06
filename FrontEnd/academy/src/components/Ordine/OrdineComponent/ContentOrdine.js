@@ -33,9 +33,6 @@ const ContentOrdine = () => {
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [newQuantity, setNewQuantity] = useState(1);
-
   const handleNextPage = () => {
     if (currentPage < totalPages) {
         setCurrentPage(currentPage + 1);
@@ -78,16 +75,6 @@ const handlePrevPage = () => {
     setModalDelete(false);
   };
 
-  const openModalEdit = (order) => {
-    setSelectedOrder(order);
-    setNewQuantity(order.quantita);
-    setModalEdit(true);
-  };
-
-  const closeModalEdit = () => {
-    setModalEdit(false);
-    setSelectedOrder(null);
-  };
 
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
@@ -151,37 +138,7 @@ const handlePrevPage = () => {
   };
 
 
-  // const handleUpdateOrder = async () => {
-    
-  //   if (!selectedOrder) return;
-
-  //   const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
-  //   try {
-  //     const response = await fetch(API_URL, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Accept': '*/*',
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
-  //     if (response.ok) {
-  //       const updatedOrder = await response.json();
-  //       setOrders(orders.map(order => 
-  //         order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
-  //         ? { ...order, ...updatedOrder }
-  //         : order
-  //       ));
-  //       closeModalEdit();
-  //       fetchOrders();
-  //     } else {
-  //       console.error("Errore nell'aggiornamento dell'ordine:", response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error("Errore:", error);
-  //   }
-  // };
- 
-   // Fetch detailed order for a specific idDettaglioOrdine
+  
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
     const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
     try {
