@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
-// import 'bootstrap/dist/css/bootstrap.css';
 import './OrdineCreate.css';
 
 const Ordine = ({onEndCreate}) => {
@@ -15,12 +14,6 @@ const Ordine = ({onEndCreate}) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 5;
-  const indexOfLastProduct = currentPage * ordersPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
-  const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
@@ -74,8 +67,6 @@ const Ordine = ({onEndCreate}) => {
 
       if (response.ok) {
         fetchOrders();
-        // Check this function
-        //setCurrentPage(totalPages);
         result(true);
         console.log('Ordine aggiunto con successo', response.status);
       } else {
@@ -153,24 +144,10 @@ const Ordine = ({onEndCreate}) => {
     setSelectedProduct(product.id);
     setShowDropdown(false);
   };
-//// test
 const result = (flag) => {
   onEndCreate(flag);
   return flag;
 };
-
-//
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <>
