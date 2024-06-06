@@ -155,7 +155,7 @@ const Ordine = ({onEndCreate}) => {
   };
 //// test
 const result = (flag) => {
-  onEndCreate(flag); // Call the parent function with the flag
+  onEndCreate(flag);
   return flag;
 };
 
@@ -183,7 +183,7 @@ const result = (flag) => {
         overlayClassName="overlay"
       >
         <div className="popup-content">
-          <h2>Welcome to our Popup</h2>
+          <h2>Nuovo Ordine</h2>
           <div>
             <div className="search-bar-dropdown">
               <input
