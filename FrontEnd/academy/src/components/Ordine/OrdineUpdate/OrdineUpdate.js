@@ -8,9 +8,11 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
   const userId = localStorage.getItem('userId');
   const [newQuantity, setNewQuantity] = useState(order.quantita);
   const [modalEdit, setModalEdit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const openModalEdit = () => {
     setModalEdit(true);
+    setErrorMessage('');
   };
 
   const closeModalEdit = () => {
@@ -37,9 +39,12 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
         closeModalEdit();
         fetchOrders();
       } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Errore nell\'aggiornamento dell\'ordine');
         console.error("Errore nell'aggiornamento dell'ordine:", response.status);
       }
     } catch (error) {
+      setErrorMessage('Quantità di prodotto disponibile non sufficiente');
       console.error("Errore:", error);
     }
   };
@@ -67,6 +72,7 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
               onChange={(e) => setNewQuantity(Number(e.target.value))}
             />
           </label>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <button onClick={handleUpdateOrder} className="close-button">Save</button>
           <button onClick={closeModalEdit} className="close-button">Cancel</button>
         </div>
