@@ -109,6 +109,7 @@
     margin-bottom: 20px;
     animation: openFromLeft 0.8s ease forwards;
 }
+
 @keyframes openFromLeft {
     0% {
         background-position: 100% 0;

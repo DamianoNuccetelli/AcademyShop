@@ -8,14 +8,14 @@ const NavbarProfile = ({ setActiveComponent, activeComponent }) => {
     return (
         <div className='box_navbar_profile'>
             <div
-                className={`row_container ${activeComponent === 'Dettagli' ? 'selected' : ''}`}
+                className={`options-container ${activeComponent === 'Dettagli' ? 'selected-utente' : ''}`}
                 onClick={() => setActiveComponent('Dettagli')}
             >
                 <FontAwesomeIcon icon={faChevronRight} className='icon_navbar' />
                 <h4>Dettagli</h4>
             </div>
             <div
-                className={`row_container ${activeComponent === 'Elimina' ? 'selected' : ''}`}
+                className={`options-container ${activeComponent === 'Elimina' ? 'selected-utente' : ''}`}
                 onClick={() => setActiveComponent('Elimina')}
             >
                 <FontAwesomeIcon icon={faChevronRight} className='icon_navbar' />
