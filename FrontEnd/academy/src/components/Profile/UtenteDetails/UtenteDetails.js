@@ -4,6 +4,7 @@ import './UtenteDetails.css';
 import sessoMaschile from '../../../img/sesso maschile.png';
 
 const DettagliUtente = () => {
+    const userId = localStorage.getItem('userId');
     const [userData, setUserData] = useState({
         nome: '',
         cognome: '',
@@ -16,7 +17,7 @@ const DettagliUtente = () => {
     });
 
     useEffect(() => {
-        fetch('https://localhost:7031/users/3')
+        fetch(`https://localhost:7031/users/${userId}`)
             .then(response => response.json())
             .then(data => {
                 setUserData({
@@ -25,7 +26,7 @@ const DettagliUtente = () => {
                     cittaNascita: data.cittaNascita,
                     provinciaNascita: data.provinciaNascita,
                     dataNascita: data.dataNascita,
-                    sesso: data.sesso === 'M' ? 'maschio' : 'femmina',
+                    sesso: data.sesso, 
                     email: data.email,
                     codiceFiscale: data.codiceFiscale
                 });
@@ -47,20 +48,11 @@ const DettagliUtente = () => {
             </div>
             <div className='flex_row'>
                 <input type="date" className="input_data" value={userData.dataNascita} disabled />
-                <select name="sesso" className="select_sesso" value={userData.sesso} disabled>
-                    <option value="" disabled hidden>Sesso</option> 
-                    <option value="maschio">Maschio</option>
-                    <option value="femmina">Femmina</option>
-                </select>
+                <input type="text" name="sesso" className="input_sesso" value={userData.sesso === 'M' ? 'Maschio' : 'Femmina'} disabled />
             </div>
             <div className='flex_row'>
                 <input type="text" placeholder="Email" value={userData.email} disabled />
-                {/* <input type="password" placeholder="Password" value="********" disabled /> */}
                 <input type="text" placeholder="Codice fiscale" value={userData.codiceFiscale} disabled />
-            </div>
-            <div className='flex_row'>
-                
-                <input type="button" value="Salva" />
             </div>
         </div>
     );
