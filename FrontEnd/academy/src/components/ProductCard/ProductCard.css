@@ -59,7 +59,7 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    cursor: pointer;
+    
 }
 
 .crud_button .icon{

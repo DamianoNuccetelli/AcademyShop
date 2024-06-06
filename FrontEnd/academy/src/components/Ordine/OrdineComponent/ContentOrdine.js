@@ -4,7 +4,10 @@ import { faPlus, faChevronLeft, faChevronRight, faEdit, faTrashCan, faEye } from
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
-import './ContentOrdine.css'
+import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
+import './ContentOrdine.css';
+
+
 // import SfondoModalAcademyShop from '../../../img/SfondoModalAcademyShop.png';
 
 const ContentOrdine = () => {
@@ -30,9 +33,6 @@ const ContentOrdine = () => {
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
-
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [newQuantity, setNewQuantity] = useState(1);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -76,16 +76,6 @@ const handlePrevPage = () => {
     setModalDelete(false);
   };
 
-  const openModalEdit = (order) => {
-    setSelectedOrder(order);
-    setNewQuantity(order.quantita);
-    setModalEdit(true);
-  };
-
-  const closeModalEdit = () => {
-    setModalEdit(false);
-    setSelectedOrder(null);
-  };
 
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
@@ -149,37 +139,7 @@ const handlePrevPage = () => {
   };
 
 
-  const handleUpdateOrder = async () => {
-    
-    if (!selectedOrder) return;
-
-    const API_URL = `https://localhost:7031/orders/${selectedOrder.idDettaglioOrdine}?idUtente=${userId}&quantita=${newQuantity}`;
-    try {
-      const response = await fetch(API_URL, {
-        method: 'PUT',
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        const updatedOrder = await response.json();
-        setOrders(orders.map(order => 
-          order.idDettaglioOrdine === selectedOrder.idDettaglioOrdine 
-          ? { ...order, ...updatedOrder }
-          : order
-        ));
-        closeModalEdit();
-        fetchOrders();
-      } else {
-        console.error("Errore nell'aggiornamento dell'ordine:", response.status);
-      }
-    } catch (error) {
-      console.error("Errore:", error);
-    }
-  };
- 
-   // Fetch detailed order for a specific idDettaglioOrdine
+  
   const fetchDetailedOrder = async (idDettaglioOrdine) => {
     const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
     try {
@@ -444,30 +404,24 @@ const handlePrevPage = () => {
           </Modal>
 
             {/* Modal Edit */}
-            {modalEdit && (
+            {/* {modalEdit && selectedOrder && (
             <Modal
-              isOpen={modalEdit}
-              ariaHideApp={true}
-              onRequestClose={closeModalEdit}
-              contentLabel="Edit Order"
-              overlayClassName="overlay"
-              className="modal"
+                isOpen={modalEdit}
+                ariaHideApp={true}
+                onRequestClose={closeModalEdit}
+                contentLabel="Edit Order"
+                overlayClassName="overlay"
+                className="modal"
             >
-              <div className="popup-content">
-              <h2>Edit Order</h2>
-              <label>
-                Quantità:
-                <input
-                  type="number"
-                  value={newQuantity}
-                  onChange={(e) => setNewQuantity(Number(e.target.value))}
+                <OrdineUpdate
+                    orders={orders}
+                    setOrders={setOrders}
+                    fetchOrders={fetchOrders}
+                    selectedOrder={selectedOrder}
+                    closeModalEdit={closeModalEdit}
                 />
-              </label>
-              <button onClick={handleUpdateOrder}  className="close-button">Save</button>
-              <button onClick={closeModalEdit}  className="close-button">Cancel</button>
-              </div>
             </Modal>
-          )}
+        )} */}
 
       <div className="products_container_ordine">
         <div className="all_products_div">
@@ -516,9 +470,13 @@ const handlePrevPage = () => {
                   <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
                   <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <button className='edit-button' onClick={() => openModalEdit(order)}>
-                    <FontAwesomeIcon icon={faEdit}/>
-                    </button>
+                  <OrdineUpdate
+                      setOrders={setOrders}
+                      fetchOrders={fetchOrders}
+                      order={order}
+                      orders={orders}
+                    />
+                    
                   <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>

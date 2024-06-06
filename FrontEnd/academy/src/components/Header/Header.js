@@ -111,7 +111,7 @@ const Header = () => {
                         <div className="popup-content">
                             <h2>Aggiungi Prodotto</h2>
                             <form onSubmit={handleSubmit}>
-                                <div>
+                                <div className="form-group">
                                     <input
                                         type="text"
                                         name="nomeProdotto"
@@ -119,14 +119,14 @@ const Header = () => {
                                         required
                                     />
                                 </div>
-                                <div>
+                                <div className="form-group">
                                     <textarea
                                         name="descrizioneProdotto"
                                         placeholder="Descrizione Prodotto"
                                         required
                                     />
                                 </div>
-                                <div>
+                                <div className="form-group">
                                     <input
                                         type="number"
                                         name="quantitaProdotto"
@@ -134,7 +134,7 @@ const Header = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit">Aggiungi</button>
+                                <button type="submit" className="submit-button">Aggiungi</button>
                             </form>
                             <button onClick={closeModalAddProduct} className="close-button">Chiudi</button>
                         </div>
