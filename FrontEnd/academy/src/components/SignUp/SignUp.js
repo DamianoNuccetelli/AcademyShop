@@ -1,14 +1,12 @@
-import React, { useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './SignUp.css';
+import React, { useReducer } from 'react'; // Importa React e useReducer per la gestione dello stato locale
+import './SignUp.css'; // Importa il file CSS per lo stile del componente
 
-import logo from '../../img/Proconsul-Services.png';
+import logo from '../../img/Proconsul-Services.png'; // Importa il logo
 
-import Modal from 'react-modal';
-import ErrorModal from './ErrorModal/ErrorModal';
-import RegisteredModal from './RegisteredModal/RegisteredModal';
+import ErrorModal from './ErrorModal/ErrorModal'; // Importa il componente per il modal di errore
+import RegisteredModal from './RegisteredModal/RegisteredModal'; // Importa il componente per il modal di registrazione completata
 
-
+// Stato iniziale del form di registrazione
 const initialState = {
     nome: '',
     cognome: '',
@@ -19,75 +17,76 @@ const initialState = {
     email: '',
     password: '',
     codiceFiscale: '',
-    isModalOpen: false,
-    isRegisteredModalOpen: false,
-    errors: {},
+    isModalOpen: false, // Stato per il modal di errore
+    isRegisteredModalOpen: false, // Stato per il modal di registrazione completata
 };
 
+// Funzione per aggiornare lo stato in base all'azione ricevuta
 const reducer = (state, action) => {
     switch (action.type) {
         case 'SET_FIELD':
-            return { ...state, [action.field]: action.value };
+            return { ...state, [action.field]: action.value }; // Aggiorna il campo specificato con il nuovo valore
         case 'OPEN_MODAL':
-            return { ...state, isModalOpen: true };
+            return { ...state, isModalOpen: true }; // Apre il modal di errore
         case 'CLOSE_MODAL':
-            return { ...state, isModalOpen: false };
+            return { ...state, isModalOpen: false }; // Chiude il modal di errore
         case 'OPEN_REGISTERED_MODAL':
-            return { ...state, isRegisteredModalOpen: true };
+            return { ...state, isRegisteredModalOpen: true }; // Apre il modal di registrazione completata
         case 'CLOSE_REGISTERED_MODAL':
-            return { ...state, isRegisteredModalOpen: false };
-        case 'SET_ERRORS': 
-            return { ...state, errors: action.errors };
+            return { ...state, isRegisteredModalOpen: false }; // Chiude il modal di registrazione completata
         default:
-            return state;
+            return state; // Restituisce lo stato non modificato per azioni non riconosciute
     }
 };
 
 const SignUp = () => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    const navigate = useNavigate();
-    const UrlApiRoot='https://localhost:7031/users';
+    const [state, dispatch] = useReducer(reducer, initialState); // Utilizza useReducer per gestire lo stato del componente
+    const UrlApiRoot = 'https://localhost:7031/users'; // URL dell'API per la registrazione
 
+    // Funzione per aggiornare i campi del form
     const handleChange = (field, value) => {
-        dispatch({ type: 'SET_FIELD', field, value });
+        dispatch({ type: 'SET_FIELD', field, value }); // Dispatch dell'azione per aggiornare il campo specificato
     };
 
+    // Funzione per gestire l'invio del form
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Previene il comportamento predefinito del form
 
         // Validazione dei campi
         const { nome, cognome, cittaNascita, dataNascita, provinciaNascita, sesso, email, password, codiceFiscale } = state;
         if (!nome || !cognome || !cittaNascita || !dataNascita || !provinciaNascita || !sesso || !email || !password || !codiceFiscale) {
-            dispatch({ type: 'OPEN_MODAL' });
+            dispatch({ type: 'OPEN_MODAL' }); // Apre il modal di errore se ci sono campi mancanti
             return;
         }
 
         try {
-            const userData = { ...state };
+            const userData = { nome, cognome, cittaNascita, dataNascita, provinciaNascita, sesso, email, password, codiceFiscale };
             const response = await fetch(UrlApiRoot, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userData),
+                body: JSON.stringify(userData), // Invia i dati dell'utente come JSON
             });
 
             if (!response.ok) {
-                throw new Error('Errore di rete');
+                throw new Error('Errore di rete'); // Lancia un errore se la risposta non è OK
             }
 
-            dispatch({ type: 'OPEN_REGISTERED_MODAL' });
+            dispatch({ type: 'OPEN_REGISTERED_MODAL' }); // Apre il modal di registrazione completata se la richiesta è andata a buon fine
         } catch (error) {
             console.error('Si è verificato un errore durante la registrazione:', error);
-            dispatch({ type: 'OPEN_MODAL' });
+            dispatch({ type: 'OPEN_MODAL' }); // Apre il modal di errore in caso di eccezione
         }
     };
 
+    // Funzione per chiudere il modal di registrazione completata e ricaricare la pagina
     const closeModal = () => {
         dispatch({ type: 'CLOSE_REGISTERED_MODAL' }); 
-        window.location.reload();
+        window.location.reload(); // Ricarica la pagina
     };
 
+    // Funzione per chiudere il modal di errore
     const clodeModalError = () => {
         dispatch({ type: 'CLOSE_MODAL' });
     };
@@ -95,7 +94,7 @@ const SignUp = () => {
     return (
         <div className="form-container sign-up">
             <form onSubmit={handleSubmit}>
-                <img src={logo} alt="Logo" />
+                <img src={logo} alt="Logo" /> {/* Logo */}
                 <h1>Crea un Account</h1>
                 <span>o usa la tua email per registrarti</span>
                 <div className="input-row">
@@ -124,6 +123,7 @@ const SignUp = () => {
                 <button type="submit">Registrati</button>
             </form>
 
+            {/* Modal per segnalare un errore */}
             <ErrorModal isOpen={state.isModalOpen} onClose={clodeModalError} />
 
             {/* Modal per confermare la registrazione */}
