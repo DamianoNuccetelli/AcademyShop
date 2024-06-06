@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import './OrdineUpdate.css';
 
 const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
   const userId = localStorage.getItem('userId');
