@@ -4,6 +4,8 @@ import { faBox } from '@fortawesome/free-solid-svg-icons';
 import './ProductCard.css';
 import DeleteProduct from '../ProductCard/DeleteProduct/DeleteProduct';
 import EditProduct from '../ProductCard/EditProduct/EditProduct';
+import AddProduct from './AddProduct/AddProduct';
+
 
 const ProductCard = ({ id, nome, descrizione, quantità, productsData, setProductsData }) => {
     return (

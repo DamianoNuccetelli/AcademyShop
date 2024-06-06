@@ -4,9 +4,12 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import './AddProduct.css';
 
-const AddProduct = ({ fetchProducts }) => {
+const AddProduct = ({ fetchProducts, onEndCreate }) => {
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
-
+    const result = (flag) => {
+        onEndCreate(flag);
+        return flag;
+      };
     const openModalAddProduct = () => {
         setModalIsOpenAddProduct(true);
     };
@@ -49,6 +52,7 @@ const AddProduct = ({ fetchProducts }) => {
 
             if (response.ok) {
                 fetchProducts();
+                result(true);
                 closeModalAddProduct();
             } else {
                 console.error('Errore durante l\'aggiunta del prodotto:', response.status);
