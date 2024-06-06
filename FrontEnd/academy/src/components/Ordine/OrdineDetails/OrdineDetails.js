@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import 'bootstrap/dist/css/bootstrap.css';
 import './OrdineDetails.css';
 import Modal from 'react-modal';
 

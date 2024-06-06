@@ -10,9 +10,6 @@ import OrdineDetails from '../OrdineDetails/OrdineDetails';
 import OrdineDelete from '../OrdineDelete/OrdineDelete';
 import './ContentOrdine.css';
 
-
-// import SfondoModalAcademyShop from '../../../img/SfondoModalAcademyShop.png';
-
 const ContentOrdine = () => {
 
   const userId = localStorage.getItem('userId');
@@ -72,27 +69,27 @@ const handlePrevPage = () => {
   useEffect(() => {
     fetchOrders(); 
   }, [userId]);
- useEffect(() => {
-      const fetchOrderDetail = async () => {
-        const API_URL = `https://localhost:7031/orders/${OrdineDettaglioArray}?userId=${userId}`;
-        try {
-          const response = await fetch(API_URL);
-          if (response.ok) {
+//  useEffect(() => {
+//       const fetchOrderDetail = async () => {
+//         const API_URL = `https://localhost:7031/orders/${OrdineDettaglioArray}?userId=${userId}`;
+//         try {
+//           const response = await fetch(API_URL);
+//           if (response.ok) {
             
-            const data = await response.json();
-            setOrderDetail(data);
-            console.log("Order detail: ", data);
+//             const data = await response.json();
+//             setOrderDetail(data);
+//             console.log("Order detail: ", data);
 
-          } else {
-            console.error("Error fetching order detail:", response.status);
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      };
+//           } else {
+//             console.error("Error fetching order detail:", response.status);
+//           }
+//         } catch (error) {
+//           console.error("Error:", error);
+//         }
+//       };
   
-      fetchOrderDetail();
-    }, []);
+//       fetchOrderDetail();
+//     }, []);
 
 
   useEffect(() => {
