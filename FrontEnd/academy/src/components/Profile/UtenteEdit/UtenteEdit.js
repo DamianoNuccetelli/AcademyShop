@@ -1,5 +1,5 @@
 import React from 'react';
-import './DettagliUtente.css';
+import './UtenteEdit.css';
 
 import sessoMaschile from '../../../img/sesso maschile.png';
 
