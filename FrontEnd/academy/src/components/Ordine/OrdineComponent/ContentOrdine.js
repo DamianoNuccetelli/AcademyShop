@@ -6,6 +6,8 @@ import banner from '../../../img/banner.png';
 import Modal from 'react-modal';
 import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
 import OrdineCreate from '../OrdineCreate/OrdineCreate';
+import OrdineDetails from '../OrdineDetails/OrdineDetails';
+import OrdineDelete from '../OrdineDelete/OrdineDelete';
 import './ContentOrdine.css';
 
 
@@ -15,17 +17,12 @@ const ContentOrdine = () => {
 
   const userId = localStorage.getItem('userId');
   const [orders, setOrders] = useState([]);
+  const [orderDetail, setOrderDetail] = useState(null);
   
   const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
-  const [detailedOrders, setDetailedOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
-  const [quantità, setQuantità] = useState(0);
-  const [deleteId, setdeleteId] = useState(0);
-
-  const [selectedProduct, setSelectedProduct] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,36 +43,6 @@ const handlePrevPage = () => {
         setCurrentPage(currentPage - 1);
     }
 };
-
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalIsOpen2, setModalIsOpen2] = useState(false);
-  const [modalDelete, setModalDelete] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const openModalDelete = () => {
-    setModalDelete(true);
-  };
-  
-  const openModal2 = () => {
-    setModalIsOpen2(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const closeModal2 = () => {
-    setModalIsOpen2(false);
-  };
-
-  const closeModalDelete= () => {
-    setModalDelete(false);
-  };
 
 
   const fetchOrders = async () => {
@@ -105,63 +72,7 @@ const handlePrevPage = () => {
   useEffect(() => {
     fetchOrders(); 
   }, [userId]);
-
- 
-
-  const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
-    closeModal();
-    console.log("addOrdine: ", idUtente, idProdotto, quantitàProdotto);
-    const API_URL = `https://localhost:7031/orders?idUtente=${idUtente}&idProdotto=${idProdotto}&quantit%C3%A0=${quantitàProdotto}`;
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          idUtente: idUtente,
-          idProdotto: idProdotto,
-          quantità: quantitàProdotto,
-        }),
-      });
-
-      if (response.ok) {
-        fetchOrders();
-        setCurrentPage(totalPages);
-       
-        console.log('Ordine aggiunto con successo', response.status);
-      } else {
-        setSearchTerm('');
-        console.error('Errore durante l\'aggiunta dell\'ordine:', response.status);
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-    }
-  };
-
-
-  
-  const fetchDetailedOrder = async (idDettaglioOrdine) => {
-    const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
-    try {
-      const response = await fetch(API_URL);
-      if (response.ok) {
-        const data = await response.json();
-        setDetailedOrders(data);
-        console.log("Detailed Order: ", data);
-        openModal2();
-      } else {
-        console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, response.status);
-      }
-    } catch (error) {
-      console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, error);
-    }
-  };
-  
-
-    const [orderDetail, setOrderDetail] = useState(null);
-  
-    useEffect(() => {
+ useEffect(() => {
       const fetchOrderDetail = async () => {
         const API_URL = `https://localhost:7031/orders/${OrdineDettaglioArray}?userId=${userId}`;
         try {
@@ -196,94 +107,19 @@ const handlePrevPage = () => {
     }
   }, [searchTerm, prodotti]);
 
- /* const getProducts = async () => {
-    const API_URL = `https://localhost:7031/products?userId=${userId}`;
-    try {
-      const response = await fetch(API_URL);
-      if (response.ok) {
-        const data = await response.json();
-        setQuantità(0);
-        setSearchTerm('');
-        setProdotti(data);
-        openModal(); // Call openModal after fetching products
-      } else {
-        console.error('Error fetching products:', response.status);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleQuantityChange = (event) => {
-    setQuantità(parseInt(event.target.value) || 1); // Ensure quantity is a positive integer
-  };*/
-/*
-  const handleKeyDown = (e) => {
-    if (e.key === 'ArrowDown') {
-      setActiveIndex((prevIndex) =>
-        prevIndex < filteredProducts.length - 1 ? prevIndex + 1 : prevIndex
-      );
-    } else if (e.key === 'ArrowUp') {
-      setActiveIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : 0
-      );
-    } else if (e.key === 'Enter') {
-      if (activeIndex >= 0) {
-        setSearchTerm(filteredProducts[activeIndex].nome);
-        setSelectedProduct(filteredProducts[activeIndex].id);
-        setShowDropdown(false);
-        setActiveIndex(-1);
-      }
-    }
-  };*/
-/*
-  const handleClick = (product) => {
-    setSearchTerm(product.nome);
-    setSelectedProduct(product.id);
-    setShowDropdown(false);
-  };*/
   const handleOnEndCreate = (flag) => {
     if (flag) {
       fetchOrders();
       setCurrentPage(totalPages);
     }
   };
-  const deletePopUp = async (idDettaglioOrdine) => {
-    setdeleteId(idDettaglioOrdine);
-    openModalDelete();
-  }
-  const deleteOrdine = async () => {
-    closeModalDelete();
-    const API_URL = `https://localhost:7031/orders/${deleteId}?idUtente=${userId}`;
-    try {
-      const response = await fetch(API_URL, {
-        method: 'DELETE',
-      });
-  
-      if (response.ok) {
-        const text = await response.text();
-  
-        if (text) {
-          const data = JSON.parse(text);
-          console.log(data);
-        } else {
-          console.log('Empty response');
-        }
-        setdeleteId(0);
-        fetchOrders();
-        setCurrentPage(1);
-      } else {
-        console.error('Error deleting order:', response.status);
-      }
-    } catch (error) {
-      console.error('Error:', error);
+
+  const handleOnEndDelete = (flag) => {
+    if (flag) {
+      fetchOrders();
+      setCurrentPage(1);
     }
   };
-  
 
   return (
     <div className="header">
@@ -300,74 +136,6 @@ const handlePrevPage = () => {
         </div>
       </div>
     
-      {/* Modal Delete */}
-      <Modal
-        isOpen={modalDelete}
-        ariaHideApp={false}
-        onRequestClose={closeModalDelete}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <div className="popup-content">
-          <h2>Vuoi Eliminare?</h2>
-          <button onClick={closeModalDelete} className="close-button">
-            Close
-          </button>
-          <button onClick={() => deleteOrdine()} className="close-button">
-            Delete
-          </button>
-        </div>
-      </Modal>
-
-      {/* Modal Detail Gabriele */}
-        <Modal
-            isOpen={modalIsOpen2}
-            ariaHideApp={false}
-            onRequestClose={closeModal2}
-            overlayClassName="modal-overlay"
-            className="modal-detailsOrder text-bold-black"
-          >
-            <div className="popup-content">
-              <h2>Dettagli Ordine</h2>
-              <p>Prodotto: {detailedOrders.prodottoNome}</p>
-              <p>Descrizione: {detailedOrders.prodottoDescrizione}</p>
-              <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
-              <p>Quantità: {detailedOrders.quantita}</p>
-              {/* <p>Id Prodotto: {detailedOrders.prodottoId}</p> */}
-              <p>
-                Data Registrazione:{" "}
-                {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
-              </p>
-              <p>
-                Data Aggiornamento:{" "}
-                {new Date(detailedOrders.dataAggiornamento).toLocaleDateString()}
-              </p>
-              <div>     
-              <button onClick={closeModal2} className="close-button">Chiudi</button>
-              </div>
-            </div>
-          </Modal>
-
-            {/* Modal Edit */}
-            {/* {modalEdit && selectedOrder && (
-            <Modal
-                isOpen={modalEdit}
-                ariaHideApp={true}
-                onRequestClose={closeModalEdit}
-                contentLabel="Edit Order"
-                overlayClassName="overlay"
-                className="modal"
-            >
-                <OrdineUpdate
-                    orders={orders}
-                    setOrders={setOrders}
-                    fetchOrders={fetchOrders}
-                    selectedOrder={selectedOrder}
-                    closeModalEdit={closeModalEdit}
-                />
-            </Modal>
-        )} */}
-
       <div className="products_container_ordine">
         <div className="all_products_div">
           <h2>Tutti i prodotti</h2>
@@ -408,23 +176,12 @@ const handlePrevPage = () => {
                     ) : (
                      <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
                      )}
-                
                 </td>
                 <td>
                   <div className='icons-container'>
-                  <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
-                  <FontAwesomeIcon icon={faEye} />
-                  </button>
-                  <OrdineUpdate
-                      setOrders={setOrders}
-                      fetchOrders={fetchOrders}
-                      order={order}
-                      orders={orders}
-                    />
-                    
-                  <button onClick={() => deletePopUp(order.idDettaglioOrdine)} className="trash-button">
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  <OrdineDetails order={order}/>
+                  <OrdineUpdate setOrders={setOrders} fetchOrders={fetchOrders} order={order} orders={orders}/>
+                  <OrdineDelete ordine={order} onEndDelete= {handleOnEndDelete}/>
                   </div>
                 </td>
               </tr>
