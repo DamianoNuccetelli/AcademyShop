@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
 import logo from '../../img/Proconsul-Services.png';
-import done from '../../img/SfondoModalAcademyShop.png';
-
 
 import Modal from 'react-modal';
+import ErrorModal from './ErrorModal/ErrorModal';
+import RegisteredModal from './RegisteredModal/RegisteredModal';
+
 
 const initialState = {
     nome: '',
@@ -122,34 +123,11 @@ const SignUp = () => {
                 </div>
                 <button type="submit">Registrati</button>
             </form>
-            <Modal
-                isOpen={state.isModalOpen}
-                onRequestClose={clodeModalError}
-                contentLabel="Campi mancanti"
-                ariaHideApp={false}
-                className="modal-login text-bold-black"
-                overlayClassName="modal-overlay"
-            >
-                <img src={done} alt="Done" className='modal_img'/>
-                <h2>Oops!</h2>
-                <p>Per favore, ricontrolla tutti i campi prima di inviare il form.</p>
-                <button onClick={clodeModalError}>Chiudi</button>
 
-            </Modal>
+            <ErrorModal isOpen={state.isModalOpen} onClose={clodeModalError} />
+
             {/* Modal per confermare la registrazione */}
-            <Modal
-                isOpen={state.isRegisteredModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Registrazione Completata"
-                ariaHideApp={false}
-                className="modal-login text-bold-black"
-                overlayClassName="modal-overlay"
-            >
-                <img src={done} alt="Done" className='modal_img'/>
-                <h2>Grazie per esserti iscritto!</h2>
-                <p>Esegui il login per verificare la registrazione.</p>
-                <button onClick={closeModal}>Chiudi</button>
-            </Modal>
+            <RegisteredModal isOpen={state.isRegisteredModalOpen} onClose={closeModal} />
         </div>
     );
 };
