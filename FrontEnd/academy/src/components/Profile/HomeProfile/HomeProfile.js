@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import NavbarProfile from "../NavbarProfile/NavbarProfile";
-import DettagliUtente from "../UtenteEdit/UtenteEdit";
+import UtenteDetails from "../UtenteDetails/UtenteDetails";
 import EliminaUtente from "../EliminaUtente/EliminaUtente";
 
 import "./HomeProfile.css";
@@ -14,11 +14,11 @@ const HomeProfile = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case "Dettagli":
-        return <DettagliUtente />;
+        return <UtenteDetails />;
       case "Elimina":
         return <EliminaUtente />;
       default:
-        return <DettagliUtente />;
+        return <UtenteDetails />;
     }
   };
 
