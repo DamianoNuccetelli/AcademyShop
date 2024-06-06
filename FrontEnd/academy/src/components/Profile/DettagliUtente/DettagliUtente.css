@@ -43,10 +43,10 @@
     width: 100%;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="date"],
-select {
+.form_container input[type="text"],
+.form_container input[type="password"],
+.form_container input[type="date"],
+.form_container select {
     margin: 1% 0;
     width: 200px;
     height: 40px;
