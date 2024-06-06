@@ -3,9 +3,12 @@
     height: 100vh;
     background-color: #361d6f;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.navbar_container{
+.navbar_container {
     box-sizing: border-box;
     padding: 15%;
     display: flex;
@@ -14,21 +17,22 @@
     flex-direction: column;
 }
 
-.profilo, .prodotti, .ordini{
-    /* width: 100%; */
+.navbar_top {
+    flex-grow: 1;
+}
+
+.profilo, .prodotti, .ordini, .logout {
     display: flex;
     align-items: center;
     justify-content: start;
     margin-bottom: 20px;
 }
 
-
-.navbar_container h4{
+.navbar_container h4 {
     color: #fff;
     margin-left: 5px;
     position: relative; 
 }
-
 
 .navbar_container h4::after {
     content: '';
@@ -58,7 +62,7 @@
     transition: transform 0.3s ease;
 }
 
-.user-icon:hover{
+.user-icon:hover {
     transform: scale(1.1);
 }
 
@@ -77,20 +81,19 @@
     margin-right: 20px;  
 }
 
-
 .separator {
     width: 70%;
     border: none;
     border-top: 2px solid #fff; 
 }
 
-.center{
+.center {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.logoAS{
+.logoAS {
     color: white;
 }
 
@@ -118,7 +121,8 @@ body:not(.loaded) .selected {
         background-position: 0 0;
     }
 }
-.user-icon-selected{
+
+.user-icon-selected {
     border-radius: 50%;
     box-sizing: border-box;
     padding: 15px;             
@@ -128,7 +132,42 @@ body:not(.loaded) .selected {
     transition: transform 0.3s ease;
 }
 
-.selected h4{
-    color : #361d6f;
+.selected h4 {
+    color: #361d6f;
     transition: color 0.3s ease;
+}
+
+.logout {
+    padding: 10% 15%; 
+}
+
+.box_flex {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    color: #361d6f;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.box_flex h4 {
+    color: #361d6f;
+    transition: color 0.3s ease;
+}
+
+.icon_purple {
+    color: #361d6f;
+    transition: color 0.3s ease;
+}
+
+.box_flex:hover {
+    transform: scale(1.05);
+    color: red;
+}
+
+.box_flex:hover h4, .box_flex:hover .icon_purple {
+    color: red;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle, faShoppingCart, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faShoppingCart, faBoxOpen, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from "react-router-dom";
 
 import './Navbar.css';
@@ -9,7 +9,7 @@ import logoAS from '../../img/LOGOacademyshop.png';
 
 const Navbar = () => {
   let navigate = useNavigate();
-  
+
   const NavigateOrdini = () => {
     let path = `/Ordine`;
     navigate(path);
@@ -23,6 +23,10 @@ const Navbar = () => {
   const NavigateProfile = () => {
     let path = `/Profile`;
     navigate(path);
+  }
+
+  const Logout = () => {
+    // Add your logout logic here
   }
 
   const [classeProdotti, setClasseProdotti] = useState('prodotti');
@@ -69,9 +73,9 @@ const Navbar = () => {
       <div className='center'>
         <hr className="separator" />
       </div>
-      <div className="navbar_container">
+      <div className="navbar_container navbar_top">
         <div className={classeProfile} onClick={NavigateProfile}>
-          <FontAwesomeIcon icon={faUserCircle}  className={blueIconProfile}/>
+          <FontAwesomeIcon icon={faUserCircle} className={blueIconProfile}/>
           <h4 className='mb-20'>Profilo</h4>
         </div>
         <div className={classeProdotti} onClick={NavigateProdotti}>
@@ -83,7 +87,11 @@ const Navbar = () => {
           <h4 className='mb-20'>Ordini</h4>
         </div>
       </div>
-      <div className="navbar_container">
+      <div className='navbar_container logout' onClick={Logout}>
+        <div className="box_flex">
+          <FontAwesomeIcon icon={faSignOutAlt} className="user-icon icon_purple"/>
+          <h4 className='mb-20'>Logout</h4>
+        </div>
       </div>
     </div>
   );
