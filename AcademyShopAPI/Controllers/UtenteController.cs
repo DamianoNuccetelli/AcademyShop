@@ -75,9 +75,9 @@ namespace ProgettoAcademyShop.Controller
 
         // DELETE USER
         [HttpDelete("users/{id}")]
-        public async Task<ActionResult<Utente>> DeleteUtenteAsync(int id)
+        public ActionResult<Utente> DeleteUtenteSync(int id)
         {
-            var result = await _oUBL.DeleteUtenteAsync(id);
+            var result =  _oUBL.DeleteUtenteAsync(id);
             return result;
         }
 
