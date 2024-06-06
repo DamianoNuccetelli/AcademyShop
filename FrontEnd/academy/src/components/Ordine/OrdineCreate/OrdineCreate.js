@@ -160,7 +160,7 @@ const result = (flag) => {
         overlayClassName="overlay"
       >
         <div className="popup-content">
-          <h2>Nuovo Ordine</h2>
+          <h2 className='title_create'>Inserisci un nuovo ordine</h2>
           <div>
             <div className="search-bar-dropdown">
               <input
@@ -186,25 +186,31 @@ const result = (flag) => {
               )}
             </div>
             <div>
-              <input
-                type="number"
-                min="1"
-                placeholder="Quantità"
-                value={quantità}
-                onChange={handleQuantityChange}
-              />
+            <p className='p_create'>Seleziona una quantità: </p>
+            <div className='input_container_create'>
+            <input
+              type="number"
+              min="0"
+              placeholder={"Quantità:"}
+              value={quantità}
+              onChange={handleQuantityChange}
+              className='number-input'
+            />
             </div>
           </div>
-          <button onClick={closeModal} className="close-button">
-            Close
-          </button>
+          <div className='button_beetween'>
           <button
             onClick={() => addOrdine(userId, selectedProduct, quantità)}
-            className="close-button"
+            className="close-button mb-20"
             disabled={!selectedProduct || !quantità}
           >
             Submit
           </button>
+          <button onClick={closeModal} className="close-button">
+            Close
+          </button>
+          </div>
+          </div>
         </div>
       </Modal>
       <div className="add_container_ordine">
