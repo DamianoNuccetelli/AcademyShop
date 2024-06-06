@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Navbar from '../Navbar/Navbar';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import ContentOrdine from './OrdineComponent/ContentOrdine';
+import Modal from 'react-modal';
 //import 'bootstrap/dist/css/bootstrap.css';
-import './Ordine.css';
 import './OrdineCreate.css'
 const Ordine = () => {
 
