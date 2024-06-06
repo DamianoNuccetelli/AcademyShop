@@ -136,9 +136,36 @@
     text-align: center;
     animation: modalFadeIn 0.3s ease-in-out;
     z-index: 2000;
-    background-image: url('../../img/SfondoModalAcademyShop.png'); /* Aggiunto sfondo */
-    background-size: cover; /* Copri interamente il contenitore */
-    background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+}
+
+.modal_img{
+    width: 30%;
+    margin-bottom: 4%;
+}
+
+/* Aggiungi margini al testo */
+.modal-login h2 {
+    margin: 0 0 20px; /* Modifica il margine inferiore */
+    font-size: 24px;
+    color: #361d6f;
+}
+
+.modal-login p {
+    margin: 0 0 20px; 
+    font-size: 14px;
+    color: #361d6f;
+}
+
+.modal-login button {
+    margin-top: 20px; 
+    padding: 10px 20px;
+    background-color: #361d6f;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .modal-overlay {
@@ -152,10 +179,10 @@
     animation: overlayFadeIn 0.3s ease-in-out;
 }
 .text-bold-black {
-    color: #000; /* Imposta il colore del testo su nero */
-    font-weight: bold; /* Imposta il testo in grassetto */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Aggiunge ombra al testo */
-    font-size: 18px; /* Aumenta la dimensione del font */
+    color: #000; 
+    font-weight: bold; 
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); 
+    font-size: 18px; 
 }
 
 @keyframes modalFadeIn {
@@ -181,18 +208,18 @@
 .modal-login h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #361d6f;
 }
 
 .modal-login p {
     margin-bottom: 20px;
-    font-size: 16px;
-    color: #666;
+    font-size: 14px;
+    color: #361d6f;
 }
 
 .modal-login button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #361d6f;
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -202,5 +229,11 @@
 }
 
 .modal-login button:hover {
-    background-color: #0056b3;
+    background-color: #fff;
+    border: 2px solid 361d6f;
+    color: #361d6f;
 }
+
+
+
+

@@ -1,46 +1,69 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
+
 import logo from '../../img/Proconsul-Services.png';
-import Modal from 'react-modal'
+
+import Modal from 'react-modal';
+import ErrorModal from './ErrorModal/ErrorModal';
+import RegisteredModal from './RegisteredModal/RegisteredModal';
+
+
+const initialState = {
+    nome: '',
+    cognome: '',
+    cittaNascita: '',
+    dataNascita: '',
+    provinciaNascita: '',
+    sesso: '',
+    email: '',
+    password: '',
+    codiceFiscale: '',
+    isModalOpen: false,
+    isRegisteredModalOpen: false,
+    errors: {},
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_FIELD':
+            return { ...state, [action.field]: action.value };
+        case 'OPEN_MODAL':
+            return { ...state, isModalOpen: true };
+        case 'CLOSE_MODAL':
+            return { ...state, isModalOpen: false };
+        case 'OPEN_REGISTERED_MODAL':
+            return { ...state, isRegisteredModalOpen: true };
+        case 'CLOSE_REGISTERED_MODAL':
+            return { ...state, isRegisteredModalOpen: false };
+        case 'SET_ERRORS': 
+            return { ...state, errors: action.errors };
+        default:
+            return state;
+    }
+};
 
 const SignUp = () => {
-    // Stato per ogni campo di input
-    const [nome, setNome] = useState('');
-    const [cognome, setCognome] = useState('');
-    const [cittaNascita, setCittaDiNascita] = useState('');
-    const [dataNascita, setAnnoNascita] = useState('');
-    const [provinciaNascita, setProvincia] = useState('');
-    const [sesso, setSesso] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [codiceFiscale, setCodiceFiscale] = useState('');
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [state, dispatch] = useReducer(reducer, initialState);
     const navigate = useNavigate();
     const UrlApiRoot='https://localhost:7031/users';
 
-  
-    // Funzione per gestire l'invio del form
-    const handleSubmit = async (event) => {
-        
-        event.preventDefault(); 
-        try {
-            const userData = {
-                nome, 
-                cognome,
-                cittaNascita,
-                dataNascita,
-                provinciaNascita,
-                sesso,
-                email,
-                password,
-                codiceFiscale
- 
-            };
-            
-            console.log("Dati inviati:", userData); // Debugging
+    const handleChange = (field, value) => {
+        dispatch({ type: 'SET_FIELD', field, value });
+    };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        // Validazione dei campi
+        const { nome, cognome, cittaNascita, dataNascita, provinciaNascita, sesso, email, password, codiceFiscale } = state;
+        if (!nome || !cognome || !cittaNascita || !dataNascita || !provinciaNascita || !sesso || !email || !password || !codiceFiscale) {
+            dispatch({ type: 'OPEN_MODAL' });
+            return;
+        }
+
+        try {
+            const userData = { ...state };
             const response = await fetch(UrlApiRoot, {
                 method: 'POST',
                 headers: {
@@ -48,25 +71,25 @@ const SignUp = () => {
                 },
                 body: JSON.stringify(userData),
             });
-            console.log(response)
 
             if (!response.ok) {
                 throw new Error('Errore di rete');
             }
 
-            const data = await response.json();
-            console.log("Risposta del server:", data); 
-                       
-            setIsModalOpen(true);
-            
+            dispatch({ type: 'OPEN_REGISTERED_MODAL' });
         } catch (error) {
             console.error('Si è verificato un errore durante la registrazione:', error);
+            dispatch({ type: 'OPEN_MODAL' });
         }
     };
 
     const closeModal = () => {
-        setIsModalOpen(false);
+        dispatch({ type: 'CLOSE_REGISTERED_MODAL' }); 
         window.location.reload();
+    };
+
+    const clodeModalError = () => {
+        dispatch({ type: 'CLOSE_MODAL' });
     };
 
     return (
@@ -74,48 +97,37 @@ const SignUp = () => {
             <form onSubmit={handleSubmit}>
                 <img src={logo} alt="Logo" />
                 <h1>Crea un Account</h1>
-
                 <span>o usa la tua email per registrarti</span>
                 <div className="input-row">
-                    <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-                    <input type="text" placeholder="Cognome" value={cognome} onChange={(e) => setCognome(e.target.value)} />
+                    <input type="text" placeholder="Nome" value={state.nome} onChange={(e) => handleChange('nome', e.target.value)} />
+                    <input type="text" placeholder="Cognome" value={state.cognome} onChange={(e) => handleChange('cognome', e.target.value)} />
                 </div>
                 <div className="input-row">
-                    <input type="text" placeholder="Città di nascita" value={cittaNascita} onChange={(e) => setCittaDiNascita(e.target.value)} />
-                    <input type="text" placeholder="Provincia di nascita" value={provinciaNascita} onChange={(e) => setProvincia(e.target.value)} />
+                    <input type="text" placeholder="Città di nascita" value={state.cittaNascita} onChange={(e) => handleChange('cittaNascita', e.target.value)} />
+                    <input type="text" placeholder="Provincia di nascita" value={state.provinciaNascita} onChange={(e) => handleChange('provinciaNascita', e.target.value)} />
                 </div>
                 <div className="input-row">
-                    <input type="date" value={dataNascita} onChange={(e) => setAnnoNascita(e.target.value)} />
-                    <select value={sesso} onChange={(e) => setSesso(e.target.value)}>
+                    <input type="date" value={state.dataNascita} onChange={(e) => handleChange('dataNascita', e.target.value)} />
+                    <select value={state.sesso} onChange={(e) => handleChange('sesso', e.target.value)}>
                         <option value="">Seleziona il sesso</option>
                         <option value="M">Maschio</option>
                         <option value="F">Femmina</option>
                     </select>
                 </div>
                 <div className="input-row">
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type="email" placeholder="Email" value={state.email} onChange={(e) => handleChange('email', e.target.value)} />
+                    <input type="password" placeholder="Password" value={state.password} onChange={(e) => handleChange('password', e.target.value)} />
                 </div>
                 <div className="input-single-row">
-                    <input type="text" placeholder="Codice fiscale" value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} />
+                    <input type="text" placeholder="Codice fiscale" value={state.codiceFiscale} onChange={(e) => handleChange('codiceFiscale', e.target.value)} />
                 </div>
-                <button type="submit" onClick={handleSubmit}>Registrati</button>
+                <button type="submit">Registrati</button>
             </form>
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Registrazione Completata"
-                ariaHideApp={false}
-                className="modal-login text-bold-black" // Assicurati di definire gli stili CSS per il modal
-                overlayClassName="modal-overlay" // Assicurati di definire gli stili CSS per l'overlay del modal
 
-            >
-                <h2>Grazie per esserti iscritto!</h2>
-                <p>Esegui il login per verificare la registrazione.</p>
-                <button onClick={closeModal}>Chiudi</button>
-            </Modal>
+            <ErrorModal isOpen={state.isModalOpen} onClose={clodeModalError} />
 
-
+            {/* Modal per confermare la registrazione */}
+            <RegisteredModal isOpen={state.isRegisteredModalOpen} onClose={closeModal} />
         </div>
     );
 };

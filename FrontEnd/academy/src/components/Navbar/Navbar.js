@@ -26,7 +26,9 @@ const Navbar = () => {
   }
 
   const Logout = () => {
+    localStorage.clear();
     navigate('/Login');
+
     // Add your logout logic here
   }
 
