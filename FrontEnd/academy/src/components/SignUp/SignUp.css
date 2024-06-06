@@ -72,7 +72,7 @@
 }
 
 .sign-up button {
-    background-color: #512da8;
+    background-color: #361d6f;
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -88,6 +88,7 @@
 
 .sign-up button:hover{
     background-color: #5c33bc;
+    color: #fff;
 }
 
 .sign-up select {
