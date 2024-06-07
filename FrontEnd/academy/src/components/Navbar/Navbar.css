@@ -13,7 +13,6 @@
     padding: 15%;
     display: flex;
     align-items: flex-start;
-    cursor: pointer;
     flex-direction: column;
 }
 
@@ -26,6 +25,7 @@
     align-items: center;
     justify-content: start;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .navbar_container h4 {
