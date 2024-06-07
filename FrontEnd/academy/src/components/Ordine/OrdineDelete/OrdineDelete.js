@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import './OrdineDelete.css';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import cestino from '../../../img/cestino.png';
 
 const Ordine = ({ ordine, onEndDelete }) => {
     const userId = localStorage.getItem('userId');
@@ -57,11 +58,12 @@ const Ordine = ({ ordine, onEndDelete }) => {
                 overlayClassName="overlay"
             >
                 <div className="popup-content">
-                    <h2>Vuoi Eliminare?</h2>
-                    <button onClick={closeModalDelete} className="close-button">
+                    <img src={cestino} alt="Occhio" className='modal_img'/>
+                    <h3>Sei sicuro di voler eliminare questo prodotto?</h3>
+                    <button onClick={closeModalDelete} className="close-button-delete">
                         Close
                     </button>
-                    <button onClick={() => deleteOrdine()} className="close-button">
+                    <button onClick={() => deleteOrdine()} className="close-button-delete">
                         Delete
                     </button>
                 </div>
