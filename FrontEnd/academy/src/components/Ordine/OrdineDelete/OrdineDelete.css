@@ -27,13 +27,15 @@
     margin-bottom: 20px;
     }
     
-    .close-button {
-    background-color: #007bff;
+    .close-button-delete {
+    margin-top: 20px;
+    background-color: #054d9a;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    max-width: 30%;
     }
     
     .close-button:hover {
