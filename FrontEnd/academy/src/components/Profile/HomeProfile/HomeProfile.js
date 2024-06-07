@@ -25,17 +25,6 @@ const HomeProfile = () => {
     }
   };
 
-  const getImageSrc = () => {
-    switch (activeComponent) {
-      case "Dettagli":
-        return editUtenteImg;
-      case "Elimina":
-        return deleteUtenteImg;
-      default:
-        return editUtenteImg;
-    }
-  };
-
   return (
     <div className="header">
       <div className="title_container_user">
