@@ -58,7 +58,7 @@ const GetProducts = ({ productsData, setProductsData }) => {
                     </button>
                 </div>
             </div>
-            <div className='products'>
+            <div className='products_card'>
                 {currentProducts.map(product => (
                     <ProductCard
                         key={product.id}

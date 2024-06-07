@@ -7,9 +7,16 @@
 
 .products_header {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     margin-bottom: 2%;
+}
+
+.products_card {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
 }
 
 .pagination {
@@ -41,6 +48,6 @@
 .products {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    /* justify-content: space-between; */
+    /* flex-wrap: wrap; */
 }
