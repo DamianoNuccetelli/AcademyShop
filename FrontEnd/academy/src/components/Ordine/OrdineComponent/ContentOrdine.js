@@ -21,7 +21,8 @@ const ContentOrdine = () => {
   let totalPages = Math.ceil(orders.length / ordersPerPage);
   const nome = sessionStorage.getItem('nome');
   const cognome = sessionStorage.getItem('cognome');
- 
+  const [counterOrdini, setCounterOrdini] = useState(1);
+
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
     try {
@@ -41,6 +42,18 @@ const ContentOrdine = () => {
     fetchOrders(); 
   }, []);
 
+  useEffect(() => {
+    if (orders.length > 0) {
+      if (orders.length > counterOrdini) {
+        setCurrentPage(totalPages);
+      } else if (orders.length < counterOrdini) {
+        setCurrentPage(1);
+      }
+    }   
+    setCounterOrdini(order.length); 
+  }, [orders.length]);
+  
+
 const handleNextPage = () => {
   if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -57,18 +70,12 @@ const handlePrevPage = () => {
 const handleOnEndCreate = (flag) => {
     if (flag) {
       fetchOrders();
-      if((order.length-1) % ordersPerPage ){
-        setCurrentPage(totalPages+1);
-      }else{
-        setCurrentPage(totalPages);
-      }      
     }
   };
 
   const handleOnEndDelete = (flag) => {
     if (flag) {
       fetchOrders();
-      setCurrentPage(1);
     }
   };
 
