@@ -7,7 +7,6 @@ import done from '../../../img/SfondoModalAcademyShop.png';
 
 const Ordine = ({onEndCreate}) => {
   const userId = localStorage.getItem('userId');
-  const [orders, setOrders] = useState([]);
   const [prodotti, setProdotti] = useState([]);
   const [quantità, setQuantità] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -24,30 +23,6 @@ const Ordine = ({onEndCreate}) => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
-  const fetchOrders = async () => {
-    const API_URL = `https://localhost:7031/orders?userId=${userId}`;
-    try {
-      const response = await fetch(API_URL);
-      if (response.ok) {
-        const data = await response.json();
-        setOrders(data);
-      } else {
-        console.error("Error fetching orders:", response.status);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  useEffect(() => {
-    fetchOrders();
-  }, [userId]);
-
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
     const API_URL = `https://localhost:7031/orders?idUtente=${idUtente}&idProdotto=${idProdotto}&quantit%C3%A0=${quantitàProdotto}`;
@@ -65,7 +40,6 @@ const Ordine = ({onEndCreate}) => {
       });
 
       if (response.ok) {
-        fetchOrders();
         result(true);
       } else {
         setSearchTerm('');
@@ -101,19 +75,19 @@ const Ordine = ({onEndCreate}) => {
       product.nome.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setFilteredProducts(filtered);
-    setShowDropdown(true); // Show the dropdown when search term changes
-    setActiveIndex(-1); // Reset active index
+    setShowDropdown(true); 
+    setActiveIndex(-1);
   };
 
   const handleSearchFocus = () => {
     if (searchTerm === '') {
-      setFilteredProducts(prodotti); // Show all products if searchTerm is empty
-      setShowDropdown(true); // Show the dropdown when search box is focused and empty
+      setFilteredProducts(prodotti); 
+      setShowDropdown(true); 
     }
   };
 
   const handleQuantityChange = (event) => {
-    setQuantità(parseInt(event.target.value) || 1); // Ensure quantity is a positive integer
+    setQuantità(parseInt(event.target.value) || 1); 
   };
 
   const handleKeyDown = (e) => {
@@ -189,7 +163,7 @@ const result = (flag) => {
             <input
               type="number"
               min="0"
-              placeholder={"Quantità:"}
+              placeholder={"Quantità:"} 
               value={quantità}
               onChange={handleQuantityChange}
               className='number-input'

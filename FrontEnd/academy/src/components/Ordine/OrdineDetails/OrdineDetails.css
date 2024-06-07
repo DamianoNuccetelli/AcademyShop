@@ -139,16 +139,19 @@
         padding: 30px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
+        max-width: 600px;
         width: 100%;
         text-align: center;
         animation: modalFadeIn 0.3s ease-in-out;
         z-index: 2000;
-        background-color: rgba(255, 255, 255, 0.8);
-        background-image: url('../../../img/SfondoModalAcademyShop.png'); /* Aggiunto sfondo */
-        background-size: cover; /* Copri interamente il contenitore */
-        background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
-        background-blend-mode: overlay;
+    }
+
+    .detail_content{
+      display: flex;
+      align-items: start;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 15px;
     }
     
     .modal-overlay {

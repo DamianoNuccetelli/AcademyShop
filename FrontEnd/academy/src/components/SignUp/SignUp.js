@@ -1,10 +1,10 @@
-import React, { useReducer } from 'react'; // Importa React e useReducer per la gestione dello stato locale
-import './SignUp.css'; // Importa il file CSS per lo stile del componente
+import React, { useReducer } from 'react'; 
+import './SignUp.css'; 
 
-import logo from '../../img/Proconsul-Services.png'; // Importa il logo
+import logo from '../../img/Proconsul-Services.png'; 
 
-import ErrorModal from './ErrorModal/ErrorModal'; // Importa il componente per il modal di errore
-import RegisteredModal from './RegisteredModal/RegisteredModal'; // Importa il componente per il modal di registrazione completata
+import ErrorModal from './ErrorModal/ErrorModal'; 
+import RegisteredModal from './RegisteredModal/RegisteredModal'; 
 
 // Stato iniziale del form di registrazione
 const initialState = {
@@ -94,7 +94,7 @@ const SignUp = () => {
     return (
         <div className="form-container sign-up">
             <form onSubmit={handleSubmit}>
-                <img src={logo} alt="Logo" /> {/* Logo */}
+                <img src={logo} alt="Logo" /> 
                 <h1>Crea un Account</h1>
                 <span>o usa la tua email per registrarti</span>
                 <div className="input-row">

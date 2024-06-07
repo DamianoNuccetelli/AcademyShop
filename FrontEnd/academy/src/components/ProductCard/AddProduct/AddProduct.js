@@ -4,12 +4,14 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import './AddProduct.css';
 
+import done from '../../../img/SfondoModalAcademyShop.png';
+
 const AddProduct = ({ fetchProducts, onEndCreate }) => {
     const [modalIsOpenAddProduct, setModalIsOpenAddProduct] = useState(false);
     const result = (flag) => {
         onEndCreate(flag);
         return flag;
-      };
+    };
     const openModalAddProduct = () => {
         setModalIsOpenAddProduct(true);
     };
@@ -72,10 +74,11 @@ const AddProduct = ({ fetchProducts, onEndCreate }) => {
                 overlayClassName="overlay"
                 ariaHideApp={false}
             >
-                <div className="popup-content">
+                <div className="popup-content_addProduct">
+                    <img src={done} alt="Done" className='modal_img_addProduct'/>
                     <h2>Aggiungi Prodotto</h2>
                     <form onSubmit={handleSubmit}>
-                        <div>
+                        <div className='container_addProduct'>
                             <input
                                 type="text"
                                 name="nomeProdotto"
@@ -98,9 +101,11 @@ const AddProduct = ({ fetchProducts, onEndCreate }) => {
                                 required
                             />
                         </div>
-                        <button type="submit">Aggiungi</button>
+                        <div className="button-group">
+                            <button type="submit" className="modal-button">Aggiungi</button>
+                            <button type="button" onClick={closeModalAddProduct} className="modal-button close-button">Chiudi</button>
+                        </div>
                     </form>
-                    <button onClick={closeModalAddProduct} className="close-button">Chiudi</button>
                 </div>
             </Modal>
         </div>

@@ -57,8 +57,8 @@ const DeleteProduct = ({ id, productsData, setProductsData }) => {
                 <div className="popup-content">
                     <h2>Conferma Eliminazione</h2>
                     <p>Sei sicuro di voler eliminare questo prodotto?</p>
-                    <button onClick={handleDeleteProduct}>Elimina</button>
-                    <button onClick={closeModalDeleteProduct} className="close-button">Annulla</button>
+                    <button onClick={handleDeleteProduct} className='close-button m2'>Elimina</button>
+                    <button onClick={closeModalDeleteProduct} className="close-button m2">Annulla</button>
                 </div>
             </Modal>
         </div>

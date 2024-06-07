@@ -6,31 +6,44 @@ import { useNavigate, useLocation } from "react-router-dom";
 import './Navbar.css';
 
 import logoAS from '../../img/LOGOacademyshop.png';
+import SfondoErrorAcademyShop from '../../img/SfondoErrorAcademyShop.png';
 
 const Navbar = () => {
   let navigate = useNavigate();
 
+  const [showLogoutModal, setShowLogoutModal] = useState(false); 
+
+  const openLogoutModal = () => {
+    setShowLogoutModal(true);
+  };
+
+  const closeLogoutModal = () => {
+    setShowLogoutModal(false);
+  };
+
+  const confirmLogout = () => {
+    localStorage.clear();
+    navigate('/Login');
+  };
+
   const NavigateOrdini = () => {
     let path = `/Ordine`;
     navigate(path);
-  }
+  };
 
   const NavigateProdotti = () => {
     let path = `/Dashboard`
-    navigate(path)
-  }
+    navigate(path);
+  };
 
   const NavigateProfile = () => {
     let path = `/Profile`;
     navigate(path);
-  }
+  };
 
   const Logout = () => {
-    localStorage.clear();
-    navigate('/Login');
-
-    // Add your logout logic here
-  }
+    openLogoutModal(); 
+  };
 
   const [classeProdotti, setClasseProdotti] = useState('prodotti');
   const [blueIconProdotti, setBlueIconProdotti] = useState('user-icon');
@@ -90,12 +103,26 @@ const Navbar = () => {
           <h4 className='mb-20'>Ordini</h4>
         </div>
       </div>
-      <div className='navbar_container logout' onClick={Logout}>
+      <div className='navbar_container logout' onClick={openLogoutModal}>
         <div className="box_flex">
           <FontAwesomeIcon icon={faSignOutAlt} className="user-icon icon_purple"/>
           <h4 className='mb-20'>Logout</h4>
         </div>
       </div>
+
+      {showLogoutModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <img src={SfondoErrorAcademyShop} alt="error" className='LogoutModalIMG' />
+            <h2>Conferma Logout</h2>
+            <p>Sei sicuro di voler effettuare il logout?</p>
+            <div className="modal-buttons">
+              <button onClick={closeLogoutModal} className='LogoutModal'>Annulla</button>
+              <button onClick={confirmLogout} className='LogoutModal '>Logout</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

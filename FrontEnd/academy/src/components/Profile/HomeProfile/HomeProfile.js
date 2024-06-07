@@ -25,17 +25,6 @@ const HomeProfile = () => {
     }
   };
 
-  const getImageSrc = () => {
-    switch (activeComponent) {
-      case "Dettagli":
-        return editUtenteImg;
-      case "Elimina":
-        return deleteUtenteImg;
-      default:
-        return editUtenteImg;
-    }
-  };
-
   return (
     <div className="header">
       <div className="title_container_user">
@@ -50,15 +39,6 @@ const HomeProfile = () => {
           activeComponent={activeComponent}
         />
         {renderComponent()}
-        <div className="image_section">
-          <img
-            setActiveComponent={setActiveComponent}
-            activeComponent={activeComponent}
-            src={getImageSrc()}
-            alt="Edit Utente"
-            className="user_image"
-          />
-        </div>
       </div>
     </div>
   );
