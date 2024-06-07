@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faChevronLeft, faChevronRight, faEdit, faTrashCan, faEye } from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
-import Modal from 'react-modal';
 import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
 import OrdineCreate from '../OrdineCreate/OrdineCreate';
 import OrdineDetails from '../OrdineDetails/OrdineDetails';
@@ -14,36 +13,15 @@ const ContentOrdine = () => {
 
   const userId = localStorage.getItem('userId');
   const [orders, setOrders] = useState([]);
-  const [orderDetail, setOrderDetail] = useState(null);
-  
-  const [OrdineDettaglioArray, setOrdineDettaglioArray] = useState([]);
-  const [prodotti, setProdotti] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5; 
   const indexOfLastProduct = currentPage * ordersPerPage;
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
+  let totalPages = Math.ceil(orders.length / ordersPerPage);
   const nome = sessionStorage.getItem('nome');
   const cognome = sessionStorage.getItem('cognome');
  
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-        setCurrentPage(currentPage + 1);
-    }
-};
-
-const handlePrevPage = () => {
-    if (currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-    }
-};
-
-
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
     try {
@@ -51,13 +29,8 @@ const handlePrevPage = () => {
       if (response.ok) {
         const data = await response.json();
         setOrders(data);
-        console.log("Ordini: ", data);
-        const OrdineDettaglioArray = data.map(order => order.idDettaglioOrdine);
-        setOrdineDettaglioArray(OrdineDettaglioArray);
-        
-        console.log("OrdineDettaglio array: ", OrdineDettaglioArray);                
       } else {
-        console.error("Error fetching orders:", response.status);
+        console.error(response.statusText, response.status);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -68,48 +41,27 @@ const handlePrevPage = () => {
     fetchOrders(); 
   }, []);
 
-  useEffect(() => {
-    fetchOrders(); 
-  }, [userId]);
-//  useEffect(() => {
-//       const fetchOrderDetail = async () => {
-//         const API_URL = `https://localhost:7031/orders/${OrdineDettaglioArray}?userId=${userId}`;
-//         try {
-//           const response = await fetch(API_URL);
-//           if (response.ok) {
-            
-//             const data = await response.json();
-//             setOrderDetail(data);
-//             console.log("Order detail: ", data);
+const handleNextPage = () => {
+  if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+  }
+};
 
-//           } else {
-//             console.error("Error fetching order detail:", response.status);
-//           }
-//         } catch (error) {
-//           console.error("Error:", error);
-//         }
-//       };
-  
-//       fetchOrderDetail();
-//     }, []);
-
-
-  useEffect(() => {
-    if (searchTerm === '') {
-      setFilteredProducts([]);
-    } else {
-      const filtered = prodotti.filter(product =>
-        product.nome.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredProducts(filtered);
-      setShowDropdown(true);
+const handlePrevPage = () => {
+    if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
     }
-  }, [searchTerm, prodotti]);
+};
 
-  const handleOnEndCreate = (flag) => {
+
+const handleOnEndCreate = (flag) => {
     if (flag) {
       fetchOrders();
-      setCurrentPage(totalPages);
+      if((order.length-1) % ordersPerPage ){
+        setCurrentPage(totalPages+1);
+      }else{
+        setCurrentPage(totalPages);
+      }      
     }
   };
 
@@ -173,7 +125,7 @@ const handlePrevPage = () => {
                 <td>{order.dataAggiornamento == null ? (
                     <span>Non aggiornato</span>
                     ) : (
-                     <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
+                     <span>  {new Date(order.dataAggiornamento).toLocaleDateString()}</span>
                      )}
                 </td>
                 <td>

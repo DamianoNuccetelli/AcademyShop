@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import './OrdineCreate.css';
-
 import done from '../../../img/SfondoModalAcademyShop.png';
 
 const Ordine = ({onEndCreate}) => {
@@ -33,7 +32,6 @@ const Ordine = ({onEndCreate}) => {
       if (response.ok) {
         const data = await response.json();
         setOrders(data);
-        console.log("Ordini: ", data);
       } else {
         console.error("Error fetching orders:", response.status);
       }
@@ -52,7 +50,6 @@ const Ordine = ({onEndCreate}) => {
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
-    console.log("addOrdine: ", idUtente, idProdotto, quantitàProdotto);
     const API_URL = `https://localhost:7031/orders?idUtente=${idUtente}&idProdotto=${idProdotto}&quantit%C3%A0=${quantitàProdotto}`;
     try {
       const response = await fetch(API_URL, {
@@ -70,7 +67,6 @@ const Ordine = ({onEndCreate}) => {
       if (response.ok) {
         fetchOrders();
         result(true);
-        console.log('Ordine aggiunto con successo', response.status);
       } else {
         setSearchTerm('');
         console.error('Errore durante l\'aggiunta dell\'ordine:', response.status);
@@ -81,7 +77,6 @@ const Ordine = ({onEndCreate}) => {
   };
 
   const getProducts = async () => {
-    console.log(userId);
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -90,9 +85,8 @@ const Ordine = ({onEndCreate}) => {
         setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
-        setFilteredProducts(data); // Initialize filteredProducts with all products
-        console.log(prodotti);
-        openModal(); // Call openModal after fetching products
+        setFilteredProducts(data);
+        openModal();
       } else {
         console.error('Error fetching products:', response.status);
       }
@@ -166,6 +160,7 @@ const result = (flag) => {
           <h2 className='title_create'>Inserisci un nuovo ordine</h2>
           <div>
             <div className="search-bar-dropdown">
+            <label className='label_create'>Seleziona un prodotto: </label>
               <input
                 type="text"
                 value={searchTerm}
@@ -189,7 +184,7 @@ const result = (flag) => {
               )}
             </div>
             <div>
-            <p className='p_create'>Seleziona una quantità: </p>
+            <label className='label_create'>Seleziona una quantità: </label>
             <div className='input_container_create'>
             <input
               type="number"

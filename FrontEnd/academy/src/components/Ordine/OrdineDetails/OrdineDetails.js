@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import {faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './OrdineDetails.css';
@@ -12,12 +12,9 @@ const OrdineDetails = ({order}) => {
     const openModal2 = () => {
         setModalIsOpen2(true);
       };
-    
-      
-      const closeModal2 = () => {
+    const closeModal2 = () => {
         setModalIsOpen2(false);
       };
-
     const fetchDetailedOrder = async (idDettaglioOrdine) => {
         const API_URL = `https://localhost:7031/orders/${idDettaglioOrdine}?userId=${userId}`;
         try {
@@ -25,7 +22,6 @@ const OrdineDetails = ({order}) => {
           if (response.ok) {
             const data = await response.json();
             setDetailedOrders(data);
-            console.log("Detailed Order: ", data);
             openModal2();
           } else {
             console.error(`Error fetching order detail for idDettaglioOrdine ${idDettaglioOrdine}:`, response.status);
@@ -52,7 +48,6 @@ const OrdineDetails = ({order}) => {
             <p>Descrizione: {detailedOrders.prodottoDescrizione}</p>
             <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
             <p>Quantità: {detailedOrders.quantita}</p>
-            {/* <p>Id Prodotto: {detailedOrders.prodottoId}</p> */}
             <p>
               Data Registrazione:{" "}
               {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
@@ -69,8 +64,6 @@ const OrdineDetails = ({order}) => {
             </div>
           </div>
         </Modal>
-
-
         <button className='show-button' onClick={() => fetchDetailedOrder(order.idDettaglioOrdine)}>
         <FontAwesomeIcon icon={faEye} />
         </button>

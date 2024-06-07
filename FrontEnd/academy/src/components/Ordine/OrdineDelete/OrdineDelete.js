@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import './OrdineDelete.css';
@@ -32,21 +32,13 @@ const Ordine = ({ ordine, onEndDelete }) => {
           });
       
           if (response.ok) {
-            const text = await response.text();
-      
-            if (text) {
-              const data = JSON.parse(text);
-              console.log(data);
-            } else {
-              console.log('Empty response');
-            }
             setdeleteId(0);
             result(true);
           } else {
-            console.error('Error deleting order:', response.status);
+            console.error("Errore durante l'eliminazione dell'ordine:", response.status);
           }
         } catch (error) {
-          console.error('Error:', error);
+          console.error('Errore Generico:', error);
         }
       };
       const result = (flag) => {
