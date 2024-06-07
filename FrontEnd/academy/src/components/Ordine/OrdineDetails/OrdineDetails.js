@@ -3,6 +3,7 @@ import {faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './OrdineDetails.css';
 import Modal from 'react-modal';
+import occhio from '../../../img/occhio.png';
 
 const OrdineDetails = ({order}) => {
     const userId = localStorage.getItem('userId');
@@ -43,7 +44,9 @@ const OrdineDetails = ({order}) => {
           className="modal-detailsOrder text-bold-black"
         >
           <div className="popup-content">
+          <img src={occhio} alt="Occhio" className='modal_img'/>
             <h2>Dettagli Ordine</h2>
+          <div className="detail_content">
             <p>Prodotto: {detailedOrders.prodottoNome}</p>
             <p>Descrizione: {detailedOrders.prodottoDescrizione}</p>
             <p>Stato Ordine: {detailedOrders.statoOrdineDescrizione}</p>
@@ -53,12 +56,14 @@ const OrdineDetails = ({order}) => {
               {new Date(detailedOrders.dataRegistrazione).toLocaleDateString()}
             </p>
             <p>
+              Data Aggiornamento:{" "}
                     {order.dataAggiornamento == null ? (
                     <span>Non aggiornato</span>
                     ) : (
                      <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
                      )}
             </p>
+          </div>
             <div>     
             <button onClick={closeModal2} className="close-button">Chiudi</button>
             </div>
