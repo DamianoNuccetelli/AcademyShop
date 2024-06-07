@@ -18,21 +18,10 @@ const ContentOrdine = () => {
   const indexOfLastProduct = currentPage * ordersPerPage;
   const indexOfFirstProduct = indexOfLastProduct - ordersPerPage;
   const order = orders.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
+  let totalPages = Math.ceil(orders.length / ordersPerPage);
   const nome = sessionStorage.getItem('nome');
   const cognome = sessionStorage.getItem('cognome');
  
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-        setCurrentPage(currentPage + 1);
-    }
-};
-
-const handlePrevPage = () => {
-    if (currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-    }
-};
   const fetchOrders = async () => {
     const API_URL = `https://localhost:7031/orders?userId=${userId}`;
     try {
@@ -51,9 +40,26 @@ const handlePrevPage = () => {
   useEffect(() => {
     fetchOrders(); 
   }, []);
+
+const handleNextPage = () => {
+  if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+  }
+};
+
+const handlePrevPage = () => {
+    if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+    }
+};
+
+
 const handleOnEndCreate = (flag) => {
     if (flag) {
       fetchOrders();
+      if((order.length-1) % ordersPerPage ){
+        totalPages = totalPages + 1;
+      }
       setCurrentPage(totalPages);
     }
   };
@@ -118,7 +124,7 @@ const handleOnEndCreate = (flag) => {
                 <td>{order.dataAggiornamento == null ? (
                     <span>Non aggiornato</span>
                     ) : (
-                     <p>  {new Date(order.dataAggiornamento).toLocaleDateString()}</p>
+                     <span>  {new Date(order.dataAggiornamento).toLocaleDateString()}</span>
                      )}
                 </td>
                 <td>

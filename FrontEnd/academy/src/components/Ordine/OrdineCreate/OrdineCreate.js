@@ -161,6 +161,7 @@ const result = (flag) => {
           <h2 className='title_create'>Inserisci un nuovo ordine</h2>
           <div>
             <div className="search-bar-dropdown">
+            <label className='label_create'>Seleziona un prodotto: </label>
               <input
                 type="text"
                 value={searchTerm}
@@ -184,7 +185,7 @@ const result = (flag) => {
               )}
             </div>
             <div>
-            <p className='p_create'>Seleziona una quantità: </p>
+            <label className='label_create'>Seleziona una quantità: </label>
             <div className='input_container_create'>
             <input
               type="number"
