@@ -74,8 +74,8 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
             />
           </label>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <div className="margin-button"><button onClick={handleUpdateOrder} className="save-button">Save</button></div>
-          <div className="margin-button"><button onClick={closeModalEdit} className="cancel-button">Cancel</button></div>
+          <div className="margin-button"><button onClick={handleUpdateOrder} className="save-button">Aggiorna</button></div>
+          <div className="margin-button"><button onClick={closeModalEdit} className="cancel-button">Annulla</button></div>
         </div>
       </Modal>
     </>
