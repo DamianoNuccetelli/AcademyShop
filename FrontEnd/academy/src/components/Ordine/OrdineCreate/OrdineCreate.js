@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import './OrdineCreate.css';
-
 import done from '../../../img/SfondoModalAcademyShop.png';
 
 const Ordine = ({onEndCreate}) => {
