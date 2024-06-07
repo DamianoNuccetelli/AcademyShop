@@ -6,12 +6,13 @@ import './OrdineUpdate.css';
 
 const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
   const userId = localStorage.getItem('userId');
-  const [newQuantity, setNewQuantity] = useState(order.quantita);
+  const [newQuantity, setNewQuantity] = useState(1); 
   const [modalEdit, setModalEdit] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const openModalEdit = () => {
     setModalEdit(true);
+    setNewQuantity(1); 
     setErrorMessage('');
   };
 
@@ -73,8 +74,8 @@ const OrdineUpdate = ({ order, orders, setOrders, fetchOrders }) => {
             />
           </label>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <div className = "margin-button"><button onClick={handleUpdateOrder} className="save-button">Save</button></div>
-          <div className = "margin-button"><button onClick={closeModalEdit} className="cancel-button">Cancel</button></div>
+          <div className="margin-button"><button onClick={handleUpdateOrder} className="save-button">Save</button></div>
+          <div className="margin-button"><button onClick={closeModalEdit} className="cancel-button">Cancel</button></div>
         </div>
       </Modal>
     </>
