@@ -189,7 +189,7 @@ const result = (flag) => {
             <input
               type="number"
               min="0"
-              placeholder={"Quantità:"}
+              placeholder={"Quantità:"} 
               value={quantità}
               onChange={handleQuantityChange}
               className='number-input'

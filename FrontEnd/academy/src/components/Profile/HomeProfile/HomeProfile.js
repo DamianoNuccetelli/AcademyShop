@@ -50,15 +50,6 @@ const HomeProfile = () => {
           activeComponent={activeComponent}
         />
         {renderComponent()}
-        <div className="image_section">
-          <img
-            setActiveComponent={setActiveComponent}
-            activeComponent={activeComponent}
-            src={getImageSrc()}
-            alt="Edit Utente"
-            className="user_image"
-          />
-        </div>
       </div>
     </div>
   );

@@ -4,13 +4,13 @@
 
 .form_container {
     display: flex;
-    width: 50%;
+    width: 100%;
     align-items: center;
     justify-content: center;
     color: #361d6f;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 0 2% 0 4%;
+    padding: 0 4% 0 4%;
 }
 
 .form_container img {
