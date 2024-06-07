@@ -38,21 +38,23 @@ const ContentOrdine = () => {
     }
   };
 
-  useEffect(() => {
-    fetchOrders(); 
-  }, []);
-
+ 
   useEffect(() => {
     if (orders.length > 0) {
       if (orders.length > counterOrdini) {
         setCurrentPage(totalPages);
       } else if (orders.length < counterOrdini) {
         setCurrentPage(1);
-      }
-    }   
-    setCounterOrdini(order.length); 
+      } 
+    }  
+    setCounterOrdini(orders.length); 
   }, [orders.length]);
-  
+
+
+  useEffect(() => {
+    fetchOrders(); 
+  }, []);
+
 
 const handleNextPage = () => {
   if (currentPage < totalPages) {
