@@ -94,7 +94,7 @@ const SignUp = () => {
     return (
         <div className="form-container sign-up">
             <form onSubmit={handleSubmit}>
-                <img src={logo} alt="Logo" /> {/* Logo */}
+                <img src={logo} alt="Logo" /> 
                 <h1>Crea un Account</h1>
                 <span>o usa la tua email per registrarti</span>
                 <div className="input-row">

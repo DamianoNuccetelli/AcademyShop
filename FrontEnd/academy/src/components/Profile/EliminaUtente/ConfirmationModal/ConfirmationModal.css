@@ -1,0 +1,77 @@
+.popup-content_confirmDelete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.popup-content_confirmDelete img {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.confirmDelete_buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.confirmDelete_button {
+    flex: 1;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.confirmDelete_button:first-child {
+    background-color: #dc3545; 
+}
+
+.confirmDelete_button:last-child {
+    background-color: #361d6f; 
+}
+
+.confirmDelete_button:hover {
+    opacity: 0.8;
+}
+
+.modal {
+    position: absolute;
+    width: 50%;
+    max-width: 500px;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        width: 80%;
+        padding: 10px;
+    }
+}

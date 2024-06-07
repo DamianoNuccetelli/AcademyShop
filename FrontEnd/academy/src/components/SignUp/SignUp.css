@@ -143,9 +143,9 @@
     margin-bottom: 4%;
 }
 
-/* Aggiungi margini al testo */
+
 .modal-login h2 {
-    margin: 0 0 20px; /* Modifica il margine inferiore */
+    margin: 0 0 20px; 
     font-size: 24px;
     color: #361d6f;
 }

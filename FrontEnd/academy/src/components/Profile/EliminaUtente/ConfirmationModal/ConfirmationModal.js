@@ -1,6 +1,9 @@
 import React from 'react';
 import Modal from 'react-modal';
 
+import './ConfirmationModal.css'; 
+import error from '../../../../img/SfondoErrorAcademyShop.png'; 
+
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   return (
     <Modal
@@ -10,12 +13,13 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
       overlayClassName="overlay"
       ariaHideApp={false}
     >
-      <div className="popup-content">
-        <h2>Conferma Eliminazione Account</h2>
-        <p>Sei sicuro di voler eliminare il tuo account? Questa operazione è irreversibile.</p>
-        <div className="buttons">
-          <button onClick={onConfirm}>Conferma Eliminazione</button>
-          <button onClick={onClose}>Annulla</button>
+      <div className="popup-content_confirmDelete">
+        <img src={error} alt="Logo" /> 
+        <h2>Sicuro di voler cancellare il tuo account?</h2>
+        <p>Una volta cancellato tutti i tuoi dati saranno eliminati definitivamente.</p>
+        <div className="confirmDelete_buttons">
+          <button onClick={onConfirm} className='confirmDelete_button'>Conferma</button>
+          <button onClick={onClose} className='confirmDelete_button'>Annulla</button>
         </div>
       </div>
     </Modal>
