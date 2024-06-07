@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faChevronLeft, faChevronRight, faEdit, faTrashCan, faEye } from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import '../../Header/Header.css';
 import banner from '../../../img/banner.png';
 import OrdineUpdate from '../OrdineUpdate/OrdineUpdate';
