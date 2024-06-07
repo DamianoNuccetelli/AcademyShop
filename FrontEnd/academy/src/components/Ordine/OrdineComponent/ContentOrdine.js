@@ -58,9 +58,10 @@ const handleOnEndCreate = (flag) => {
     if (flag) {
       fetchOrders();
       if((order.length-1) % ordersPerPage ){
-        totalPages = totalPages + 1;
-      }
-      setCurrentPage(totalPages);
+        setCurrentPage(totalPages+1);
+      }else{
+        setCurrentPage(totalPages);
+      }      
     }
   };
 
