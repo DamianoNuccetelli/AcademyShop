@@ -33,7 +33,6 @@ const Ordine = ({onEndCreate}) => {
       if (response.ok) {
         const data = await response.json();
         setOrders(data);
-        console.log("Ordini: ", data);
       } else {
         console.error("Error fetching orders:", response.status);
       }
@@ -52,7 +51,6 @@ const Ordine = ({onEndCreate}) => {
 
   const addOrdine = async (idUtente, idProdotto, quantitàProdotto) => {
     closeModal();
-    console.log("addOrdine: ", idUtente, idProdotto, quantitàProdotto);
     const API_URL = `https://localhost:7031/orders?idUtente=${idUtente}&idProdotto=${idProdotto}&quantit%C3%A0=${quantitàProdotto}`;
     try {
       const response = await fetch(API_URL, {
@@ -70,7 +68,6 @@ const Ordine = ({onEndCreate}) => {
       if (response.ok) {
         fetchOrders();
         result(true);
-        console.log('Ordine aggiunto con successo', response.status);
       } else {
         setSearchTerm('');
         console.error('Errore durante l\'aggiunta dell\'ordine:', response.status);
@@ -81,7 +78,6 @@ const Ordine = ({onEndCreate}) => {
   };
 
   const getProducts = async () => {
-    console.log(userId);
     const API_URL = `https://localhost:7031/products?userId=${userId}`;
     try {
       const response = await fetch(API_URL);
@@ -90,9 +86,8 @@ const Ordine = ({onEndCreate}) => {
         setQuantità(0);
         setSearchTerm('');
         setProdotti(data);
-        setFilteredProducts(data); // Initialize filteredProducts with all products
-        console.log(prodotti);
-        openModal(); // Call openModal after fetching products
+        setFilteredProducts(data);
+        openModal();
       } else {
         console.error('Error fetching products:', response.status);
       }
