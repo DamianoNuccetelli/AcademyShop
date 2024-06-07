@@ -1,7 +1,7 @@
 .modal_editProduct {
     position: absolute;
-    width: 60%;
-    height: 75%;
+    width: auto;
+    height: auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -9,9 +9,10 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+.modal_editProduct img{
+    width: 30%;
 }
 
 .overlay_editProduct {
@@ -21,74 +22,54 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 999; 
+    z-index: 999;
 }
 
 .popup-content_editProduct {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
 }
 
 .popup-content_editProduct h2 {
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .popup-content_editProduct label {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     display: block;
+    width: 100%;
 }
 
 .popup-content_editProduct input[type="text"],
 .popup-content_editProduct input[type="number"],
 .popup-content_editProduct textarea {
     width: 100%;
-    max-width: 500px;
-    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
-/* .popup-content_editProduct textarea {
-    width: 100%;
-    height: 100px; 
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+.popup-content_editProduct textarea {
+    height: 100px;
     resize: none;
-} */
-
-.popup-content_editProduct, button {
-    background-color: #fff;
-    color: #000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%; 
-    box-sizing: border-box; 
-    margin-right: 5px;
 }
 
-.submit_editProduct{
-    background-color: #007bff;
+.popup-content_editProduct button {
+    background-color: #361d6f;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    width: 43%; 
-    box-sizing: border-box; 
     margin-right: 5px;
+    width:48%;
 }
 
 .popup-content_editProduct button:hover {
-    background-color: #0056b3;
+    opacity: 0.8;
 }
 
 .popup-content_editProduct .close-button {
@@ -99,6 +80,21 @@
     background-color: #bd2130;
 }
 
-.mb_20{
-    margin-bottom: 20px;
+.modal_img_editProduct {
+    display: block;
+    margin: 0 auto 20px;
+    max-width: 100%;
+    height: auto;
 }
+
+@media (max-width: 768px) {
+    .modal_editProduct {
+        width: 80%;
+        padding: 10px;
+    }
+
+    .popup-content_editProduct {
+        width: 100%;
+    }
+}
+
