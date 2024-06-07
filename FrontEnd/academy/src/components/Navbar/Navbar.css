@@ -189,3 +189,28 @@
 .box_flex:hover .icon_purple {
     color: #361d6f;
 }
+
+.LogoutModal {
+    width: 43%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #361d6f;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.LogoutModal:hover{
+    transform: scale(1.1);
+}
+
+.modal-content{
+    text-align: center;
+}
+
+.LogoutModalIMG{
+    width: 30%;
+    margin-bottom: 20px;
+}
