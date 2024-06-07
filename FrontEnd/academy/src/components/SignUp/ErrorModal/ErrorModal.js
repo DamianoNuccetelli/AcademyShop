@@ -1,6 +1,8 @@
 import React from 'react';
 import Modal from 'react-modal';
+
 import done from '../../../img/SfondoModalAcademyShop.png';
+import errore from '../../../img/SfondoErrorAcademyShop.png';
 
 const ErrorModal = ({ isOpen, onClose }) => {
     return (
@@ -12,7 +14,7 @@ const ErrorModal = ({ isOpen, onClose }) => {
             className="modal-login text-bold-black"
             overlayClassName="modal-overlay"
         >
-            <img src={done} alt="Done" className='modal_img'/> 
+            <img src={errore} alt="Error" className='modal_img'/> 
             <h2>Oops!</h2>
             <p>Per favore, ricontrolla tutti i campi prima di inviare il form.</p>
             <button onClick={onClose}>Chiudi</button>

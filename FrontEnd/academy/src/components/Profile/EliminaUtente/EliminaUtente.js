@@ -43,15 +43,12 @@ const EliminaUtente = () => {
 
   return (
     <div className="form_container">
-      <h2>
-        Questa operazione è irreversibile e tutti i tuoi dati andranno persi.
-      </h2>
+      <h2>Cancella il tuo account</h2>
+      <h4>Questa operazione è irreversibile e tutti i tuoi dati andranno persi.</h4>
       <img src={sessoMaschile} alt="Icona maschio" className="imgMaschio" />
       <button className="delete-button" onClick={handleDelete}>
         Elimina
       </button>
-      {/* <FontAwesomeIcon icon={fa}>Elimina Il Tuo account</FontAwesomeIcon> */}
-      {/* Aggiungi il contenuto specifico per la rimozione del profilo */}
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
+import './EditProduct.css';
+import done from '../../../img/SfondoModalAcademyShop.png';
 
 const EditProduct = ({ id, nome, descrizione, quantità, productsData, setProductsData }) => {
     const [modalIsOpenEditProduct, setModalIsOpenEditProduct] = useState(false);
@@ -14,7 +16,7 @@ const EditProduct = ({ id, nome, descrizione, quantità, productsData, setProduc
         setNewDescrizione(descrizione);
         setNewQuantità(quantità);
         setModalIsOpenEditProduct(true);
-    };
+    }; 
 
     const closeModalEditProduct = () => {
         setModalIsOpenEditProduct(false);
@@ -63,14 +65,15 @@ const EditProduct = ({ id, nome, descrizione, quantità, productsData, setProduc
             <Modal
                 isOpen={modalIsOpenEditProduct}
                 onRequestClose={closeModalEditProduct}
-                className="modal"
-                overlayClassName="overlay"
+                className="modal_editProduct"
+                overlayClassName="overlay_editProduct"
                 ariaHideApp={false}
             >
-                <div className="popup-content">
+                <div className="popup-content_editProduct">
+                    <img src={done} alt="Done" className='modal_img_editProduct'/>
                     <h2>Modifica Prodotto</h2>
                     <form onSubmit={handleEditProduct}>
-                        <label>
+                        <label className='mb_20'>
                             Nome:
                             <input
                                 type="text"
@@ -78,14 +81,24 @@ const EditProduct = ({ id, nome, descrizione, quantità, productsData, setProduc
                                 onChange={(e) => setNewName(e.target.value)}
                             />
                         </label>
-                        <label>
+                        <label className='mb_20'>
                             Descrizione:
                             <textarea
                                 value={newDescrizione}
                                 onChange={(e) => setNewDescrizione(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    height: '100px',
+                                    marginBottom: '10px',
+                                    padding: '10px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '5px',
+                                    boxSizing: 'border-box',
+                                    resize: 'none' 
+                                }}
                             />
                         </label>
-                        <label>
+                        <label className='mb_20'>
                             Quantità:
                             <input
                                 type="number"
@@ -93,7 +106,7 @@ const EditProduct = ({ id, nome, descrizione, quantità, productsData, setProduc
                                 onChange={(e) => setNewQuantità(e.target.value)}
                             />
                         </label>
-                        <button type="submit">Salva</button>
+                        <button type="submit" className='submit_editProduct'>Salva</button>
                         <button onClick={closeModalEditProduct} className="close-button">Annulla</button>
                     </form>
                 </div>
