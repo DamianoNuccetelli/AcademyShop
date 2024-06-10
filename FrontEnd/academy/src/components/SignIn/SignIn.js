@@ -50,7 +50,7 @@ const SignIn = () => {
     return (
         <div className="form-container sign-in">
             <form onSubmit={handleSignIn}>
-                <img src={logo} alt="Logo" />
+                <img src={logo} alt="Logo" className='NavbarLogo' />
                 <h1>Accedi</h1>
                 <span>o usa la tua email e password</span>
                 <div>

@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMultiply } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 
+import error from '../../../img/SfondoErrorAcademyShop.png';
+import styles from './DeleteProduct.module.css';
+
 const DeleteProduct = ({ id, productsData, setProductsData }) => {
     const [modalIsOpenDeleteProduct, setModalIsOpenDeleteProduct] = useState(false);
 
@@ -55,9 +58,10 @@ const DeleteProduct = ({ id, productsData, setProductsData }) => {
                 ariaHideApp={false}
             >
                 <div className="popup-content">
+                <img src={error} alt="Error" className={styles.deleteIMG}/>
                     <h2>Conferma Eliminazione</h2>
                     <p>Sei sicuro di voler eliminare questo prodotto?</p>
-                    <button onClick={handleDeleteProduct} className='close-button m2'>Elimina</button>
+                    <button onClick={handleDeleteProduct} className={styles.buttonDelete}>Elimina</button>
                     <button onClick={closeModalDeleteProduct} className="close-button m2">Annulla</button>
                 </div>
             </Modal>
