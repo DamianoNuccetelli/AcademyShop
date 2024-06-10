@@ -6,7 +6,7 @@ import Header from '../Header/Header';
 
 const Dashboard = () => {
     return (
-        <div className='dashboard'>
+        <div className='Dashboard'>
             <Navbar/>
             <Header />
         </div>

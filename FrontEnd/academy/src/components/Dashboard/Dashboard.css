@@ -1,4 +1,4 @@
-.dashboard{
+.Dashboard{
     width: calc(100%); /* Larghezza della finestra visualizzata meno 40px (20px di padding da entrambi i lati) */
 
     display: flex;

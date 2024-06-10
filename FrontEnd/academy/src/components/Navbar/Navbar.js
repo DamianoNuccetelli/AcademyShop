@@ -64,13 +64,6 @@ const Navbar = () => {
       setBlueIconProdotti('user-icon-selected');
       setBlueIconOrdini('user-icon');
       setBlueIconProfile('user-icon');
-    } else if (location.pathname === '/Ordine') {
-      setClasseProdotti('prodotti');
-      setClasseOrdini('ordini selected');
-      setClasseProfile('profilo');
-      setBlueIconProdotti('user-icon');
-      setBlueIconOrdini('user-icon-selected');
-      setBlueIconProfile('user-icon');
     } else if (location.pathname === '/Profile') {
       setClasseProdotti('prodotti');
       setClasseOrdini('ordini');
@@ -78,6 +71,13 @@ const Navbar = () => {
       setBlueIconProdotti('user-icon');
       setBlueIconOrdini('user-icon');
       setBlueIconProfile('user-icon-selected');
+    }else if (location.pathname === '/Ordine') {
+      setClasseProdotti('prodotti');
+      setClasseOrdini('ordini selected');
+      setClasseProfile('profilo');
+      setBlueIconProdotti('user-icon');
+      setBlueIconOrdini('user-icon-selected');
+      setBlueIconProfile('user-icon');
     }
   }, [location]);
 

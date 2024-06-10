@@ -5,7 +5,7 @@ import HomeProfile from './HomeProfile/HomeProfile';
 
 const Profile = () => {
     return (
-        <div className='dashboard'>
+        <div className='Dashboard'>
             <Navbar />
             <HomeProfile />
         </div>
